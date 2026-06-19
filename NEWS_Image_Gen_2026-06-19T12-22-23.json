@@ -1,0 +1,1054 @@
+{
+  "updatedAt": "2026-06-13T11:27:53.084Z",
+  "createdAt": "2026-06-11T13:01:14.976Z",
+  "id": "xtx1zRJ8Ko3m8SQP",
+  "name": "YOUR_NAME",
+  "description": null,
+  "active": false,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "content": "## –––> ОТПРАВИЛ\n",
+        "height": 384,
+        "width": 960,
+        "color": 4
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        1776,
+        592
+      ],
+      "typeVersion": 1,
+      "id": "YOUR_CREDENTIAL_ID",
+      "name": "YOUR_NAME"
+    },
+    {
+      "parameters": {
+        "content": "## [ ошибка при редактировании ]",
+        "height": 224,
+        "width": 608,
+        "color": 3
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        1776,
+        992
+      ],
+      "typeVersion": 1,
+      "id": "YOUR_CREDENTIAL_ID",
+      "name": "YOUR_NAME"
+    },
+    {
+      "parameters": {
+        "content": "# –––> ПОЛУЧИЛ ЗАПРОС > УВИДЕЛ ПРОШЛОЕ ФОТО (если есть) > НАПИСАЛ ПРОМПТ \n",
+        "height": 464,
+        "width": 2560,
+        "color": 6
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        0,
+        0
+      ],
+      "typeVersion": 1,
+      "id": "YOUR_CREDENTIAL_ID",
+      "name": "YOUR_NAME"
+    },
+    {
+      "parameters": {
+        "content": "## –––> СГЕНЕРИРОВАЛ КАРТИНКУ\n\n",
+        "height": 272,
+        "width": 768
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        944,
+        608
+      ],
+      "typeVersion": 1,
+      "id": "YOUR_CREDENTIAL_ID",
+      "name": "YOUR_NAME"
+    },
+    {
+      "parameters": {
+        "content": "fal.ai — это специализированный облачный сервис (платформа разработчика) для запуска тяжелых нейросетей, связанных с медиа (генерация изображений, видео, аудио).\n\nFLUX — это семейство моделей генерации изображений нового поколения, созданное компанией Black Forest Labs (её основали ключевые разработчики, которые когда-то создали легендарную Stable Diffusion). На сегодняшний день FLUX считается главным конкурентом Midjourney, а во многих аспектах (например, в точном следовании промту и генерации текста) даже превосходит её.\nКонкретная версия flux-pro/v1.1-ultra — это вершина этой линейки по состоянию на текущий момент (середина 2026 года):\n•\tv1.1 — это обновленная архитектура, которая генерирует изображения в 2-3 раза быстрее первой версии FLUX и выдает более высокую детализацию (микротекстура кожи, свет, тени).\n•\tpro — коммерческая, самая умная и продвинутая версия модели (в отличие от «облегченных» версий schnell или dev, которые можно запускать дома на видеокарте).\n•\tultra — специальный режим генерации (или ультра-разрешение), который позволяет создавать изображения в сверхвысоком качестве (до 4K и выше) с потрясающей фотореалистичностью, идеальными пропорциями и глубокой проработкой деталей по краям кадра.",
+        "height": 736,
+        "width": 464,
+        "color": 5
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        464,
+        608
+      ],
+      "typeVersion": 1,
+      "id": "YOUR_CREDENTIAL_ID",
+      "name": "YOUR_NAME"
+    },
+    {
+      "parameters": {
+        "content": "# 📋 ДОКУМЕНТАЦИЯ WORKFLOW\n\n## ОСНОВНОЙ ПОТОК:\n\n**1. When Executed by Another Workflow** — Триггер: получает запрос от другого workflow (Квалификатор)\n\n**2. Load Task Data** — Загружает данные задачи из Supabase по ID\n\n**3. Determine Source Context** — Определяет контекст: тип источника (text_only/with_reference/modify_previous), версию, reference данные\n\n**4. Check Reference Task** — Проверяет, нужно ли загружать referenced task (если reference_type === \"post\")\n\n**5. If Reference** — Ветвление: есть ли ссылка на другую задачу?\n\n**6. Load Referenced Task** — (TRUE ветка) Загружает referenced task из Supabase\n\n**7. Extract Referenced Data** — Извлекает post_text из последней версии referenced задачи\n\n**8. Set Style Preference** — Добавляет style_preference (стилистические предпочтения проекта)\n\n**9. If** — Ветвление: есть ли reference изображение или previous prompt?\n\n**10. Download Previous Image** — (TRUE ветка) Скачивает предыдущее изображение для анализа\n\n**11. AI Agent (With Photo)** — Генерирует FLUX промпт с учётом изображения\n  **11a. Gemini 2.5 Flash** — Language Model для AI Agent\n\n**11.1. AI Agent (Text Only)** — (FALSE ветка) Генерирует FLUX промпт без изображения\n\n**12. Merge Prompt & Params** — Объединяет промпт и параметры для FLUX API\n\n**13. flux-pro/v1.1-ultra** — Отправляет запрос на генерацию изображения в FLUX API\n\n**14. Wait** — Ожидание 10 секунд (FLUX генерирует изображение)\n\n**15. Download Edited Image** — Скачивает сгенерированное изображение\n\n**16. Prepare All Data** — Собирает все данные (FLUX результат + merged data + task data)\n\n**17. Send to Telegram** — Отправляет изображение в Telegram\n\n**18. Prepare sent_message** — Подготавливает данные для записи в sent_messages\n\n**19. Save to sent_messages** — Сохраняет информацию об отправленном сообщении в Supabase\n\n**20. Prepare task_update** — Подготавливает обновление задачи (добавляет новую версию в agent_output)\n\n**21. Update Task** — Обновляет задачу в Supabase (status: completed, agent_output с новой версией)\n\n---\n\n## ОБРАБОТКА ОШИБОК:\n\n**E1. Handle Error** — Обрабатывает ошибки от FLUX API или Download Image\n\n**E2. Task Error** — Обновляет задачу в Supabase со статусом failed\n\n**E3. Send Error** — Отправляет сообщение об ошибке в Telegram",
+        "height": 1232,
+        "width": 1152
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -1232,
+        -16
+      ],
+      "typeVersion": 1,
+      "id": "YOUR_CREDENTIAL_ID",
+      "name": "YOUR_NAME"
+    },
+    {
+      "parameters": {
+        "inputSource": "passthrough"
+      },
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        144,
+        256
+      ],
+      "id": "YOUR_CREDENTIAL_ID",
+      "name": "YOUR_NAME"
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "tableId": "tasks",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "id",
+              "keyValue": "={{ $json.id }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        336,
+        256
+      ],
+      "id": "YOUR_CREDENTIAL_ID",
+      "name": "YOUR_NAME",
+      "credentials": {
+        "supabaseApi": {
+          "id": "u5jLuYJAJLw2Nk0K",
+          "name": "YOUR_NAME"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Get data from trigger and Load Task Data\nconst triggerData = $('1. When Executed by Another Workflow').first().json;  // ← От Квалификатора\nconst taskData = $('2. Load Task Data').first().json;  // ← Из БД\n\n// Parse agent_output\nlet agentOutput = taskData.agent_output;\nif (typeof agentOutput === 'string') {\n  try {\n    agentOutput = JSON.parse(agentOutput);\n  } catch (e) {\n    agentOutput = {};\n  }\n}\n\n// Get versions array\nconst versions = agentOutput?.versions || [];\nconst currentVersion = versions.length > 0 ? versions.length + 1 : 1;\n\n// ✅ ИСПРАВЛЕНИЕ: Читаем из triggerData (от Квалификатора)\nconst userRequest = triggerData.effective_user_request ||  // ← ИЗ TRIGGER!\n                    triggerData.source_data?.user_request || \n                    taskData.effective_user_request ||\n                    taskData.initial_prompt || \n                    '';\n\nconsole.log('[Determine Source Context] User request:', userRequest);\nconsole.log('[Determine Source Context] triggerData.effective_user_request:', triggerData.effective_user_request);\n\n// ✅ Extract reference data from triggerData first\nconst referenceTaskId = triggerData.source_data?.reference_task_id || taskData.source_data?.reference_task_id || null;\nconst referenceType = triggerData.source_data?.reference_type || taskData.source_data?.reference_type || null;\n\nconsole.log('[Determine Source Context] Reference task ID:', referenceTaskId);\nconsole.log('[Determine Source Context] Reference type:', referenceType);\n\n// Determine source type\nlet sourceType = 'text_only';\nlet sourceData = {\n  post_text: triggerData.post_text || '',\n  user_request: userRequest,\n  current_version: currentVersion,\n  reference_task_id: referenceTaskId,\n  reference_type: referenceType\n};\n\n// Check for reference photo\nif (triggerData.reference_photo_url || taskData.reference_photo_url) {\n  sourceType = 'with_reference';\n  sourceData.reference_photo_url = triggerData.reference_photo_url || taskData.reference_photo_url;\n  sourceData.file_id = triggerData.file_id || taskData.file_id || null;\n}\n\n// Check for previous prompt\nif (versions.length > 0) {\n  const lastVersion = versions[versions.length - 1];\n  if (lastVersion && lastVersion.flux_prompt) {\n    sourceType = 'modify_previous';\n    sourceData.previous_prompt = lastVersion.flux_prompt;\n    sourceData.previous_image_url = lastVersion.image_url;\n    if (lastVersion.flux_params) {\n      sourceData.previous_params = lastVersion.flux_params;\n    }\n  }\n}\n\n// Check for from_scratch flag\nif (triggerData.from_scratch === true || taskData.from_scratch === true) {\n  sourceType = 'from_scratch';\n  delete sourceData.previous_prompt;\n  delete sourceData.previous_params;\n  delete sourceData.previous_image_url;\n}\n\nconsole.log('[Determine Source Context] Source type:', sourceType);\nconsole.log('[Determine Source Context] Final user_request:', sourceData.user_request);\n\nreturn {\n  source_type: sourceType,\n  source_data: sourceData,\n  task_id: taskData.id,\n  task_type: taskData.task_type,\n  chat_id: taskData.chat_id\n};"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        528,
+        256
+      ],
+      "id": "YOUR_CREDENTIAL_ID",
+      "name": "YOUR_NAME"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Получаем context из предыдущей ноды\nconst context = $input.first().json;\nconst sourceData = context.source_data || {};\n\n// Проверяем нужно ли загружать referenced task\nconst needsReference = Boolean(\n  sourceData.reference_task_id && \n  sourceData.reference_type === 'post'\n);\n\nconsole.log('[Check Reference Task] needs_reference:', needsReference);\n\n// Возвращаем весь context + флаг needs_reference\nreturn {\n  json: {\n    ...context,\n    needs_reference: needsReference,\n    reference_task_id: sourceData.reference_task_id || null\n  }\n};\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        720,
+        256
+      ],
+      "id": "YOUR_CREDENTIAL_ID",
+      "name": "YOUR_NAME"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "YOUR_CREDENTIAL_ID",
+              "leftValue": "={{ $json.needs_reference === true }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        896,
+        256
+      ],
+      "id": "YOUR_CREDENTIAL_ID",
+      "name": "YOUR_NAME"
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "tableId": "tasks",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "id",
+              "keyValue": "={{ $json.reference_task_id }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        1088,
+        112
+      ],
+      "id": "YOUR_CREDENTIAL_ID",
+      "name": "YOUR_NAME",
+      "credentials": {
+        "supabaseApi": {
+          "id": "u5jLuYJAJLw2Nk0K",
+          "name": "YOUR_NAME"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Получаем context из Check Reference Task (используем $node)\nconst checkNode = $('4. Check Reference Task').first().json;\nconst context = {...checkNode};\nconst sourceData = {...(context.source_data || {})};\n\ntry {\n  // Получаем referenced task из Supabase\n  const referencedTask = $input.first().json;\n  \n  console.log('[Extract Referenced Data] Loading task:', referencedTask.id);\n  \n  // Извлекаем post_text из последней версии copywriting задачи\n  const versions = referencedTask.agent_output?.versions || [];\n  \n  if (versions.length > 0) {\n    // Берём последнюю версию\n    const lastVersion = versions[versions.length - 1];\n    sourceData.post_text = lastVersion.agent_response || '';\n    console.log('[Extract Referenced Data] Loaded from version', versions.length);\n  } else {\n    // Fallback: если versions пустой (ручное создание или старая задача)\n    console.log('[Extract Referenced Data] Warning: versions array empty, using initial_prompt');\n    sourceData.post_text = referencedTask.initial_prompt || '';\n  }\n  \n  // Дополнительная проверка что post_text не пустой\n  if (!sourceData.post_text || sourceData.post_text.trim().length === 0) {\n    console.log('[Extract Referenced Data] Error: post_text is empty after extraction');\n    sourceData.post_text = `[Не удалось загрузить текст поста из задачи ${referencedTask.id}]`;\n  } else {\n    console.log('[Extract Referenced Data] Successfully loaded post_text, length:', sourceData.post_text.length);\n  }\n  \n  sourceData.referenced_task_id = referencedTask.id;  // Для трекинга\n  \n} catch (e) {\n  console.log('[Extract Referenced Data] Error:', e.message);\n  sourceData.post_text = '[Ошибка загрузки referenced task]';\n}\n\n// Возвращаем обновлённый context\nreturn {\n  json: {\n    ...context,\n    source_data: sourceData\n  }\n};"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1296,
+        112
+      ],
+      "id": "YOUR_CREDENTIAL_ID",
+      "name": "YOUR_NAME"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "YOUR_CREDENTIAL_ID",
+              "name": "YOUR_NAME",
+              "value": "# ИДЕИ ПО СТИЛЮ: ",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1504,
+        272
+      ],
+      "id": "YOUR_CREDENTIAL_ID",
+      "name": "YOUR_NAME"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "YOUR_CREDENTIAL_ID",
+              "leftValue": "={{ $json.source_type }}",
+              "rightValue": "with_reference",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            },
+            {
+              "id": "YOUR_CREDENTIAL_ID",
+              "leftValue": "={{ $json.source_type }}",
+              "rightValue": "modify_previous",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "YOUR_NAME"
+              }
+            }
+          ],
+          "combinator": "or"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        1680,
+        272
+      ],
+      "id": "YOUR_CREDENTIAL_ID",
+      "name": "YOUR_NAME"
+    },
+    {
+      "parameters": {
+        "url": "={{ $json.source_data.previous_image_url }}",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "file"
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1872,
+        32
+      ],
+      "id": "YOUR_CREDENTIAL_ID",
+      "name": "YOUR_NAME",
+      "retryOnFail": false,
+      "waitBetweenTries": 5000,
+      "maxTries": 3,
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "uYjANeOBNxAt5C49",
+          "name": "YOUR_NAME"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ ($json.source_data.post_text ? 'Контекст: создание изображения для поста:\\n\\n' + $json.source_data.post_text + '\\n\\n' : '') + ($json.source_data.previous_prompt ? 'PREVIOUS PROMPT: ' + $json.source_data.previous_prompt + '\\n\\n' : '') + 'USER REQUEST: ' + $json.source_data.user_request + ($vars.style_preference ? '\\n\\nSTYLE PREFERENCE: ' + $vars.style_preference : '') }}",
+        "messages": {
+          "messageValues": [
+            {
+              "message": "=# AI Image Gen Agent - System Message\n\nТы - композитор промптов для FLUX.1 Pro, создающий визуальные образы для SMM контента.\n\nТвоя задача: превратить идею/пост в КРЕАТИВНЫЙ английский промпт.\nНЕ описывай буквально - создавай визуальные метафоры с юмором и иронией.\n\nВСЕГДА возвращай ТОЛЬКО английский промпт (plain text, без объяснений).\n\n---\n\n## Что ты получаешь:\n\n1. **USER REQUEST** - что хочет пользователь (русский или английский)\n2. **PREVIOUS PROMPT** - может быть:\n   - `\"Контекст: создание изображения для поста...\"` → это ТЕКСТ ПОСТА (не промпт!)\n   - Обычный промпт → это предыдущая генерация для модификации\n3. **REFERENCE IMAGE** - изображение для анализа (опционально)\n4. **STYLE PREFERENCE** - постоянная стилистическая база проекта (опционально)\n\n⚠️ **STYLE PREFERENCE — ОБЯЗАТЕЛЬНО К ПРИМЕНЕНИЮ**\n\nЕсли STYLE PREFERENCE присутствует:\n- Применяй его ВСЕГДА (не игнорируй!)\n- Интегрируй в промпт органично (не механически)\n- Владелец указал стилистические предпочтения — это приоритет\n\n---\n\n## Режимы работы (определи автоматически):\n\n### РЕЖИМ A: Создание для текстового поста\n**Триггер:** PREVIOUS PROMPT начинается с `\"Контекст:\"` или `\"Context:\"`\n\n**Алгоритм работы:**\n\n1. **ИЗВЛЕКИ текст поста** из PREVIOUS PROMPT (после слов \"для поста\")\n   - ⚠️ Прочитай текст ПОЛНОСТЬЮ, от начала до конца\n\n2. **ОПРЕДЕЛИ тип новости:**\n   - **Продуктовая новость** (выпуск продукта, апдейт) → визуализируй \"что это даёт пользователю\"\n   - **Конфликт/противостояние** (суды, регуляция, конкуренция) → визуализируй \"столкновение сил\"\n   - **Технологический breakthrough** (открытие, исследование) → визуализируй \"прорыв границ\"\n   - **Мнение/анализ** (тренды, прогнозы) → визуализируй \"будущее/последствия\"\n\n3. **НАЙДИ ЦЕНТРАЛЬНЫЙ КОНФЛИКТ или ЭМОЦИЮ:**\n   - Что НЕ ТАК? (проблема, которую решают)\n   - Кто ПРОТИВ кого? (противоборство)\n   - Что ИЗМЕНИТСЯ? (трансформация)\n   - Что УДИВЛЯЕТ? (неожиданность)\n\n4. **СОЗДАЙ ВИЗУАЛЬНУЮ МЕТАФОРУ:**\n   - **НЕ буквально**: Не изображай логотипы, скриншоты, продукты\n   - **С иронией/драмой**: Преувеличь масштаб, добавь необычный элемент\n   - **Передай НАСТРОЕНИЕ**: Тревога? Восторг? Конфликт? Надежда?\n\n5. **ПРИМЕНИ STYLE PREFERENCE** (если есть):\n   - Интегрируй в промпт органично\n\n**Пример трансформации:**\n\n```\nПост: \"OpenAI выпустила GPT-5 с улучшенным reasoning. Модель справляется с задачами, которые раньше требовали human expertise.\"\n\nАнализ:\n- Тип: Продуктовая новость (новая версия AI)\n- Конфликт: AI vs Human expertise\n- Эмоция: Восхищение + тревога\n- Ключевая идея: AI становится \"умнее человека\"\n\nПромпт:\n\"A massive glowing purple AI brain floating above a dark cityscape, with tiny human figures looking up in awe and concern. Streams of golden light connecting the brain to various buildings below. Cinematic lighting, dramatic shadows, cyberpunk aesthetic, 8K detail.\"\n```\n\n**ВАЖНЫЕ ПРАВИЛА для РЕЖИМА A:**\n\n❌ **НЕ делай:**\n- Логотипы компаний (Apple logo, OpenAI logo)\n- Скриншоты продуктов/интерфейсов\n- Портреты конкретных людей (Сэм Альтман, Илон Маск)\n- Буквальное изображение технологии (микросхемы, серверы)\n\n✅ **ДЕЛАЙ:**\n- Драматизируй масштаб (гигантские объекты, tiny humans)\n- Используй контрасты (свет vs тьма, старое vs новое, хаос vs порядок)\n- Добавляй движение и действие (breaking, emerging, colliding)\n- Создавай сторителлинг (что было → что происходит → что будет)\n\n---\n\n### РЕЖИМ B: Модификация с референсным изображением\n**Триггер:** REFERENCE IMAGE присутствует\n\n**Что делать:**\n\n1. **ИЗУЧИ изображение внимательно:**\n   - Композиция (что где расположено)\n   - Освещение (откуда свет, тени)\n   - Цветовая палитра (доминирующие цвета)\n   - Стиль (реализм, киберпанк, минимализм)\n   - Объекты и персонажи (что изображено)\n   - Атмосфера (настроение)\n\n   **Обрати особое внимание на:**\n   - Откуда свет? (bottom-left, top-right, backlight)\n   - Угол съёмки (low angle, high angle, eye level)\n   - Главный цвет (purple, red, blue, dark tones)\n\n2. **ОПРЕДЕЛИ намерение пользователя:**\n\n   **Если USER REQUEST про \"похожее изображение\":**\n   ```\n   Примеры: \"Сделай похожее\", \"Нарисуй в таком же стиле\", \"Хочу что-то подобное\"\n\n   Действие:\n   - ПОВТОРИ композицию (расположение элементов)\n   - СОХРАНИ цветовую палитру\n   - ИСПОЛЬЗУЙ тот же стиль освещения\n   - ИЗМЕНИ только конкретные объекты (если указано)\n   ```\n\n   **Если USER REQUEST про \"изменение X\":**\n   ```\n   Примеры: \"Измени фон на лес\", \"Добавь дракона\", \"Убери человека справа\"\n\n   Действие:\n   - СОХРАНИ всё кроме X\n   - ОПИШИ что остаётся (конкретно!)\n   - ОПИШИ новый элемент X в том же стиле\n   - СОХРАНИ атмосферу и освещение\n   ```\n\n3. **ИСПОЛЬЗУЙ КОНКРЕТНЫЕ ДЕТАЛИ из изображения:**\n   ```\n   Плохо: \"Similar composition with different subject\"\n   Хорошо: \"Low angle shot of [new subject], same dramatic purple neon lighting from bottom-left, dark moody background with fog, rule of thirds composition matching the reference\"\n   ```\n\n---\n\n### РЕЖИМ C: Модификация предыдущего промпта\n**Триггер:** PREVIOUS PROMPT содержит обычный промпт (не начинается с \"Контекст:\")\n\n**Алгоритм:**\n\n1. **ПРОЧИТАЙ previous prompt полностью**\n   - Выдели главный объект/персонаж\n   - Выдели композицию и угол съёмки\n   - Выдели освещение и атмосферу\n   - Выдели стиль и технические детали\n\n2. **ОПРЕДЕЛИ что изменить из USER REQUEST:**\n   - Изменение объекта: \"Сделай робота зелёным\" → только цвет\n   - Добавление элемента: \"Добавь луну на фоне\" → добавить в фон\n   - Изменение композиции: \"Покажи его сбоку\" → изменить угол\n   - Изменение атмосферы: \"Сделай мрачнее\" → изменить освещение/цвета\n\n3. **МОДИФИЦИРУЙ prompt, НЕ пиши с нуля:**\n\n   ⚠️ **Если пользователь НЕ попросил что-то изменить — оставь КАК БЫЛО в PREVIOUS PROMPT:**\n   - Освещение → копируй дословно из PREVIOUS PROMPT\n   - Композицию и угол съёмки → копируй дословно\n   - Технические детали и качество → копируй дословно\n\n   Изменяй ТОЛЬКО то, что ЯВНО указано в USER REQUEST.\n\n**Пример:**\n\n```\nPREVIOUS PROMPT: [Промпт с объектом, действием, окружением, освещением, композицией, техническими деталями]\n\nUSER REQUEST: \"Сделай фон фиолетовым\"\n\nНОВЫЙ ПРОМПТ: [Тот же объект, действие, окружение скопированы дословно + изменено только освещение фона на purple + композиция и технические детали скопированы дословно]\n\n(Изменено: ТОЛЬКО освещение фона, всё остальное скопировано из PREVIOUS PROMPT без изменений)\n```\n\n---\n\n### РЕЖИМ D: Генерация с нуля\n**Триггер:** НЕТ ни PREVIOUS PROMPT, ни REFERENCE IMAGE\n\n**Алгоритм:**\n\n1. **ПРОЧИТАЙ USER REQUEST**\n2. **ПЕРЕВЕДИ с русского** (если нужно)\n3. **ПРИМЕНИ STYLE PREFERENCE** (если есть)\n4. **СОЗДАЙ детальный промпт:**\n   - Главный объект/персонаж\n   - Действие/поза\n   - Окружение/фон\n   - Освещение\n   - Атмосфера/настроение\n   - Технические детали (композиция, качество)\n\n---\n\n## ❌ ЗАПРЕЩЕНО (generic AI art prevention):\n\n### Дефолтные композиции:\n- \"robot on white background\"\n- \"smartphone product photography\"\n- \"person standing in futuristic city\"\n- \"AI brain with circuits\"\n- \"glowing blue technology\"\n- \"cryptocurrency coin floating\"\n- \"businessman looking at screens\"\n\n### AI-клише (избегай ВСЕГДА):\n- \"in a world where...\" визуализации\n- Центрированные объекты на пустом фоне\n- Симметричные композиции без истории\n- Перегруженные \"neuro-noise\" детали (слишком много мелких бессмысленных элементов)\n- Стандартные позы (руки по швам, прямой взгляд)\n- Generic sci-fi (abstract blue holograms, floating geometric shapes)\n\n### Буквальность:\n- Логотипы компаний (Apple logo, Google logo, OpenAI logo)\n- Скриншоты интерфейсов или приложений\n- Портреты реальных людей (Илон Маск, Сэм Альтман)\n- Просто \"красивая картинка\" без истории/смысла\n- Буквальное изображение технологии (схемы, диаграммы)\n\n### Вместо этого:\n✅ Необычные ракурсы (low angle, high angle, Dutch angle, extreme close-up)\n✅ Динамичные позы (движение, действие, конфликт)\n✅ Сторителлинг в одном кадре (начало-середина-конец видно сразу)\n✅ Контраст и конфликт (свет vs тьма, старое vs новое, хаос vs порядок)\n✅ Юмор, ирония, преувеличение (giant objects, tiny humans, surreal elements)\n✅ Эмоциональная атмосфера (heroic, oppressive, mysterious, playful)\n\n---\n\n## FLUX.1 Pro best practices:\n\n### Язык:\n- **Если USER REQUEST русский** → ПЕРЕВЕДИ + УЛУЧШИ (добавь детали)\n- **Если USER REQUEST английский профессиональный** → ОСТАВЬ КАК ЕСТЬ\n- **Всегда выводи на АНГЛИЙСКОМ языке**\n\n### Краткость:\n- **40-50 слов** для простых сцен (один объект, минимальный фон)\n- **80-120 слов** для сложных композиций (multiple elements, detailed environment)\n- **До 200 слов максимум** для очень сложных сцен с множеством деталей\n- **Каждое слово несёт смысл**, нет воды и повторений\n\n### Структура промпта (порядок важен):\n1. **Главный объект/персонаж** - что/кто в центре внимания\n2. **Действие/поза** - что делает, как расположен\n3. **Окружение/фон** - где происходит действие\n4. **Освещение** - откуда свет, какие тени\n5. **Атмосфера** - настроение и эмоция\n6. **Технические детали** - композиция, качество, стиль\n\nПример правильной структуры:\n```\n[1. Объект] A humanoid robot samurai warrior in purple neon armor\n[2. Действие] wielding a katana with glowing energy trails, standing in heroic pose\n[3. Окружение] on a rain-soaked cyberpunk street with neon signs reflecting in puddles\n[4. Освещение] dramatic purple lighting from below, rim light from neon signs\n[5. Атмосфера] mysterious and heroic atmosphere\n[6. Технические] rule of thirds composition, cinematic 8K detail\n```\n\n### Освещение (добавляй конкретику):\n- ❌ Плохо: \"good lighting\"\n- ✅ Хорошо: \"dramatic neon lighting from bottom-left, strong rim light, moody shadows\"\n\n**Варианты освещения:**\n- `\"neon lighting\"` - киберпанк, яркие цвета\n- `\"dramatic shadows\"` - контрастное, мрачное\n- `\"golden hour\"` - тёплое, закатное\n- `\"rim lighting\"` - контур объекта подсвечен\n- `\"volumetric light rays\"` - лучи света сквозь туман/пыль\n- `\"harsh overhead lighting\"` - жёсткое, холодное\n\n### Композиция (указывай угол и правило):\n- `\"rule of thirds\"` - классическое правило третей\n- `\"low angle shot\"` - снизу вверх (героизм, величие)\n- `\"high angle shot\"` - сверху вниз (vulnerability, масштаб)\n- `\"Dutch angle\"` - наклон камеры (динамика, дисбаланс)\n- `\"extreme close-up\"` - очень близко к объекту\n- `\"wide establishing shot\"` - общий план для масштаба\n\n### Атмосфера (передавай эмоцию):\n- `\"heroic\"` - героическое, вдохновляющее\n- `\"oppressive\"` - давящее, тревожное\n- `\"playful\"` - игривое, лёгкое\n- `\"mysterious\"` - загадочное, интригующее\n- `\"epic\"` - эпическое, грандиозное\n- `\"intimate\"` - интимное, личное\n\n### Качество (технические детали в конце):\n- `\"cinematic\"` - кинематографическое качество\n- `\"8K\"` или `\"high detail\"` - высокая детализация\n- `\"photorealistic\"` - фотореализм (если нужен)\n- `\"concept art style\"` - стиль концепт-арта\n\n### ❌ НЕ используй prompt weights (FLUX не поддерживает):\n- ❌ ПЛОХО: `\"[robot:1.5]\"` или `\"(purple:2.0)\"`\n- ✅ ХОРОШО: `\"with strong emphasis on robot\"` или `\"dominated by purple lighting\"`\n\n---\n\n## Формат ответа:\n\n**ТОЛЬКО английский промпт (plain text).**\n**БЕЗ объяснений, комментариев, переводов, думалок.**\n**Максимум 200 слов.**\n\n---\n\n## Чеклист перед отправкой промпта:\n\n✅ Промпт на английском языке\n✅ Нет логотипов/скриншотов/портретов реальных людей\n✅ Есть конкретное освещение (не \"good lighting\")\n✅ Есть композиция/угол съёмки\n✅ Есть атмосфера/настроение\n✅ Применён STYLE PREFERENCE (если есть)\n✅ Нет AI-клише (centered objects, generic backgrounds)\n✅ Есть сторителлинг или конфликт (не просто \"красивая картинка\")\n✅ Нет prompt weights `[...]` или `(...)`\n✅ Длина 40-200 слов"
+            },
+            {
+              "type": "HumanMessagePromptTemplate",
+              "messageType": "imageBinary"
+            }
+          ]
+        },
+        "batching": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.7,
+      "position": [
+        2032,
+        32
+      ],
+      "id": "YOUR_CREDENTIAL_ID",
+      "name": "YOUR_NAME"
+    },
+    {
+      "parameters": {
+        "model": "google/gemini-2.5-flash",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenRouter",
+      "typeVersion": 1,
+      "position": [
+        1872,
+        208
+      ],
+      "id": "YOUR_CREDENTIAL_ID",
+      "name": "YOUR_NAME",
+      "credentials": {
+        "openRouterApi": {
+          "id": "kSlzJSYywOH0MwEV",
+          "name": "YOUR_NAME"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Получаем AI response\nlet aiResponse;\ntry {\n  aiResponse = $('11. AI Agent (With Photo)').first().json;\n} catch (e) {\n  try {\n    aiResponse = $('11.1. AI Agent (Text Only)').first().json;\n  } catch (e2) {\n    aiResponse = { text: '' };\n  }\n}\n\n// ✅ Читаем source_data из Set Style Preference (не из AI Agent!)\nconst styleNode = $('8. Set Style Preference').first().json;\n\n// Извлекаем flux_prompt из text\nconst fluxPrompt = aiResponse.text || aiResponse.output?.flux_prompt || '';\n\n// TODO: flux_params пока пустой\nconst fluxParams = {};\n\n// ✅ Берем source_data из Set Style Preference\nconst sourceData = styleNode.source_data || {};\n\nreturn {\n  task_id: styleNode.task_id,\n  prompt: fluxPrompt,\n  flux_prompt: fluxPrompt,\n  flux_params: fluxParams,\n  source_type: styleNode.source_type,\n  user_request: sourceData.user_request || '',\n  post_text: sourceData.post_text || '',\n  current_version: sourceData.current_version || 1,\n  chat_id: styleNode.chat_id\n};"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2368,
+        288
+      ],
+      "id": "YOUR_CREDENTIAL_ID",
+      "name": "YOUR_NAME"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://queue.fal.run/fal-ai/flux-pro/v1.1-ultra",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "YOUR_NAME",
+              "value": "={{ $json.prompt }}"
+            },
+            {
+              "name": "YOUR_NAME",
+              "value": "1:1"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1040,
+        688
+      ],
+      "id": "YOUR_CREDENTIAL_ID",
+      "name": "YOUR_NAME",
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "uYjANeOBNxAt5C49",
+          "name": "YOUR_NAME"
+        }
+      },
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "amount": 10
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        1328,
+        672
+      ],
+      "id": "YOUR_CREDENTIAL_ID",
+      "name": "YOUR_NAME",
+      "webhookId": "YOUR_CREDENTIAL_ID"
+    },
+    {
+      "parameters": {
+        "url": "={{ $json.response_url }}",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1520,
+        720
+      ],
+      "id": "YOUR_CREDENTIAL_ID",
+      "name": "YOUR_NAME",
+      "retryOnFail": true,
+      "waitBetweenTries": 5000,
+      "maxTries": 3,
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "uYjANeOBNxAt5C49",
+          "name": "YOUR_NAME"
+        }
+      },
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Получаем данные от FLUX API\nconst fluxResult = $input.first().json;\n\n// Получаем merged data\nconst mergedData = $('12. Merge Prompt & Params').first().json;\n\n// Получаем task data\nconst taskData = $('2. Load Task Data').first().json;\n\n// Собираем ВСЕ данные в один объект\nreturn {\n  // FLUX API данные\n  flux_image_url: fluxResult.images?.[0]?.url || '',\n  flux_result: fluxResult,\n  \n  // Merged data\n  task_id: mergedData.task_id,\n  flux_prompt: mergedData.flux_prompt,\n  flux_params: mergedData.flux_params,\n  user_request: mergedData.user_request,\n  post_text: mergedData.post_text,\n  current_version: mergedData.current_version,\n  source_type: mergedData.source_type,\n  \n  // Task data\n  chat_id: taskData.chat_id,\n  agent_output: taskData.agent_output\n};"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1840,
+        720
+      ],
+      "id": "YOUR_CREDENTIAL_ID",
+      "name": "YOUR_NAME"
+    },
+    {
+      "parameters": {
+        "operation": "sendPhoto",
+        "chatId": "={{ $json.chat_id }}",
+        "file": "={{ $json.flux_image_url }}",
+        "additionalFields": {
+          "caption": "=Создал ✨ (v{{ $json.current_version }})"
+        }
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        2016,
+        720
+      ],
+      "id": "YOUR_CREDENTIAL_ID",
+      "name": "YOUR_NAME",
+      "webhookId": "YOUR_CREDENTIAL_ID",
+      "credentials": {
+        "telegramApi": {
+          "id": "08rilHeqmVcSA8cN",
+          "name": "YOUR_NAME"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const telegramResponse = $input.first().json.result;\nconst allData = $('16. Prepare All Data').first().json;\n\nconst versionData = {\n  version: allData.current_version,\n  timestamp: new Date().toISOString(),\n  flux_prompt: allData.flux_prompt,\n  flux_params: allData.flux_params,\n  image_url: allData.flux_image_url,  // ✅ Сохраняем URL от FLUX\n  model: 'flux-pro-v1.1-ultra',\n  user_request: allData.user_request,\n  source_type: allData.source_type\n};\n\nreturn [{\n  json: {\n    telegram_message_id: telegramResponse.message_id,\n    telegram_chat_id: telegramResponse.chat.id,\n    message_type: 'photo',\n    task_id: allData.task_id,\n    source_type: 'task',\n    source_id: allData.task_id,\n    content_data: versionData,\n    created_at: new Date().toISOString()\n  }\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2224,
+        624
+      ],
+      "id": "YOUR_CREDENTIAL_ID",
+      "name": "YOUR_NAME"
+    },
+    {
+      "parameters": {
+        "tableId": "sent_messages",
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "telegram_chat_id",
+              "fieldValue": "={{ $json.telegram_chat_id }}"
+            },
+            {
+              "fieldId": "telegram_message_id",
+              "fieldValue": "={{ $json.telegram_message_id }}"
+            },
+            {
+              "fieldId": "message_type",
+              "fieldValue": "={{ $json.message_type }}"
+            },
+            {
+              "fieldId": "task_id",
+              "fieldValue": "={{ $json.task_id }}"
+            },
+            {
+              "fieldId": "content_data",
+              "fieldValue": "={{ $json.content_data }}"
+            },
+            {
+              "fieldId": "created_at",
+              "fieldValue": "={{ $json.created_at }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        2432,
+        624
+      ],
+      "id": "YOUR_CREDENTIAL_ID",
+      "name": "YOUR_NAME",
+      "credentials": {
+        "supabaseApi": {
+          "id": "u5jLuYJAJLw2Nk0K",
+          "name": "YOUR_NAME"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const allData = $('16. Prepare All Data').first().json;\n\n// Parse agent_output\nlet agentOutput = allData.agent_output;\nif (typeof agentOutput === 'string') {\n  try {\n    agentOutput = JSON.parse(agentOutput);\n  } catch (e) {\n    agentOutput = {};\n  }\n}\n\n// Get or initialize versions array\nlet versions = agentOutput?.versions || [];\n\n// Create new version entry\nconst newVersion = {\n  version: allData.current_version,\n  timestamp: new Date().toISOString(),\n  flux_prompt: allData.flux_prompt,\n  flux_params: allData.flux_params,\n  image_url: allData.flux_image_url,\n  model: 'flux-pro-v1.1-ultra',\n  user_request: allData.user_request,\n  source_type: allData.source_type\n};\n\n// Add new version\nversions.push(newVersion);\n\n// ✅ ИСПРАВЛЕНИЕ: Создаем чистый agent_output БЕЗ старых полей error\nconst updatedAgentOutput = {\n  versions: versions,\n  latest_image_url: newVersion.image_url,\n  latest_prompt: newVersion.flux_prompt,\n  current_version: allData.current_version\n};\n\nreturn {\n  task_id: allData.task_id,\n  agent_output: updatedAgentOutput,\n  status: 'completed',\n  updated_at: new Date().toISOString()\n};"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2224,
+        816
+      ],
+      "id": "YOUR_CREDENTIAL_ID",
+      "name": "YOUR_NAME"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "tableId": "tasks",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "id",
+              "condition": "eq",
+              "keyValue": "={{ $json.task_id }}"
+            }
+          ]
+        },
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "agent_output",
+              "fieldValue": "={{ $json.agent_output }}"
+            },
+            {
+              "fieldId": "status",
+              "fieldValue": "={{ $json.status }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        2432,
+        816
+      ],
+      "id": "YOUR_CREDENTIAL_ID",
+      "name": "YOUR_NAME",
+      "credentials": {
+        "supabaseApi": {
+          "id": "u5jLuYJAJLw2Nk0K",
+          "name": "YOUR_NAME"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Get error information\nconst error = $input.first().json.error || {};\nconst errorMessage = error.message || 'Unknown error occurred';\n\n// Get task data\nconst taskData = $('2. Load Task Data').first().json;\n\n// Try to get merge node data\nlet mergeNode;\ntry {\n  mergeNode = $('12. Merge Prompt & Params').first().json;\n} catch (e) {\n  mergeNode = {};\n}\n\nreturn {\n  task_id: mergeNode.task_id || taskData.id,\n  error_message: errorMessage,\n  status: 'failed',\n  updated_at: new Date().toISOString(),\n  \n  agent_output: {\n    versions: taskData.agent_output?.versions || [],\n    current_version: taskData.agent_output?.current_version || 1,\n    error: errorMessage,\n    error_timestamp: new Date().toISOString()\n  },\n  \n  user_message: `❌ Не удалось создать изображение\\n\\nОшибка: ${errorMessage}\\n\\nПопробуй еще раз.`,\n  \n  chat_id: taskData.chat_id\n};"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1824,
+        1056
+      ],
+      "id": "YOUR_CREDENTIAL_ID",
+      "name": "YOUR_NAME"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "tableId": "tasks",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "id",
+              "condition": "eq",
+              "keyValue": "={{ $json.task_id }}"
+            }
+          ]
+        },
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "status",
+              "fieldValue": "={{ $json.status }}"
+            },
+            {
+              "fieldId": "agent_output",
+              "fieldValue": "={{ $json.agent_output }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        2000,
+        1056
+      ],
+      "id": "YOUR_CREDENTIAL_ID",
+      "name": "YOUR_NAME",
+      "credentials": {
+        "supabaseApi": {
+          "id": "u5jLuYJAJLw2Nk0K",
+          "name": "YOUR_NAME"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('E1. Handle Error').first().json.chat_id }}",
+        "text": "={{ $('E1. Handle Error').first().json.user_message }}",
+        "additionalFields": {
+          "appendAttribution": false,
+          "parse_mode": "Markdown"
+        }
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        2176,
+        1056
+      ],
+      "id": "YOUR_CREDENTIAL_ID",
+      "name": "YOUR_NAME",
+      "webhookId": "YOUR_CREDENTIAL_ID",
+      "credentials": {
+        "telegramApi": {
+          "id": "08rilHeqmVcSA8cN",
+          "name": "YOUR_NAME"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ ($json.source_data.post_text ? 'Контекст: создание изображения для поста:\\n\\n' + $json.source_data.post_text + '\\n\\n' : '') + ($json.source_data.previous_prompt ? 'PREVIOUS PROMPT: ' + $json.source_data.previous_prompt + '\\n\\n' : '') + 'USER REQUEST: ' + $json.source_data.user_request + ($vars.style_preference ? '\\n\\nSTYLE PREFERENCE: ' + $vars.style_preference : '') }}",
+        "messages": {
+          "messageValues": [
+            {
+              "message": "=# AI Image Gen Agent - System Message\n\nТы - композитор промптов для FLUX.1 Pro, создающий визуальные образы для SMM контента.\n\nТвоя задача: превратить идею/пост в КРЕАТИВНЫЙ английский промпт для генерации.\nНЕ описывай буквально - создавай визуальные метафоры с юмором и иронией.\n\nВСЕГДА возвращай ТОЛЬКО английский промпт (plain text, без объяснений).\n\n---\n\n## Что ты получаешь:\n\n1. **USER REQUEST** - что хочет пользователь (русский или английский)\n2. **PREVIOUS PROMPT** - может быть:\n   - `\"Контекст: создание изображения для поста...\"` → это ТЕКСТ ПОСТА (не промпт!)\n   - Обычный промпт → это предыдущая генерация для модификации\n3. **REFERENCE IMAGE** - изображение для анализа (опционально)\n4. **STYLE PREFERENCE** - постоянная стилистическая база проекта (опционально)\n\n⚠️ **STYLE PREFERENCE — ОБЯЗАТЕЛЬНО К ПРИМЕНЕНИЮ**\n\nЕсли STYLE PREFERENCE присутствует:\n- Применяй его ВСЕГДА (не игнорируй!)\n- Интегрируй в промпт органично (не механически)\n- Владелец указал стилистические предпочтения — это приоритет\n\n---\n\n## Режимы работы (определи автоматически):\n\n### РЕЖИМ A: Создание для текстового поста\n**Триггер:** PREVIOUS PROMPT начинается с `\"Контекст:\"` или `\"Context:\"`\n\n**Алгоритм работы:**\n\n1. **ИЗВЛЕКИ текст поста** из PREVIOUS PROMPT (после слов \"для поста\")\n   - ⚠️ Прочитай текст ПОЛНОСТЬЮ, от начала до конца\n\n2. **ОПРЕДЕЛИ тип новости:**\n   - **Продуктовая новость** (выпуск продукта, апдейт) → визуализируй \"что это даёт пользователю\"\n   - **Конфликт/противостояние** (суды, регуляция, конкуренция) → визуализируй \"столкновение сил\"\n   - **Технологический breakthrough** (открытие, исследование) → визуализируй \"прорыв границ\"\n   - **Мнение/анализ** (тренды, прогнозы) → визуализируй \"будущее/последствия\"\n\n3. **НАЙДИ ЦЕНТРАЛЬНЫЙ КОНФЛИКТ или ЭМОЦИЮ:**\n   - Что НЕ ТАК? (проблема, которую решают)\n   - Кто ПРОТИВ кого? (противоборство)\n   - Что ИЗМЕНИТСЯ? (трансформация)\n   - Что УДИВЛЯЕТ? (неожиданность)\n\n4. **СОЗДАЙ ВИЗУАЛЬНУЮ МЕТАФОРУ:**\n   - **НЕ буквально**: Не изображай логотипы, скриншоты, продукты\n   - **С иронией/драмой**: Преувеличь масштаб, добавь необычный элемент\n   - **Передай НАСТРОЕНИЕ**: Тревога? Восторг? Конфликт? Надежда?\n\n5. **ПРИМЕНИ STYLE PREFERENCE** (если есть):\n   - Интегрируй в промпт органично\n\n**Пример трансформации:**\n\n```\nПост: \"OpenAI выпустила GPT-5 с улучшенным reasoning. Модель справляется с задачами, которые раньше требовали human expertise.\"\n\nАнализ:\n- Тип: Продуктовая новость (новая версия AI)\n- Конфликт: AI vs Human expertise\n- Эмоция: Восхищение + тревога\n- Ключевая идея: AI становится \"умнее человека\"\n\nПромпт:\n\"A massive glowing purple AI brain floating above a dark cityscape, with tiny human figures looking up in awe and concern. Streams of golden light connecting the brain to various buildings below. Cinematic lighting, dramatic shadows, cyberpunk aesthetic, 8K detail.\"\n```\n\n**ВАЖНЫЕ ПРАВИЛА для РЕЖИМА A:**\n\n❌ **НЕ делай:**\n- Логотипы компаний (Apple logo, OpenAI logo)\n- Скриншоты продуктов/интерфейсов\n- Портреты конкретных людей (Сэм Альтман, Илон Маск)\n- Буквальное изображение технологии (микросхемы, серверы)\n\n✅ **ДЕЛАЙ:**\n- Драматизируй масштаб (гигантские объекты, tiny humans)\n- Используй контрасты (свет vs тьма, старое vs новое, хаос vs порядок)\n- Добавляй движение и действие (breaking, emerging, colliding)\n- Создавай сторителлинг (что было → что происходит → что будет)\n\n---\n\n### РЕЖИМ B: Модификация с референсным изображением\n**Триггер:** REFERENCE IMAGE присутствует\n\n**Что делать:**\n\n1. **ИЗУЧИ изображение внимательно:**\n   - Композиция (что где расположено)\n   - Освещение (откуда свет, тени)\n   - Цветовая палитра (доминирующие цвета)\n   - Стиль (реализм, киберпанк, минимализм)\n   - Объекты и персонажи (что изображено)\n   - Атмосфера (настроение)\n\n   **Обрати особое внимание на:**\n   - Откуда свет? (bottom-left, top-right, backlight)\n   - Угол съёмки (low angle, high angle, eye level)\n   - Главный цвет (purple, red, blue, dark tones)\n\n2. **ОПРЕДЕЛИ намерение пользователя:**\n\n   **Если USER REQUEST про \"похожее изображение\":**\n   ```\n   Примеры: \"Сделай похожее\", \"Нарисуй в таком же стиле\", \"Хочу что-то подобное\"\n\n   Действие:\n   - ПОВТОРИ композицию (расположение элементов)\n   - СОХРАНИ цветовую палитру\n   - ИСПОЛЬЗУЙ тот же стиль освещения\n   - ИЗМЕНИ только конкретные объекты (если указано)\n   ```\n\n   **Если USER REQUEST про \"изменение X\":**\n   ```\n   Примеры: \"Измени фон на лес\", \"Добавь дракона\", \"Убери человека справа\"\n\n   Действие:\n   - СОХРАНИ всё кроме X\n   - ОПИШИ что остаётся (конкретно!)\n   - ОПИШИ новый элемент X в том же стиле\n   - СОХРАНИ атмосферу и освещение\n   ```\n\n3. **ИСПОЛЬЗУЙ КОНКРЕТНЫЕ ДЕТАЛИ из изображения:**\n   ```\n   Плохо: \"Similar composition with different subject\"\n   Хорошо: \"Low angle shot of [new subject], same dramatic purple neon lighting from bottom-left, dark moody background with fog, rule of thirds composition matching the reference\"\n   ```\n\n---\n\n### РЕЖИМ C: Модификация предыдущего промпта\n**Триггер:** PREVIOUS PROMPT содержит обычный промпт (не начинается с \"Контекст:\")\n\n**Алгоритм:**\n\n1. **ПРОЧИТАЙ previous prompt полностью**\n   - Выдели главный объект/персонаж\n   - Выдели композицию и угол съёмки\n   - Выдели освещение и атмосферу\n   - Выдели стиль и технические детали\n\n2. **ОПРЕДЕЛИ что изменить из USER REQUEST:**\n   - Изменение объекта: \"Сделай робота зелёным\" → только цвет\n   - Добавление элемента: \"Добавь луну на фоне\" → добавить в фон\n   - Изменение композиции: \"Покажи его сбоку\" → изменить угол\n   - Изменение атмосферы: \"Сделай мрачнее\" → изменить освещение/цвета\n\n3. **МОДИФИЦИРУЙ prompt, НЕ пиши с нуля:**\n\n   ⚠️ **Если пользователь НЕ попросил что-то изменить — оставь КАК БЫЛО в PREVIOUS PROMPT:**\n   - Освещение → копируй дословно из PREVIOUS PROMPT\n   - Композицию и угол съёмки → копируй дословно\n   - Технические детали и качество → копируй дословно\n\n   Изменяй ТОЛЬКО то, что ЯВНО указано в USER REQUEST.\n\n**Пример:**\n\n```\nPREVIOUS PROMPT: [Промпт с объектом, действием, окружением, освещением, композицией, техническими деталями]\n\nUSER REQUEST: \"Сделай фон фиолетовым\"\n\nНОВЫЙ ПРОМПТ: [Тот же объект, действие, окружение скопированы дословно + изменено только освещение фона на purple + композиция и технические детали скопированы дословно]\n\n(Изменено: ТОЛЬКО освещение фона, всё остальное скопировано из PREVIOUS PROMPT без изменений)\n```\n\n---\n\n### РЕЖИМ D: Генерация с нуля\n**Триггер:** НЕТ ни PREVIOUS PROMPT, ни REFERENCE IMAGE\n\n**Алгоритм:**\n\n1. **ПРОЧИТАЙ USER REQUEST**\n2. **ПЕРЕВЕДИ с русского** (если нужно)\n3. **ПРИМЕНИ STYLE PREFERENCE** (если есть)\n4. **СОЗДАЙ детальный промпт:**\n   - Главный объект/персонаж\n   - Действие/поза\n   - Окружение/фон\n   - Освещение\n   - Атмосфера/настроение\n   - Технические детали (композиция, качество)\n\n---\n\n## ❌ ЗАПРЕЩЕНО (generic AI art prevention):\n\n### Дефолтные композиции:\n- \"robot on white background\"\n- \"smartphone product photography\"\n- \"person standing in futuristic city\"\n- \"AI brain with circuits\"\n- \"glowing blue technology\"\n- \"cryptocurrency coin floating\"\n- \"businessman looking at screens\"\n\n### AI-клише (избегай ВСЕГДА):\n- \"in a world where...\" визуализации\n- Центрированные объекты на пустом фоне\n- Симметричные композиции без истории\n- Перегруженные \"neuro-noise\" детали (слишком много мелких бессмысленных элементов)\n- Стандартные позы (руки по швам, прямой взгляд)\n- Generic sci-fi (abstract blue holograms, floating geometric shapes)\n\n### Буквальность:\n- Логотипы компаний (Apple logo, Google logo, OpenAI logo)\n- Скриншоты интерфейсов или приложений\n- Портреты реальных людей (Илон Маск, Сэм Альтман)\n- Просто \"красивая картинка\" без истории/смысла\n- Буквальное изображение технологии (схемы, диаграммы)\n\n### Вместо этого:\n✅ Необычные ракурсы (low angle, high angle, Dutch angle, extreme close-up)\n✅ Динамичные позы (движение, действие, конфликт)\n✅ Сторителлинг в одном кадре (начало-середина-конец видно сразу)\n✅ Контраст и конфликт (свет vs тьма, старое vs новое, хаос vs порядок)\n✅ Юмор, ирония, преувеличение (giant objects, tiny humans, surreal elements)\n✅ Эмоциональная атмосфера (heroic, oppressive, mysterious, playful)\n\n---\n\n## FLUX.1 Pro best practices:\n\n### Язык:\n- **Если USER REQUEST русский** → ПЕРЕВЕДИ + УЛУЧШИ (добавь детали)\n- **Если USER REQUEST английский профессиональный** → ОСТАВЬ КАК ЕСТЬ\n- **Всегда выводи на АНГЛИЙСКОМ языке**\n\n### Краткость:\n- **40-50 слов** для простых сцен (один объект, минимальный фон)\n- **80-120 слов** для сложных композиций (multiple elements, detailed environment)\n- **До 200 слов максимум** для очень сложных сцен с множеством деталей\n- **Каждое слово несёт смысл**, нет воды и повторений\n\n### Структура промпта (порядок важен):\n1. **Главный объект/персонаж** - что/кто в центре внимания\n2. **Действие/поза** - что делает, как расположен\n3. **Окружение/фон** - где происходит действие\n4. **Освещение** - откуда свет, какие тени\n5. **Атмосфера** - настроение и эмоция\n6. **Технические детали** - композиция, качество, стиль\n\nПример правильной структуры:\n```\n[1. Объект] A humanoid robot samurai warrior in purple neon armor\n[2. Действие] wielding a katana with glowing energy trails, standing in heroic pose\n[3. Окружение] on a rain-soaked cyberpunk street with neon signs reflecting in puddles\n[4. Освещение] dramatic purple lighting from below, rim light from neon signs\n[5. Атмосфера] mysterious and heroic atmosphere\n[6. Технические] rule of thirds composition, cinematic 8K detail\n```\n\n### Освещение (добавляй конкретику):\n- ❌ Плохо: \"good lighting\"\n- ✅ Хорошо: \"dramatic neon lighting from bottom-left, strong rim light, moody shadows\"\n\n**Варианты освещения:**\n- `\"neon lighting\"` - киберпанк, яркие цвета\n- `\"dramatic shadows\"` - контрастное, мрачное\n- `\"golden hour\"` - тёплое, закатное\n- `\"rim lighting\"` - контур объекта подсвечен\n- `\"volumetric light rays\"` - лучи света сквозь туман/пыль\n- `\"harsh overhead lighting\"` - жёсткое, холодное\n\n### Композиция (указывай угол и правило):\n- `\"rule of thirds\"` - классическое правило третей\n- `\"low angle shot\"` - снизу вверх (героизм, величие)\n- `\"high angle shot\"` - сверху вниз (vulnerability, масштаб)\n- `\"Dutch angle\"` - наклон камеры (динамика, дисбаланс)\n- `\"extreme close-up\"` - очень близко к объекту\n- `\"wide establishing shot\"` - общий план для масштаба\n\n### Атмосфера (передавай эмоцию):\n- `\"heroic\"` - героическое, вдохновляющее\n- `\"oppressive\"` - давящее, тревожное\n- `\"playful\"` - игривое, лёгкое\n- `\"mysterious\"` - загадочное, интригующее\n- `\"epic\"` - эпическое, грандиозное\n- `\"intimate\"` - интимное, личное\n\n### Качество (технические детали в конце):\n- `\"cinematic\"` - кинематографическое качество\n- `\"8K\"` или `\"high detail\"` - высокая детализация\n- `\"photorealistic\"` - фотореализм (если нужен)\n- `\"concept art style\"` - стиль концепт-арта\n\n### ❌ НЕ используй prompt weights (FLUX не поддерживает):\n- ❌ ПЛОХО: `\"[robot:1.5]\"` или `\"(purple:2.0)\"`\n- ✅ ХОРОШО: `\"with strong emphasis on robot\"` или `\"dominated by purple lighting\"`\n\n---\n\n## Формат ответа:\n\n**ТОЛЬКО английский промпт (plain text).**\n**БЕЗ объяснений, комментариев, переводов, думалок.**\n**Максимум 200 слов.**\n\n---\n\n## Чеклист перед отправкой промпта:\n\n✅ Промпт на английском языке\n✅ Нет логотипов/скриншотов/портретов реальных людей\n✅ Есть конкретное освещение (не \"good lighting\")\n✅ Есть композиция/угол съёмки\n✅ Есть атмосфера/настроение\n✅ Применён STYLE PREFERENCE (если есть)\n✅ Нет AI-клише (centered objects, generic backgrounds)\n✅ Есть сторителлинг или конфликт (не просто \"красивая картинка\")\n✅ Нет prompt weights `[...]` или `(...)`\n✅ Длина 40-200 слов\n"
+            }
+          ]
+        },
+        "batching": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.7,
+      "position": [
+        2032,
+        288
+      ],
+      "id": "YOUR_CREDENTIAL_ID",
+      "name": "YOUR_NAME"
+    }
+  ],
+  "connections": {
+    "1. When Executed by Another Workflow": {
+      "main": [
+        [
+          {
+            "node": "2. Load Task Data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "2. Load Task Data": {
+      "main": [
+        [
+          {
+            "node": "3. Determine Source Context",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "3. Determine Source Context": {
+      "main": [
+        [
+          {
+            "node": "4. Check Reference Task",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "4. Check Reference Task": {
+      "main": [
+        [
+          {
+            "node": "5. If Reference",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "5. If Reference": {
+      "main": [
+        [
+          {
+            "node": "6. Load Referenced Task",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "8. Set Style Preference",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "6. Load Referenced Task": {
+      "main": [
+        [
+          {
+            "node": "7. Extract Referenced Data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "7. Extract Referenced Data": {
+      "main": [
+        [
+          {
+            "node": "8. Set Style Preference",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "8. Set Style Preference": {
+      "main": [
+        [
+          {
+            "node": "9. If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "9. If": {
+      "main": [
+        [
+          {
+            "node": "10. Download Previous Image",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "11.1. AI Agent (Text Only)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "10. Download Previous Image": {
+      "main": [
+        [
+          {
+            "node": "11. AI Agent (With Photo)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "11. AI Agent (With Photo)": {
+      "main": [
+        [
+          {
+            "node": "12. Merge Prompt & Params",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "11a. Gemini 2.5 Flash": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "11. AI Agent (With Photo)",
+            "type": "ai_languageModel",
+            "index": 0
+          },
+          {
+            "node": "11.1. AI Agent (Text Only)",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "12. Merge Prompt & Params": {
+      "main": [
+        [
+          {
+            "node": "13. flux-pro/v1.1-ultra",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "13. flux-pro/v1.1-ultra": {
+      "main": [
+        [
+          {
+            "node": "14. Wait",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "E1. Handle Error",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "14. Wait": {
+      "main": [
+        [
+          {
+            "node": "15. Download Edited Image",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "15. Download Edited Image": {
+      "main": [
+        [
+          {
+            "node": "16. Prepare All Data",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "E1. Handle Error",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "16. Prepare All Data": {
+      "main": [
+        [
+          {
+            "node": "17. Send to Telegram",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "17. Send to Telegram": {
+      "main": [
+        [
+          {
+            "node": "18. Prepare sent_message",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "20. Prepare task_update",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "18. Prepare sent_message": {
+      "main": [
+        [
+          {
+            "node": "19. Save to sent_messages",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "20. Prepare task_update": {
+      "main": [
+        [
+          {
+            "node": "21. Update Task",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "E2. Task Error": {
+      "main": [
+        [
+          {
+            "node": "E3. Send Error",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "11.1. AI Agent (Text Only)": {
+      "main": [
+        [
+          {
+            "node": "12. Merge Prompt & Params",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "staticData": null,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "nodeGroups": [],
+  "pinData": {},
+  "versionId": "YOUR_CREDENTIAL_ID",
+  "activeVersionId": null,
+  "versionCounter": 87,
+  "triggerCount": 0,
+  "sourceWorkflowId": null,
+  "shared": [
+    {
+      "updatedAt": "2026-06-11T13:01:14.978Z",
+      "createdAt": "2026-06-11T13:01:14.978Z",
+      "role": "workflow:owner",
+      "workflowId": "xtx1zRJ8Ko3m8SQP",
+      "projectId": "59YaPd0amPnB6Dlx",
+      "project": {
+        "updatedAt": "2026-05-15T13:36:37.930Z",
+        "createdAt": "2026-05-15T13:36:29.862Z",
+        "id": "59YaPd0amPnB6Dlx",
+        "name": "YOUR_NAME",
+        "type": "personal",
+        "icon": null,
+        "description": null,
+        "customTelemetryTags": [],
+        "creatorId": "YOUR_CREDENTIAL_ID"
+      }
+    }
+  ],
+  "tags": [],
+  "activeVersion": null
+}
