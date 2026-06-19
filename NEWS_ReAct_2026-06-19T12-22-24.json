@@ -1,0 +1,97 @@
+{
+  "updatedAt": "2026-06-11T12:59:22.791Z",
+  "createdAt": "2026-06-11T12:59:15.052Z",
+  "id": "jN0iyMxp6R49BlCs",
+  "name": "YOUR_NAME",
+  "description": null,
+  "active": true,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "inputSource": "passthrough"
+      },
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "YOUR_CREDENTIAL_ID",
+      "name": "YOUR_NAME"
+    }
+  ],
+  "connections": {},
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "staticData": null,
+  "meta": null,
+  "nodeGroups": [],
+  "pinData": {},
+  "versionId": "YOUR_CREDENTIAL_ID",
+  "activeVersionId": "YOUR_CREDENTIAL_ID",
+  "versionCounter": 1,
+  "triggerCount": 0,
+  "sourceWorkflowId": null,
+  "shared": [
+    {
+      "updatedAt": "2026-06-11T12:59:15.053Z",
+      "createdAt": "2026-06-11T12:59:15.053Z",
+      "role": "workflow:owner",
+      "workflowId": "jN0iyMxp6R49BlCs",
+      "projectId": "59YaPd0amPnB6Dlx",
+      "project": {
+        "updatedAt": "2026-05-15T13:36:37.930Z",
+        "createdAt": "2026-05-15T13:36:29.862Z",
+        "id": "59YaPd0amPnB6Dlx",
+        "name": "YOUR_NAME",
+        "type": "personal",
+        "icon": null,
+        "description": null,
+        "customTelemetryTags": [],
+        "creatorId": "YOUR_CREDENTIAL_ID"
+      }
+    }
+  ],
+  "tags": [],
+  "activeVersion": {
+    "updatedAt": "2026-06-11T12:59:33.000Z",
+    "createdAt": "2026-06-11T12:59:15.055Z",
+    "versionId": "YOUR_CREDENTIAL_ID",
+    "workflowId": "jN0iyMxp6R49BlCs",
+    "nodes": [
+      {
+        "parameters": {
+          "inputSource": "passthrough"
+        },
+        "type": "n8n-nodes-base.executeWorkflowTrigger",
+        "typeVersion": 1.1,
+        "position": [
+          0,
+          0
+        ],
+        "id": "YOUR_CREDENTIAL_ID",
+        "name": "YOUR_NAME"
+      }
+    ],
+    "connections": {},
+    "nodeGroups": [],
+    "authors": "Semenovych Oleksii",
+    "name": "YOUR_NAME",
+    "description": "",
+    "autosaved": true,
+    "workflowPublishHistory": [
+      {
+        "createdAt": "2026-06-11T12:59:33.923Z",
+        "id": 52,
+        "workflowId": "jN0iyMxp6R49BlCs",
+        "versionId": "YOUR_CREDENTIAL_ID",
+        "event": "activated",
+        "userId": "YOUR_CREDENTIAL_ID"
+      }
+    ]
+  }
+}
