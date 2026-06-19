@@ -1,0 +1,932 @@
+{
+  "updatedAt": "2026-06-17T18:01:11.728Z",
+  "createdAt": "2026-06-10T13:07:10.071Z",
+  "id": "sTEDyCHI7FFMGyHi",
+  "name": "YOUR_NAME",
+  "description": null,
+  "active": false,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "content": "# -–--> ОТКРЫЛ > СКЛЕИЛ > СОХРАНИЛ > ПЕРЕДАЛ\n",
+        "height": 432,
+        "width": 1280,
+        "color": 4
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        592,
+        560
+      ],
+      "typeVersion": 1,
+      "id": "YOUR_CREDENTIAL_ID",
+      "name": "YOUR_NAME"
+    },
+    {
+      "parameters": {
+        "content": "# -–--> ПОЛУЧИЛ ССЫЛКИ > ОТФИЛЬТРОВАЛ\n\n",
+        "height": 512,
+        "width": 1872,
+        "color": 5
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        0,
+        0
+      ],
+      "typeVersion": 1,
+      "id": "YOUR_CREDENTIAL_ID",
+      "name": "YOUR_NAME"
+    },
+    {
+      "parameters": {
+        "content": "ScrapingBee — это сервис для веб-скрапинга (парсинга сайтов) через API.ScrapingBee — это сервис для веб-скрапинга (парсинга сайтов) через API.\n\nЧто делает\nПозволяет извлекать данные с любых сайтов без блокировок — он берёт на себя все технические сложности:\n\nРотация прокси — автоматически меняет IP чтобы сайт не заблокировал\nHeadless браузер — рендерит JavaScript как настоящий браузер\nОбход антибот защиты — Cloudflare, капчи и другие защиты\nСкриншоты страниц — делает снимок любого сайта\nИзвлечение данных — CSS селекторы для парсинга конкретных элементов\n\n\nКак использовать в n8n\nДобавь узел HTTP Request и обращайся к ScrapingBee API:\nhttps://app.scrapingbee.com/api/v1/?api_key=ТВОЙ_КЛЮЧ&url=https://сайт.com&render_js=true\n\nДля чего полезен\n\nМониторинг цен конкурентов\nСбор новостей с сайтов без RSS\nПарсинг вакансий, объявлений, отзывов\nСкрапинг сайтов с JavaScript рендерингом (SPA)\n\n\nЦены\nЕсть бесплатный план — 1000 кредитов при регистрации. Один запрос = 1-25 кредитов в зависимости от сложности.",
+        "height": 576,
+        "width": 528
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        0,
+        704
+      ],
+      "typeVersion": 1,
+      "id": "YOUR_CREDENTIAL_ID",
+      "name": "YOUR_NAME"
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "hours",
+              "hoursInterval": 12
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        48,
+        176
+      ],
+      "id": "YOUR_CREDENTIAL_ID",
+      "name": "YOUR_NAME"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Получаем оригинальные статьи до сохранения\nconst splitOutItems = $items(\"14. Разбивка массива articles на отдельные статьи\");\nconst articles = splitOutItems.map(item => ({\n  source_url: item.json.articles?.source_url || item.json.source_url,\n  title: item.json.articles?.scraped_title || item.json.scraped_title,\n  full_text: item.json.articles?.full_text || item.json.full_text,\n  processed_at: item.json.articles?.processed_at || item.json.processed_at,\n  quality_flags: item.json.articles?.quality_flags || item.json.quality_flags\n}));\n\nreturn {\n  json: {\n    articles: articles,\n    ready_for_ai: true,\n    total_articles: articles.length,\n    timestamp: new Date().toISOString()\n  }\n};"
+      },
+      "id": "YOUR_CREDENTIAL_ID",
+      "name": "YOUR_NAME",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1456,
+        784
+      ],
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "content": "📋 ДОКУМЕНТАЦИЯ WORKFLOW\n🔄 ОСНОВНОЙ ПОТОК\n1. Schedule Trigger → Запускает workflow по расписанию (автоматический триггер)\n\n2. Airtable → Получает список RSS-источников из базы данных Airtable\n\n3. Split In Batches → Разбивает источники на пакеты для последовательной обработки\n\n4. RSS Read → Читает RSS-ленты и извлекает статьи из каждого источника\n\n5. If → Проверяет условие (вероятно, наличие статей или валидность данных)\n\n6. Get All Processed URLs → Получает из Airtable список уже обработанных URL статей\n\n7. Code → Обрабатывает данные (подготовка к сравнению или фильтрации)\n\n8. Merge → Объединяет новые статьи со списком обработанных URL\n\n9. Filter Unique Articles → Фильтрует только уникальные статьи (исключает дубликаты)\n\n10. Limit 8 → Ограничивает количество статей до 8 штук за раз\n\n11. Scrape using HTML API → Извлекает полный контент статей через ScrapingBee API\n\n12. Code → Обрабатывает извлеченный HTML (парсинг, очистка данных)\n\n13. Code → Дополнительная обработка данных статей\n\n14. Split Out Articles → Разделяет массив статей на отдельные элементы\n\n15. Save to Processed → Сохраняет обработанные URL в Airtable (предотвращает повторную обработку)\n\n16. Aggregate for AI → Агрегирует данные статей для передачи в AI\n\n17. Call 'NEWS Longread Writer' → Вызывает другой workflow для генерации лонгрида на основе статей\n\n\nОбщая логика: Workflow автоматически собирает RSS-статьи, фильтрует новые, скрапит их содержимое и передает в AI для создания лонгридов.\n\nhttps://aizdec.notion.site/YOUR_GOOGLE_DRIVE_FOLDER_ID4adcb7531",
+        "height": 1200,
+        "width": 816
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -960,
+        0
+      ],
+      "typeVersion": 1,
+      "id": "YOUR_CREDENTIAL_ID",
+      "name": "YOUR_NAME"
+    },
+    {
+      "parameters": {
+        "jsCode": "// 1. Получаем все входящие элементы из предыдущей ноды (на скрине слева)\nconst inputItems = $input.all();\n\n// 2. Считаем длину полученного массива (количество статей)\nconst processedCount = inputItems.length;\n\n// 3. Возвращаем результат и формируем нужное сообщение\nreturn [{\n  json: {\n    message: `🗂 Уже обработано ссылок: ${processedCount}`,\n    processedCount: processedCount\n  }\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        656,
+        -256
+      ],
+      "id": "YOUR_CREDENTIAL_ID",
+      "name": "YOUR_NAME",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "chatId": "27020283",
+        "text": "={{ $json.message }}",
+        "additionalFields": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        832,
+        -256
+      ],
+      "id": "YOUR_CREDENTIAL_ID",
+      "name": "YOUR_NAME",
+      "webhookId": "YOUR_CREDENTIAL_ID",
+      "credentials": {
+        "telegramApi": {
+          "id": "08rilHeqmVcSA8cN",
+          "name": "YOUR_NAME"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const count = $input.all().length;\n\nreturn [{\n  json: {\n    message: `📰 Было прочитано ${count} ссылок`,\n    count: count\n  }\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1056,
+        -256
+      ],
+      "id": "YOUR_CREDENTIAL_ID",
+      "name": "YOUR_NAME",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "chatId": "27020283",
+        "text": "={{ $json.message }}",
+        "additionalFields": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        1232,
+        -256
+      ],
+      "id": "YOUR_CREDENTIAL_ID",
+      "name": "YOUR_NAME",
+      "webhookId": "YOUR_CREDENTIAL_ID",
+      "credentials": {
+        "telegramApi": {
+          "id": "08rilHeqmVcSA8cN",
+          "name": "YOUR_NAME"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const count = $input.all().length;\n\nreturn [{\n  json: {\n    message: `📰 Получено ссылок за последние сутки ${count}`,\n    count: count\n  }\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1424,
+        -256
+      ],
+      "id": "YOUR_CREDENTIAL_ID",
+      "name": "YOUR_NAME",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "chatId": "27020283",
+        "text": "={{ $json.message }}",
+        "additionalFields": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        1600,
+        -256
+      ],
+      "id": "YOUR_CREDENTIAL_ID",
+      "name": "YOUR_NAME",
+      "webhookId": "YOUR_CREDENTIAL_ID",
+      "credentials": {
+        "telegramApi": {
+          "id": "08rilHeqmVcSA8cN",
+          "name": "YOUR_NAME"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const count = $input.all().length;\n\nreturn [{\n  json: {\n    message: `📰 Осталось ссылок после фильтрации - ${count}`,\n    count: count\n  }\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1792,
+        -256
+      ],
+      "id": "YOUR_CREDENTIAL_ID",
+      "name": "YOUR_NAME",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "chatId": "27020283",
+        "text": "={{ $json.message }}",
+        "additionalFields": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        1968,
+        -256
+      ],
+      "id": "YOUR_CREDENTIAL_ID",
+      "name": "YOUR_NAME",
+      "webhookId": "YOUR_CREDENTIAL_ID",
+      "credentials": {
+        "telegramApi": {
+          "id": "08rilHeqmVcSA8cN",
+          "name": "YOUR_NAME"
+        }
+      },
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "operation": "search",
+        "base": {
+          "__rl": true,
+          "value": "appATZYvsfy1jCLp4",
+          "mode": "list",
+          "cachedResultName": "RSS (шаблон таблицы)",
+          "cachedResultUrl": "https://airtable.com/appATZYvsfy1jCLp4"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tblsBWjRU1Y41H0aF",
+          "mode": "list",
+          "cachedResultName": "Обработанные",
+          "cachedResultUrl": "https://airtable.com/appATZYvsfy1jCLp4/tblsBWjRU1Y41H0aF"
+        },
+        "options": {},
+        "sort": {
+          "property": [
+            {
+              "field": "Дата обработки"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.1,
+      "position": [
+        256,
+        288
+      ],
+      "id": "YOUR_CREDENTIAL_ID",
+      "name": "YOUR_NAME",
+      "alwaysOutputData": false,
+      "retryOnFail": false,
+      "maxTries": 2,
+      "executeOnce": true,
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "SNeO3C6XhrBc89Y7",
+          "name": "YOUR_NAME"
+        }
+      },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "operation": "search",
+        "base": {
+          "__rl": true,
+          "value": "appATZYvsfy1jCLp4",
+          "mode": "list",
+          "cachedResultName": "RSS (шаблон таблицы)",
+          "cachedResultUrl": "https://airtable.com/appATZYvsfy1jCLp4"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tbl3jxf4rM7Y99PEU",
+          "mode": "list",
+          "cachedResultName": "Источники",
+          "cachedResultUrl": "https://airtable.com/appATZYvsfy1jCLp4/tbl3jxf4rM7Y99PEU"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.1,
+      "position": [
+        256,
+        112
+      ],
+      "id": "YOUR_CREDENTIAL_ID",
+      "name": "YOUR_NAME",
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "SNeO3C6XhrBc89Y7",
+          "name": "YOUR_NAME"
+        }
+      },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Собрать массив обработанных URL из входного потока\nfunction normalizeUrl(u) {\n  try {\n    const url = new URL(u.trim());\n    // убираем UTM и прочие маркеры\n    ['utm_source','utm_medium','utm_campaign','utm_term','utm_content','gclid','fbclid','ref','ref_src'].forEach(p => url.searchParams.delete(p));\n    // trailing slash нормализуем\n    if (url.pathname !== '/' && url.pathname.endsWith('/')) url.pathname = url.pathname.slice(0, -1);\n    // приводим хост к нижнему регистру\n    url.hostname = url.hostname.toLowerCase();\n    return url.toString();\n  } catch {\n    return (u || '').trim();\n  }\n}\n\nconst processed = $input.all()\n  .map(i => i.json?.URL)\n  .filter(Boolean)\n  .map(normalizeUrl);\n\n// Пишем в workflow static data\nconst s = $getWorkflowStaticData('global');\ns.processedUrls = processed;        // массив на текущий ран\ns.seenNow = [];                     // для дедупа в рамках текущего запуска\n\n// Пробрасываем вход дальше без изменений (или вернём пустой item — как удобнее)\nreturn $input.all();\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        448,
+        288
+      ],
+      "id": "YOUR_CREDENTIAL_ID",
+      "name": "YOUR_NAME",
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "options": {
+          "reset": false
+        }
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        640,
+        96
+      ],
+      "id": "YOUR_CREDENTIAL_ID",
+      "name": "YOUR_NAME",
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "YOUR_CREDENTIAL_ID",
+              "leftValue": "={{ $json.isoDate }}",
+              "rightValue": "={{ $now.minus({ hours: 24 }) }}",
+              "operator": {
+                "type": "dateTime",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            },
+            {
+              "id": "YOUR_CREDENTIAL_ID",
+              "leftValue": "={{ $json.isoDate }}",
+              "rightValue": "={{ $now.minus({ hours: 24 }) }}",
+              "operator": {
+                "type": "dateTime",
+                "operation": "after"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        1072,
+        80
+      ],
+      "id": "YOUR_CREDENTIAL_ID",
+      "name": "YOUR_NAME"
+    },
+    {
+      "parameters": {
+        "url": "={{ $json.RSS_Feed_URL }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.rssFeedRead",
+      "typeVersion": 1.2,
+      "position": [
+        880,
+        80
+      ],
+      "id": "YOUR_CREDENTIAL_ID",
+      "name": "YOUR_NAME",
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        1280,
+        272
+      ],
+      "id": "YOUR_CREDENTIAL_ID",
+      "name": "YOUR_NAME"
+    },
+    {
+      "parameters": {
+        "jsCode": "// ---- URL нормализация (устойчивая к мусору) ----\nfunction norm(u) {\n  try {\n    const s = String(u || '').trim();\n    if (!s) return '';\n    const url = new URL(s);\n    url.hostname = url.hostname.toLowerCase().replace(/^www\\./, '');\n    // вычищаем маркеры и мусор\n    ['utm_source','utm_medium','utm_campaign','utm_term','utm_content','gclid','fbclid','ref','ref_src','m']\n      .forEach(p => url.searchParams.delete(p));\n    // убираем хвостовой слеш (кроме корня)\n    if (url.pathname !== '/' && url.pathname.endsWith('/')) url.pathname = url.pathname.slice(0, -1);\n    url.hash = '';\n    return url.toString();\n  } catch {\n    return String(u || '').trim();\n  }\n}\n\n// ---- 1) Собираем Set обработанных URL из Airtable ----\nconst all = $input.all();\nconst processedSet = new Set();\n\nfor (const it of all) {\n  const p = it?.json?.URL;            // у записей Airtable есть поле URL\n  if (p) {\n    const n = norm(p);\n    if (n) processedSet.add(n);\n  }\n}\n\n// ---- 2) Фильтруем только статьи ----\nconst seen = new Set();                // дедуп внутри текущего запуска\nconst out = [];\n\nfor (const it of all) {\n  const j = it.json || {};\n\n  // пропускаем записи из Airtable (они уже учтены выше)\n  if (j.URL) continue;\n\n  // достаём ссылку статьи из разных возможных полей\n  const raw =\n    j.link ||\n    j.url ||\n    (typeof j.id === 'string' && j.id.startsWith('http') ? j.id : null) ||\n    j.guid ||\n    j?.enclosure?.url;\n\n  if (!raw) continue;\n\n  const n = norm(raw);\n  if (!n) continue;\n\n  // если уже обработанo или повтор внутри этого батча — пропускаем\n  if (processedSet.has(n) || seen.has(n)) continue;\n\n  seen.add(n);\n  out.push(it); // возвращаем оригинальный item статьи\n}\n\nreturn out;\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1472,
+        272
+      ],
+      "id": "YOUR_CREDENTIAL_ID",
+      "name": "YOUR_NAME",
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "maxItems": 8
+      },
+      "type": "n8n-nodes-base.limit",
+      "typeVersion": 1,
+      "position": [
+        1680,
+        336
+      ],
+      "id": "YOUR_CREDENTIAL_ID",
+      "name": "YOUR_NAME"
+    },
+    {
+      "parameters": {
+        "url": "={{ $json.link }}",
+        "additionalFields": {
+          "aiExtractRules": "{\"title\": \"Extract the main article title (not site name, not navigation text, just the article headline)\",\n\"full_article_text\": \"Extract ONLY the main article content. Exclude: cookie banners, navigation menus, advertisements, social media buttons, footer text, 'Sign in dialog', 'Search dialog', comment sections, and any promotional content. Focus on paragraphs that form the actual article body.\"}",
+          "blockResources": true,
+          "jsonResponse": true
+        }
+      },
+      "type": "n8n-nodes-scrapingbee.ScrapingBee",
+      "typeVersion": 1,
+      "position": [
+        672,
+        704
+      ],
+      "id": "YOUR_CREDENTIAL_ID",
+      "name": "YOUR_NAME",
+      "executeOnce": false,
+      "credentials": {
+        "ScrapingBeeApi": {
+          "id": "paVilOPPuhJUBy2x",
+          "name": "YOUR_NAME"
+        }
+      },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForEachItem",
+        "jsCode": "// 1. Получаем объект от ScrapingBee\nconst scrapedResult = $input.item.json;\n\n// Helper function: Safely parse potentially malformed JSON\nfunction safeJsonParse(jsonString) {\n  if (!jsonString) return null;\n  \n  try {\n    return JSON.parse(jsonString);\n  } catch (e1) {\n    try {\n      const cleaned = jsonString\n        .replace(/\\\\'/g, \"'\")\n        .replace(/\\n/g, '\\\\n')\n        .replace(/\\r/g, '\\\\r')\n        .replace(/\\t/g, '\\\\t');\n      return JSON.parse(cleaned);\n    } catch (e2) {\n      try {\n        const match = jsonString.match(/\\{[^]*\\}/);\n        if (match) return JSON.parse(match[0]);\n      } catch (e3) {\n        console.error('All JSON parse attempts failed:', e3.message);\n        return null;\n      }\n    }\n  }\n  return null;\n}\n\n// Helper function: Clean junk from article text\nfunction cleanArticleText(text) {\n  if (!text) return '';\n  \n  let cleaned = text;\n  \n  // Define cleanup patterns\n  const junkPatterns = [\n    // Cookie consent (matches \"We process your data...\")\n    /We (use|process) (cookies?|your data)[^]*?privacy policy[^]*?\\n/gi,\n    /This (website|site) uses (cookies?|tracking)[^]{0,300}?\\n/gi,\n    /Accept (all )?cookies?[^]*?\\n/gi,\n    /Cookie (settings?|preferences?)[^]*?\\n/gi,\n    /On\\nThese cookies[^]*?---/gi,  // Ars Technica cookie sections\n    \n    // Navigation\n    /Search dialog\\.{3}\\n*/gi,\n    /Sign in dialog\\.{3}\\n*/gi,\n    /Loading\\.{3}\\n*/gi,\n    /Skip to (content|main)\\n/gi,\n    /Text\\nsettings[^]*?Minimize to nav\\n/gi,  // Text settings widget\n    \n    // Footer junk\n    /Customize\\s*$/gi,\n    /Prev story\\n/gi,\n    /Next story\\n/gi,\n    \n    // Comment sections\n    /\\d+ Comments\\nComments\\nForum view\\nLoading comments\\.{3}/gi,\n    \n    // Ad/tracking pixels at end\n    /!\\[\\]\\(https:\\/\\/(dc\\.ads\\.linkedin|t\\.co|analytics\\.twitter)[^)]+\\)/gi\n  ];\n  \n  // Apply cleanup\n  for (const pattern of junkPatterns) {\n    cleaned = cleaned.replace(pattern, '');\n  }\n  \n  // Clean excessive whitespace\n  cleaned = cleaned.replace(/\\n{3,}/g, '\\n\\n').trim();\n  \n  return cleaned;\n}\n\n// 2. Проверяем ai_response\nif (!scrapedResult || !scrapedResult.ai_response) {\n  return {\n    json: {\n      error: true,\n      error_message: 'Missing ai_response from ScrapingBee',\n      error_type: 'missing_response',\n      source_url: scrapedResult?.['resolved-url'] || scrapedResult?.url || 'unknown',\n      raw_response_preview: JSON.stringify(scrapedResult).substring(0, 200)\n    }\n  };\n}\n\n// 3. Парсим ai_response\nconst scrapedData = safeJsonParse(scrapedResult.ai_response);\n\nif (!scrapedData) {\n  return {\n    json: {\n      error: true,\n      error_message: 'Failed to parse ai_response JSON',\n      error_type: 'json_parse_error',\n      source_url: scrapedResult?.['resolved-url'] || scrapedResult?.url || 'unknown',\n      raw_response: scrapedResult.ai_response?.substring(0, 500) || 'no response'\n    }\n  };\n}\n\n// 4. Получаем RSS данные\nconst inputItemIndex = $input.item.pairedItem?.item ?? 0;\nconst inputItems = $items(\"9. Фильтруем на уникальность\");\nconst originalItem = inputItems[inputItemIndex]?.json || {};\n\n// 5. Extract и clean данные\nconst scrapedTitle = (scrapedData.title || scrapedData.main_title || '').trim();\nconst rawText = (scrapedData.full_article_text || scrapedData.full_text || scrapedData.content || '').trim();\nconst rssTitle = (originalItem.title || '').trim();\n\n// 6. CLEAN THE TEXT\nconst cleanedText = cleanArticleText(rawText);\n\n// 7. Финальный объект\nconst finalArticle = {\n  source_url: originalItem.link || originalItem.url || scrapedResult?.['resolved-url'] || '',\n  rss_title: rssTitle,\n  pubDate: originalItem.pubDate || originalItem.isoDate || '',\n  author: originalItem.author || originalItem.creator || originalItem['dc:creator'] || '',\n  scraped_title: scrapedTitle || rssTitle,\n  full_text: cleanedText,\n  processed_at: new Date().toISOString(),\n  error: false,\n  quality_flags: {\n    title_from_scraping: scrapedTitle.length > 0,\n    text_length: cleanedText.length,\n    raw_text_length: rawText.length,\n    cleanup_reduced_by: rawText.length - cleanedText.length,\n    has_meaningful_content: cleanedText.length > 100\n  }\n};\n\nreturn { json: finalArticle };"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        864,
+        704
+      ],
+      "id": "YOUR_CREDENTIAL_ID",
+      "name": "YOUR_NAME",
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Получаем все статьи с предыдущего шага\nconst allArticles = $input.all();\n\ntry {\n  // Фильтруем только успешные статьи (без ошибок)\n  const successfulArticles = allArticles\n    .map(item => item.json)\n    .filter(article => !article.error);\n\n  const errorCount = allArticles.length - successfulArticles.length;\n\n  // Возвращаем объект с массивом статей и метаданными\n  return {\n    json: {\n      articles: successfulArticles,\n      metadata: {\n        total_processed: allArticles.length,\n        successful: successfulArticles.length,\n        errors: errorCount,\n        processed_at: new Date().toISOString()\n      }\n    }\n  };\n\n} catch (error) {\n  return {\n    json: {\n      articles: [],\n      metadata: {\n        total_processed: 0,\n        successful: 0,\n        errors: allArticles.length,\n        error_message: error.message\n      }\n    }\n  };\n}"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1072,
+        704
+      ],
+      "id": "YOUR_CREDENTIAL_ID",
+      "name": "YOUR_NAME",
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "articles",
+        "include": "selectedOtherFields",
+        "fieldsToInclude": "metadata",
+        "options": {}
+      },
+      "id": "YOUR_CREDENTIAL_ID",
+      "name": "YOUR_NAME",
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        1248,
+        704
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "create",
+        "base": {
+          "__rl": true,
+          "value": "appATZYvsfy1jCLp4",
+          "mode": "list",
+          "cachedResultName": "RSS (шаблон таблицы)",
+          "cachedResultUrl": "https://airtable.com/appATZYvsfy1jCLp4"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tblsBWjRU1Y41H0aF",
+          "mode": "list",
+          "cachedResultName": "Обработанные",
+          "cachedResultUrl": "https://airtable.com/appATZYvsfy1jCLp4/tblsBWjRU1Y41H0aF"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "URL": "={{ $json.articles?.source_url || $json.source_url }}",
+            "Дата обработки": "={{ $json.articles?.processed_at || $json.processed_at || $now() }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "URL",
+              "displayName": "URL",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Дата обработки",
+              "displayName": "Дата обработки",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "dateTime",
+              "readOnly": false,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "id": "YOUR_CREDENTIAL_ID",
+      "name": "YOUR_NAME",
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.1,
+      "position": [
+        1664,
+        608
+      ],
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "SNeO3C6XhrBc89Y7",
+          "name": "YOUR_NAME"
+        }
+      },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "zTkdcDnMZP5apEzE",
+          "mode": "list",
+          "cachedResultUrl": "/workflow/zTkdcDnMZP5apEzE",
+          "cachedResultName": "NEWS -> Longread Writer"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": true
+        },
+        "options": {
+          "waitForSubWorkflow": false
+        }
+      },
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.3,
+      "position": [
+        1664,
+        784
+      ],
+      "id": "YOUR_CREDENTIAL_ID",
+      "name": "YOUR_NAME"
+    },
+    {
+      "parameters": {
+        "content": "–--> ДЕБАГЕР\nОтправка данных в ТГ на каждом этапе",
+        "height": 400,
+        "width": 1712,
+        "color": 3
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        560,
+        -432
+      ],
+      "typeVersion": 1,
+      "id": "YOUR_CREDENTIAL_ID",
+      "name": "YOUR_NAME"
+    }
+  ],
+  "connections": {
+    "1. Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "2. Забираем источники новостей",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "6. Забирает все ссылки из ОБРАБОТАННЫЕ",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "16. Aggregate for AI": {
+      "main": [
+        [
+          {
+            "node": "17. Отправляем данные в  'NEWS Longread Writer'",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Подсчет ссылок в Airtable (обработанные)": {
+      "main": [
+        [
+          {
+            "node": "TG -> Airtable (обработанные)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Кол-во ссылок из RSS": {
+      "main": [
+        [
+          {
+            "node": "TG -> Кол-во ссылок из RSS",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Кол-во ссылок за последние 24 часа": {
+      "main": [
+        [
+          {
+            "node": "TG -> Кол-во ссылок за последние 24 часа",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Кол-во новых ссылок (после фильтра)": {
+      "main": [
+        [
+          {
+            "node": "TG -> Кол-во новых ссылок (после фильтра)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "6. Забирает все ссылки из ОБРАБОТАННЫЕ": {
+      "main": [
+        [
+          {
+            "node": "7. Собираем в нужный формат JSON",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "2. Забираем источники новостей": {
+      "main": [
+        [
+          {
+            "node": "3. Отправляем по 1 ссылке",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "7. Собираем в нужный формат JSON": {
+      "main": [
+        [
+          {
+            "node": "8. Объединяем все в один массив, сначала из RSS и потом из ОБРАБОТАННЫЕ",
+            "type": "main",
+            "index": 1
+          },
+          {
+            "node": "Подсчет ссылок в Airtable (обработанные)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "3. Отправляем по 1 ссылке": {
+      "main": [
+        [
+          {
+            "node": "4. Обработки одного источника RSS Read и отдаем все новости",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "3. Отправляем по 1 ссылке",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "5. Проверка на наличие даты и свежести новости": {
+      "main": [
+        [
+          {
+            "node": "8. Объединяем все в один массив, сначала из RSS и потом из ОБРАБОТАННЫЕ",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Кол-во ссылок за последние 24 часа",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "4. Обработки одного источника RSS Read и отдаем все новости": {
+      "main": [
+        [
+          {
+            "node": "5. Проверка на наличие даты и свежести новости",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Кол-во ссылок из RSS",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "8. Объединяем все в один массив, сначала из RSS и потом из ОБРАБОТАННЫЕ": {
+      "main": [
+        [
+          {
+            "node": "9. Фильтруем на уникальность",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "9. Фильтруем на уникальность": {
+      "main": [
+        [
+          {
+            "node": "10. Пропускаем только первые 8 шт",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Кол-во новых ссылок (после фильтра)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "10. Пропускаем только первые 8 шт": {
+      "main": [
+        [
+          {
+            "node": "11. Парсим новости по ссылкам",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "11. Парсим новости по ссылкам": {
+      "main": [
+        [
+          {
+            "node": "12. Очистка от хлама",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "12. Очистка от хлама": {
+      "main": [
+        []
+      ]
+    },
+    "13. Сборка в один массив в нужном формате": {
+      "main": [
+        [
+          {
+            "node": "14. Разбивка массива articles на отдельные статьи",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "14. Разбивка массива articles на отдельные статьи": {
+      "main": [
+        [
+          {
+            "node": "15. Запись в таблицу ОБРАБОТАННЫЕ",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "16. Aggregate for AI",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "staticData": null,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "nodeGroups": [],
+  "pinData": {},
+  "versionId": "YOUR_CREDENTIAL_ID",
+  "activeVersionId": null,
+  "versionCounter": 161,
+  "triggerCount": 0,
+  "sourceWorkflowId": null,
+  "shared": [
+    {
+      "updatedAt": "2026-06-10T13:07:10.073Z",
+      "createdAt": "2026-06-10T13:07:10.073Z",
+      "role": "workflow:owner",
+      "workflowId": "sTEDyCHI7FFMGyHi",
+      "projectId": "59YaPd0amPnB6Dlx",
+      "project": {
+        "updatedAt": "2026-05-15T13:36:37.930Z",
+        "createdAt": "2026-05-15T13:36:29.862Z",
+        "id": "59YaPd0amPnB6Dlx",
+        "name": "YOUR_NAME",
+        "type": "personal",
+        "icon": null,
+        "description": null,
+        "customTelemetryTags": [],
+        "creatorId": "YOUR_CREDENTIAL_ID"
+      }
+    }
+  ],
+  "tags": [],
+  "activeVersion": null
+}
