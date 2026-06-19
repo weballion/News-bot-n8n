@@ -1,0 +1,790 @@
+{
+  "updatedAt": "2026-06-14T08:23:43.724Z",
+  "createdAt": "2026-06-11T11:01:43.089Z",
+  "id": "zTkdcDnMZP5apEzE",
+  "name": "YOUR_NAME",
+  "description": null,
+  "active": false,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "content": "## -–--> ОЦЕНИЛ > НАПИСАЛ\n",
+        "height": 416,
+        "width": 1552,
+        "color": 6
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        0,
+        0
+      ],
+      "typeVersion": 1,
+      "id": "YOUR_CREDENTIAL_ID",
+      "name": "YOUR_NAME"
+    },
+    {
+      "parameters": {
+        "content": "## -–--> ОПУБЛИКОВАЛ > УВЕДОМИЛ > СОХРАНИЛ\n",
+        "height": 400,
+        "width": 1552,
+        "color": 4
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        16,
+        496
+      ],
+      "typeVersion": 1,
+      "id": "YOUR_CREDENTIAL_ID",
+      "name": "YOUR_NAME"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.analysisPrompt }}",
+        "hasOutputParser": true,
+        "options": {
+          "systemMessage": "=Ты — помощник редактора информационного онлайн-журнала. Наша аудитория интересуется искусственным интеллектом, роботами, технологиями, новыми открытиями - но на базовом уровне, поэтому издание можно назвать техно-науч-попом.\n\nТвоя задача: отфильтровать несколько ИНТЕРЕСНЫХ (вызывающих эмоцию, как негативную так и положительную) и ВАЖНЫХ (с точки зрения влияния на жизнь людей) новостей из списка.\n\n## ИСКЛЮЧАЙ СРАЗУ:\n\n1. **Маркетинговые обзоры**: \"10 лучших...\", \"Топ-5...\", обзоры продуктов, реклама.\n2. **Сверхтехнические**: research papers, глубокая математика, задротские статьи для узкой аудитории.\n3. **Незначительные**: небольшие инвестиции в стартапы (если не прорыв или не феномен), мелкие обновления неполпулярных продуктов.\n\n## БАЛЛЫ\n\n**9-10:** Прорывы от лидеров, новые влиятельные проекты, интересные перфомансы от людей, феноменальные проекты\n**7-8:** Обновления популярных продуктов, новые AI-фичи в массовых сервисах, интересные люди оказавшиеся в интересных ситуациях\n**5-6:** Мнения экспертов, тренды, аналитика, законодательство\n**< 5:** Отсекай\n\n## СТИЛЬ ПИСЬМА:\n\n- Каждое слово/предложение должно нести смысловую нагрузку или вызывать эмоциональную реакцию. Старайся избегать \"воды\" и сжато доносить самое главное. Но так, чтобы текст был связным и интересным для прочтения.\n\n- Избегай первых слов, которые приходят на ум, и старайся выбирать интересный и необычный способ выражения мыслей, по возможности.\n\n- Можно пожертвовать красивыми словами ради сжатого донесения ценной информации, но нельзя делать наоборот (метафоры ради метафор нам не нужны, они только перегружают текст). Текст долден читаться быстро, легко.\n\n- Простой способ проверки необходимости использования какого-либо слова или выражения это попробовать \"убрать\" его из текста, и если его смысл от этого не потерялся, значит оно было лишним. А если слово или выражение исчезнув, \"ломает\" структуру мысли, значит оно было лишним.\n\n- Старайся писать как человек, а не как искусственный интеллект.\n\n- СТОП СЛОВА И ФРАЗЫ (СТРОГО ЗАПРЕЩЕНЫ они и близкие к ним, так как выдают что текст написан ИИ ,а мы это скрываем): \"Это не просто\"; \"Представьте\"; \"Совершил революцию\"; \"Перевернул игру\"; \"Перевернет мир\"; \"Это не очередное.\"; \"Забудьте о простом\"; \"Результаты говорят сами за себя\". НЕ ИСПОЛЬЗУЙ ЭТИ СЛОВА.\n\n___\n\n## ДОСТУПНОСТЬ:\n\nСпроси себя: \"Будет ли это интересно человеку без глубокого технического бэкграунда?\"\n\n- Если статья интересна только задротам → снижай оценку на 2 балла\n\n## ГРУППИРОВКА:\n\nЕсли несколько статей об одном событии → сгруппируй их в `article_groups`\n\n## OUTPUT:\n\nВерни JSON согласно Output Parser. Отбирай статьи с оценкой >= 6."
+        }
+      },
+      "id": "YOUR_CREDENTIAL_ID",
+      "name": "YOUR_NAME",
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 1.7,
+      "position": [
+        464,
+        224
+      ],
+      "retryOnFail": true,
+      "maxTries": 2,
+      "waitBetweenTries": 5000
+    },
+    {
+      "parameters": {
+        "model": "google/gemini-2.5-flash",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenRouter",
+      "typeVersion": 1,
+      "position": [
+        432,
+        64
+      ],
+      "id": "YOUR_CREDENTIAL_ID",
+      "name": "YOUR_NAME",
+      "credentials": {
+        "openRouterApi": {
+          "id": "kSlzJSYywOH0MwEV",
+          "name": "YOUR_NAME"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsonSchemaExample": "{\n  \"analysis_summary\": \"Краткое резюме анализа новостной повестки\",\n  \"key_trends\": [\n    \"Тренд 1: Описание\",\n    \"Тренд 2: Описание\"\n  ],\n  \"article_groups\": [\n    {\n      \"topic\": \"Название темы\",\n      \"articles\": [1, 2],\n      \"importance\": 9,\n      \"summary\": \"О чем эта группа статей\"\n    }\n  ],\n  \"selected_articles\": [\n    {\n      \"id\": 1,\n      \"importance_score\": 9,\n      \"reason\": \"Почему эта статья важна\",\n      \"key_points\": [\"Ключевой момент 1\", \"Ключевой момент 2\"]\n    }\n  ],\n  \"excluded_articles\": [\n    {\n      \"id\": 3,\n      \"reason\": \"Маркетинговый контент\"\n    }\n  ]\n}"
+      },
+      "id": "YOUR_CREDENTIAL_ID",
+      "name": "YOUR_NAME",
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.3,
+      "position": [
+        624,
+        64
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const inputData = $input.first().json;\nconst originalArticles = $('2. Подготовка данных для аналитики AI').first().json.articles;\n\nconst analysis = inputData.output || inputData;\nif (!analysis.selected_articles) {\n  throw new Error('Missing selected_articles in analysis. Available fields: ' + JSON.stringify(Object.keys(analysis)));\n}\n\n// ✅ СОРТИРОВКА СТАТЕЙ ПО ВАЖНОСТИ (от большего к меньшему)\nconst selectedArticles = analysis.selected_articles\n  .map(selected => {\n    const article = originalArticles.find(a => a.id === selected.id);\n    if (!article) {\n      throw new Error(`Article with id ${selected.id} not found in original articles`);\n    }\n    return {\n      ...article,\n      importance: selected.importance_score,\n      reason: selected.reason,\n      key_points: selected.key_points\n    };\n  })\n  .sort((a, b) => b.importance - a.importance); // ← ДОБАВЛЕНА СОРТИРОВКА\n\n// ✅ ПРОМПТ С УКАЗАНИЕМ ПОРЯДКА\nconst writingPrompt = `На основе следующего анализа создай качественный технологический лонгрид В ФОРМАТЕ MARKDOWN:\n\n**Анализ новостной повестки:**\n${analysis.analysis_summary}\n\n**Ключевые тренды:**\n${analysis.key_trends.map((t, i) => `${i + 1}. ${t}`).join('\\n')}\n\n**Группы статей по темам:**\n${analysis.article_groups.map(group => `\n### ${group.topic} (Важность: ${group.importance}/10)\nСтатьи: ${group.articles.join(', ')}\nСуммари: ${group.summary}\n`).join('\\n')}\n\n**Статьи для использования (в порядке убывания важности):**\n${selectedArticles.map((article, index) => `\n--- Новость #${index + 1} (Важность: ${article.importance}/10) ---\nЗаголовок: ${article.title}\nURL: ${article.url}\nПричина выбора: ${article.reason}\nКлючевые моменты: ${article.key_points.join('; ')}\n\nПолный текст:\n${article.content}\n`).join('\\n\\n')}\n\nВАЖНО: Используй нумерацию 1, 2, 3... в заголовках новостей согласно порядку выше.\n\nНапиши профессиональный технологический лонгрид в ЧИСТОМ MARKDOWN формате.\nВерни результат в формате JSON согласно схеме (title + markdown_content).`;\n\nreturn {\n  json: {\n    writingPrompt,\n    analysis,\n    selectedArticlesCount: selectedArticles.length,\n    totalTrends: analysis.key_trends.length\n  }\n};"
+      },
+      "id": "YOUR_CREDENTIAL_ID",
+      "name": "YOUR_NAME",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        832,
+        224
+      ]
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.writingPrompt }}",
+        "hasOutputParser": true,
+        "options": {
+          "systemMessage": "=## КОНТЕКСТ\n\nТы — опытный главный редактор информационного онлайн-журнала. Наша аудитория интересуется искусственным интеллектом, роботами, технологиями, новыми открытиями - но не вникая глубоко в IT-шные темы, поэтому издание можно назвать техно-науч-попом. Мы противопоставляем себя массовым медиа, и стараемся говорить коротко о самом важном, и доносить только актуальную информацию до наших читателей.\n\n**Твоя задача:** Разобраться в происходящем и рассказать о списке новостей который тебе доступен так, будто это дело всей твоей жизни, и тебе искренне важно чтобы читатель захотел об этом узнать, вник, и оставил после этого выводы. Ты понимаешь, что другие издания уже рассказали о том же самом раньше, поэтому стараешься преподнести информацию креативно, сохранив максимальную точность.\n\n---\n\n## СТРУКТУРА ЛОНГРИДА\n\n### 1. Заголовок (H1)\nФормат: `\"Отчет на ДД.ММ.ГГ\"` (используй сегодняшнюю дату {{ $now }})\n\nЗаголовок может намекать на главную тему дня, если она ярко выделяется:\n- \"Отчет на 15.10.25: Прорыв в квантовых вычислениях\"\n- \"Отчет на 15.10.25: Неделя роботов-гуманоидов\"\n- \"Отчет на 15.10.25\" (если темы разрозненные)\n\n### 2. Введение (1-2 абзаца)\n- Тут нужно перечислить основные события\n- Связно, единым текстом, если возможно\n\n### 3. Новости (каждая = отдельная секция)\n\n**Формат каждой новости:**\n\n```markdown\n## [Номер]. [Заголовок с сутью]\n\n[основной текст новости]\n\n**Источники:**\n- [Название ЭТОЙ статьи](URL_ЭТОЙ_статьи)\n\n**Во что углубиться:**\n- Направление 1: Объяснение\n- Направление 2: Объяснение\n\n---\n```\n\n**Как писать текст новости (4 шага):**\n\n1. Нужно заинтересовать, но оперируя только реально известными тебе данными.\n2. Введи в контекст происходящего, зажги огонь у читателя (если новость скучная но важная, то лучше признать это честно, а не пытаться писать наигранно).\n3. Объясни важные детали, факты или события. Раскрой ситуациюю целиком. Или расширь контекст.\n4. Сделай вывод или подведи итог. Можно тут закрыть все оставшиеся вопросы, которые остались при прочтении новости. Если ситуация позволяет, можно закончить на интриге.\n\n---\n\n## СТИЛЬ ПИСЬМА:\n\n- Каждое слово/предложение должно нести смысловую нагрузку или вызывать эмоциональную реакцию. Старайся избегать \"воды\" и сжато доносить самое главное. Но так, чтобы текст был связным и интересным для прочтения.\n\n- Избегай первых слов, которые приходят на ум, и старайся выбирать интересный и необычный способ выражения мыслей, по возможности.\n\n- Можно пожертвовать красивыми словами ради сжатого донесения ценной информации, но нельзя делать наоборот (метафоры ради метафор нам не нужны, они только перегружают текст). Текст должен читаться быстро, легко.\n\n- Простой способ проверки необходимости использования какого-либо слова или выражения это попробовать \"убрать\" его из текста, и если его смысл от этого не потерялся, значит оно было лишним. А если слово или выражение исчезнув, \"ломает\" структуру мысли, значит оно было лишним.\n\n- Старайся писать как человек, а не как искусственный интеллект. \n\n- Помни, что у нас научно-популярное издание - и люди будут читать только если написано честно, но так чтобы текст \"ласкал\" их умы или чувства.\n\n- Пиши с любовью, так будто тебе реально очень интересно рассказать о каждой из этих новостей и объяснить их.\n\n- СТОП СЛОВА И ФРАЗЫ (СТРОГО ЗАПРЕЩЕНЫ они и близкие к ним, так как выдают что текст написан ИИ ,а мы это скрываем): \"Это не просто\"; \"Представьте\"; \"Совершил революцию\"; \"Перевернул игру\"; \"Перевернет мир\"; \"Это не очередное.\"; \"Забудьте о простом\"; \"Результаты говорят сами за себя\". НЕ ИСПОЛЬЗУЙ ЭТИ СЛОВА.\n\n---\n\n## ТЕХНИЧЕСКИЕ ТРЕБОВАНИЯ\n\n**Обязательные правила (СТРОГО):**\n\n1. **ОДНА новость = ОДИН источник**\n   - Используй URL именно ТОЙ статьи, о которой пишешь\n   - НЕ перечисляй несколько ссылок под одной новостью\n   - НЕ собирай все источники в конце лонгрида\n\n2. **Формат ссылки: ТОЛЬКО `[текст](url)`**\n   - Иначе ссылка не будет кликабельной\n   - НЕ пиши \"Название статьи — URL\"\n   - НЕ пиши \"Название статьи (URL)\"\n\n3. **Каждая новость заканчивается разделителем `---`**\n   - После \"Во что углубиться\" ставь `---`\n   - Это визуально разделяет новости\n\n4. **\"Во что углубиться\" — готовые направления для поиска**\n\n   Предложи 2-3 готовых поисковых направления для тех, кто хочет копнуть глубже в тему новости.\n\n   Формат: `Тема запроса: Что узнаешь`\n\n   **Примеры ХОРОШИХ направлений:**\n   - Когда гугл стал лидером в квантовых компьютерах\n   - Кто такой Сэм Альтман\n   - Лучшие носимые AI-устройства в 2025\n   - Опасности нейроинтерфейсов для мозга\n\n   **Примеры ПЛОХИХ (слишком общие):**\n   - \"История AI\" ❌ (не про конкретную новость)\n   - \"Узнать больше про компанию\" ❌ (размыто)\n   - \"Нейронные сети\" ❌ (слишком широко)\n\n   Каждое направление должно:\n   - Быть конкретной темой для поиска (можно сразу в Google)\n   - Открывать СМЕЖНЫЙ аспект новости (не пересказывать её)\n   - Содержать ключевые слова для точного поиска\n\n---\n\n## ФОРМАТ ОТВЕТА\n\nВерни ТОЛЬКО валидный JSON. Никакого текста до или после JSON.\n\n**Схема JSON:**\n\n```json\n{\n  \"title\": \"Заголовок лонгрида (50-70 символов)\",\n  \"markdown_content\": \"# Заголовок\\n\\nВведение...\\n\\n## 1. Первая новость\\n\\n...\",\n  \"metadata\": {\n    \"created_at\": \"2025-10-15\",\n    \"total_sources\": 3,\n    \"topics_covered\": [\"AI funding\", \"Regulation\"],\n    \"estimated_reading_time\": \"5-7 минут\",\n    \"word_count\": 1500\n  }\n}\n```\n\n**Метаданные:**\n- `title`: заголовок лонгрида\n- `markdown_content`: полный текст в markdown\n- `metadata.total_sources`: количество ИСПОЛЬЗОВАННЫХ статей (не всех проанализированных!)\n- `metadata.estimated_reading_time`: примерное время чтения\n- `metadata.topics_covered`: список основных тем\n- `metadata.created_at`: дата создания (формат: YYYY-MM-DD)\n\n**ВАЖНО про total_sources:**\nСчитай ТОЛЬКО статьи, упомянутые в лонгриде.\nЕсли написал на основе 3 из 30 → `total_sources: 3`\n\n**Техническая проверка перед отправкой:**\n\n1. ✅ JSON валиден? (без блоков ```json)\n2. ✅ Все ссылки в формате `[текст](url)`?\n3. ✅ После каждой новости стоит `---`?\n4. ✅ `total_sources` = количество упомянутых статей?\n\nЕсли хоть один НЕТ → переделай.\n"
+        }
+      },
+      "id": "YOUR_CREDENTIAL_ID",
+      "name": "YOUR_NAME",
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 1.7,
+      "position": [
+        992,
+        224
+      ],
+      "retryOnFail": true,
+      "maxTries": 2,
+      "waitBetweenTries": 5000
+    },
+    {
+      "parameters": {
+        "model": "google/gemini-2.5-pro",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenRouter",
+      "typeVersion": 1,
+      "position": [
+        976,
+        64
+      ],
+      "id": "YOUR_CREDENTIAL_ID",
+      "name": "YOUR_NAME",
+      "credentials": {
+        "openRouterApi": {
+          "id": "kSlzJSYywOH0MwEV",
+          "name": "YOUR_NAME"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsonSchemaExample": "{\n  \"title\": \"Заголовок лонгрида (50-70 символов)\",\n  \"markdown_content\": \"# Заголовок\\n\\nВведение в тему...\\n\\n## 1. Первая новость — Исчерпывающий заголовок\\n\\nТекст новости (кто/что/почему/зачем)...\\n\\n**Источники:**\\n- [Статья 1](URL)\\n\\n**Во что углубиться:**\\n- Направление 1: Объяснение\\n- Направление 2: Объяснение\\n\\n---\\n\\n## 2. Вторая новость — Заголовок\\n\\n...\",\n  \"metadata\": {\n    \"created_at\": \"2025-10-11\",\n    \"total_sources\": 5,\n    \"topics_covered\": [\"Тема 1\", \"Тема 2\"],\n    \"estimated_reading_time\": \"8-10 минут\",\n    \"word_count\": 1500\n  }\n}"
+      },
+      "id": "YOUR_CREDENTIAL_ID",
+      "name": "YOUR_NAME",
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.3,
+      "position": [
+        1152,
+        64
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.github.com/gists",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "githubApi",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "YOUR_NAME",
+              "value": "application/vnd.github+json"
+            },
+            {
+              "name": "YOUR_NAME",
+              "value": "2022-11-28"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ $json }}",
+        "options": {}
+      },
+      "id": "YOUR_CREDENTIAL_ID",
+      "name": "YOUR_NAME",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        96,
+        608
+      ],
+      "credentials": {
+        "githubApi": {
+          "id": "LoQKQuVKEuhQIAoG",
+          "name": "YOUR_NAME"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "gist-url",
+              "name": "YOUR_NAME",
+              "value": "={{ $json.html_url }}",
+              "type": "string"
+            },
+            {
+              "id": "gist-id",
+              "name": "YOUR_NAME",
+              "value": "={{ $json.id }}",
+              "type": "string"
+            },
+            {
+              "id": "original-data",
+              "name": "YOUR_NAME",
+              "value": "={{ $('5. AI Longread Writer').first().json.output }}",
+              "type": "object"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "YOUR_CREDENTIAL_ID",
+      "name": "YOUR_NAME",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        304,
+        608
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const longreadData = $('8. Extract Gist URL').first().json.original_longread_data;\nconst gistUrl = $input.first().json.gist_url;\nconst originalArticles = $('2. Подготовка данных для аналитики AI').first().json.articles;\nconst analystOutput = $('3. AI Analyst').first().json.output;\n\n// Parse markdown to extract sections for summary\nconst markdown = longreadData.markdown_content;\nconst title = longreadData.title;\n\n// ============================================\n// ФОЛЛБЭК ЛОГИКА ДЛЯ 100% НАДЁЖНОСТИ\n// ============================================\n\n// Попытка 1: Секции с нумерацией (## 1. Заголовок, ## 2. Заголовок...)\nlet sectionMatches = [...markdown.matchAll(/^## (\\d+)\\.\\s*(.+)$/gm)];\nlet sections = sectionMatches.map(match => ({\n  number: match[1],\n  title: match[2]\n}));\n\n// Попытка 2: Секции БЕЗ нумерации (## Заголовок)\nif (sections.length === 0) {\n  sectionMatches = [...markdown.matchAll(/^## ([^#\\n]+)$/gm)];\n  sections = sectionMatches.map((match, index) => ({\n    number: String(index + 1),\n    title: match[1].trim()\n  }));\n}\n\n// Попытка 3: Любые заголовки (H1, H2, H3)\nif (sections.length === 0) {\n  sectionMatches = [...markdown.matchAll(/^#{1,3}\\s+(.+)$/gm)];\n  sections = sectionMatches.map((match, index) => ({\n    number: String(index + 1),\n    title: match[1].replace(/^\\d+\\.\\s*/, '').trim() // Убираем цифры из заголовка, если есть\n  }));\n}\n\n// Фильтруем заключение и введение\nsections = sections.filter(s => \n  !s.title.toLowerCase().includes('заключение') && \n  !s.title.toLowerCase().includes('введение')\n);\n\n// Строим сообщение\nlet message = `📰 *${title}*\\n\\n`;\n\n// Если нашли секции — делаем краткое содержание\nif (sections.length > 0) {\n  message += `📊 *Краткое содержание:*\\n\\n`;\n\n  sections.forEach((section, index) => {\n    const emoji = ['1️⃣', '2️⃣', '3️⃣', '4️⃣', '5️⃣', '6️⃣', '7️⃣', '8️⃣', '9️⃣', '🔟'][index] || '▪️';\n    \n    // Убираем цифру из заголовка для отображения (чтобы не было \"1️⃣ 1. Заголовок\")\n    const cleanTitle = section.title.replace(/^\\d+\\.\\s*/, '');\n    \n    // Пробуем извлечь первый абзац после этой секции\n    const escapedTitle = section.title.replace(/[.*+?^${}()|[\\]\\\\]/g, '\\\\$&');\n    const sectionRegex = new RegExp(\n      `## (?:\\\\d+\\\\.\\\\s*)?${escapedTitle}\\\\s*\\\\n\\\\s*\\\\n([^#]+)`, \n      'm'\n    );\n    const sectionContent = markdown.match(sectionRegex);\n    \n    if (sectionContent && sectionContent[1]) {\n      const firstPara = sectionContent[1].split('\\n\\n')[0];\n      const sentences = firstPara.split(/[.!?]\\s+/).slice(0, 2);\n      const summary = sentences.join('. ').trim();\n      const shortSummary = summary.length > 250 ? summary.substring(0, 247) + '...' : summary;\n      \n      message += `${emoji} *${cleanTitle}*\\n`;\n      message += `${shortSummary}\\n\\n`;\n    } else {\n      // Фоллбэк: если не удалось извлечь контент, просто показываем заголовок\n      message += `${emoji} *${cleanTitle}*\\n\\n`;\n    }\n  });\n}\n\n// Ссылка на полный лонгрид\nmessage += `📖 [Читать полный лонгрид](${gistUrl})\\n\\n`;\nmessage += `⏱ Время чтения: ~${longreadData.metadata?.estimated_reading_time || 'N/A'}\\n`;\nmessage += `📚 Использовано источников: ${longreadData.metadata?.total_sources || 0}`;\n\n// ✅ СОХРАНЯЕМ ВСЕ ДАННЫЕ для downstream nodes\nreturn {\n  json: {\n    telegram_message: message,\n    gist_url: gistUrl,\n    title: title,\n    markdown_content: markdown,\n    longread_data: longreadData,\n    original_articles: originalArticles,\n    analyst_output: analystOutput\n  }\n};"
+      },
+      "id": "YOUR_CREDENTIAL_ID",
+      "name": "YOUR_NAME",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        528,
+        608
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "YOUR_CREDENTIAL_ID",
+              "leftValue": "={{ $json.storage_type }}",
+              "rightValue": "supabase",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "YOUR_NAME"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2.2,
+      "position": [
+        1152,
+        544
+      ],
+      "id": "YOUR_CREDENTIAL_ID",
+      "name": "YOUR_NAME"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "YOUR_CREDENTIAL_ID",
+              "leftValue": "={{ $json.storage_type }}",
+              "rightValue": "airtable",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "YOUR_NAME"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2.2,
+      "position": [
+        1152,
+        720
+      ],
+      "id": "YOUR_CREDENTIAL_ID",
+      "name": "YOUR_NAME"
+    },
+    {
+      "parameters": {
+        "content": "📋 Документация workflow\n\n🎯 Основной поток\n\n1. When Executed by Another Workflow (n8n-nodes-base.executeWorkflowTrigger)\n  Триггер, запускающий workflow при вызове из другого workflow\n\n2. Prepare for Analyst (n8n-nodes-base.code)\n  Подготавливает данные для передачи AI-аналитику\n\n3. AI Analyst (@n8n/n8n-nodes-langchain.agent)\n  AI-агент для анализа контента с использованием LangChain\n  Инструменты:\n  3a. Gemini 2.5 Flash — языковая модель Google Gemini 2.5 Flash через OpenRouter для быстрого анализа\n  3b. Analysis Output Parser — парсер для структурирования результатов анализа\n\n4. Prepare for Writer (n8n-nodes-base.code)\n  Преобразует результаты анализа для AI-писателя\n\n5. AI Longread Writer (@n8n/n8n-nodes-langchain.agent)\n  AI-агент для создания длинных текстов (лонгридов)\n  Инструменты:\n  5a. Gemini 2.5 Pro — языковая модель Google Gemini 2.5 Pro через OpenRouter для создания качественных текстов\n  5b. Longread Output Parser — парсер для структурирования готового лонгрида\n\n6. Code in JavaScript (n8n-nodes-base.code)\n  Обработка результатов от AI-писателя\n\n7. Create GitHub Gist (n8n-nodes-base.httpRequest)\n  Создаёт Gist на GitHub с готовым контентом\n\n8. Extract Gist URL (n8n-nodes-base.set)\n  Извлекает URL созданного Gist\n\n9. Prepare Telegram Summary (n8n-nodes-base.code)\n  Формирует краткое сообщение для Telegram\n\n10. Send Telegram (n8n-nodes-base.telegram)\n  Отправляет уведомление в Telegram\n\n11. Prepare All Storage Data (n8n-nodes-base.code)\n  Подготавливает данные для сохранения в базы\n\n12. Filter Supabase (n8n-nodes-base.filter)\n  Фильтрует данные для отправки в Supabase\n\n13. Sent Messages (n8n-nodes-base.supabase)\n  Сохраняет отправленные сообщения в Supabase\n\n14. Filter Airtable (n8n-nodes-base.filter)\n  Фильтрует данные для отправки в Airtable\n\n15. Save to Airtable (n8n-nodes-base.airtable)\n  Сохраняет записи в Airtable\n",
+        "height": 960,
+        "width": 880
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -912,
+        0
+      ],
+      "typeVersion": 1,
+      "id": "YOUR_CREDENTIAL_ID",
+      "name": "YOUR_NAME"
+    },
+    {
+      "parameters": {
+        "inputSource": "passthrough"
+      },
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        80,
+        224
+      ],
+      "id": "YOUR_CREDENTIAL_ID",
+      "name": "YOUR_NAME"
+    },
+    {
+      "parameters": {
+        "jsCode": "const inputData = $input.first().json;\nconsole.log('Full input:', JSON.stringify(inputData, null, 2));\nconst articles = inputData.articles || [];\nif (!articles || articles.length === 0) {\n  throw new Error('No articles received from webhook');\n}\n\nconst formattedArticles = articles.map((article, index) => ({\n  id: index + 1,\n  title: article.title || article.scraped_title || article.rss_title || 'Untitled',  // ← ФИХ ЗДЕСЬ\n  url: article.source_url,\n  content: article.full_text,\n  author: article.author,\n  pubDate: article.pubDate,\n  contentLength: article.full_text?.length || 0\n}));\n\nconst analysisPrompt = `Проанализируй следующие ${formattedArticles.length} технологических новостей:\n\n${formattedArticles.map(a => `\n--- Статья #${a.id} ---\nЗаголовок: ${a.title}\nURL: ${a.url}\nАвтор: ${a.author || 'Unknown'}\nДата: ${a.pubDate}\nДлина контента: ${a.contentLength} символов\n\nСодержание:\n${a.content}\n`).join('\\n')}\n\nПроанализируй их согласно инструкциям в System Prompt.\nВерни результат в формате JSON согласно схеме.`;\n\nreturn {\n  json: {\n    analysisPrompt,\n    totalArticles: formattedArticles.length,\n    articles: formattedArticles\n  }\n};"
+      },
+      "id": "YOUR_CREDENTIAL_ID",
+      "name": "YOUR_NAME",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        288,
+        224
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const longreadData = $('5. AI Longread Writer').first().json.output;\n\nreturn {\n  json: {\n    description: longreadData.title,\n    public: false,\n    files: {\n      \"longread.md\": {\n        content: longreadData.markdown_content\n      }\n    }\n  }\n};"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1392,
+        272
+      ],
+      "id": "YOUR_CREDENTIAL_ID",
+      "name": "YOUR_NAME"
+    },
+    {
+      "parameters": {
+        "chatId": "27020283",
+        "text": "={{ $json.telegram_message }}",
+        "additionalFields": {
+          "appendAttribution": false,
+          "parse_mode": "Markdown"
+        }
+      },
+      "id": "YOUR_CREDENTIAL_ID",
+      "name": "YOUR_NAME",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        720,
+        608
+      ],
+      "webhookId": "YOUR_CREDENTIAL_ID",
+      "credentials": {
+        "telegramApi": {
+          "id": "08rilHeqmVcSA8cN",
+          "name": "YOUR_NAME"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Получаем данные из Send Telegram\nconst telegramResponse = $input.first().json;\nconst telegramMessage = telegramResponse.result || telegramResponse;\n\n// Получаем сохранённые данные из Prepare Telegram Summary (через Send Telegram)\nconst prepareTelegramData = $('9. Prepare Telegram Summary').first().json;\n\nconst gistUrl = prepareTelegramData.gist_url;\nconst longreadData = prepareTelegramData.longread_data;\nconst originalArticles = prepareTelegramData.original_articles;\nconst analystOutput = prepareTelegramData.analyst_output;\n\n// Формируем news_list: джойним selected_articles + originalArticles\nconst newsList = analystOutput.selected_articles.map(selected => {\n  const originalArticle = originalArticles.find(a => a.id === selected.id);\n  if (!originalArticle) {\n    throw new Error(`Article with id ${selected.id} not found in originalArticles`);\n  }\n  return {\n    id: selected.id,\n    title: originalArticle.title || 'Untitled',\n    url: originalArticle.url || '',\n    summary: selected.reason || '',\n    full_text: originalArticle.content || ''\n  };\n});\n\n// Возвращаем ДВА item'а\nreturn [\n  // Item 0: для Airtable\n  {\n    json: {\n      storage_type: 'airtable',\n      created_at: longreadData.metadata?.created_at || new Date().toISOString().split('T')[0],\n      gist_url: gistUrl,\n      topics_covered: longreadData.metadata?.topics_covered || [],\n      markdown_content: longreadData.markdown_content,\n      telegram_message_id: telegramMessage.message_id\n    }\n  },\n  // Item 1: для Supabase\n  {\n    json: {\n      storage_type: 'supabase',\n      telegram_message_id: telegramMessage.message_id,\n      telegram_chat_id: telegramMessage.chat.id,\n      message_type: 'longread',\n      task_id: null,\n      content_data: {\n        title: longreadData.title,\n        gist_url: gistUrl,\n        longread_markdown: longreadData.markdown_content,\n        news_list: newsList,\n        metadata: longreadData.metadata\n      }\n    }\n  }\n];"
+      },
+      "id": "YOUR_CREDENTIAL_ID",
+      "name": "YOUR_NAME",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        928,
+        608
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "create",
+        "base": {
+          "__rl": true,
+          "value": "appATZYvsfy1jCLp4",
+          "mode": "list",
+          "cachedResultName": "RSS (шаблон таблицы)",
+          "cachedResultUrl": "https://airtable.com/appATZYvsfy1jCLp4"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tblNjCBwm2q2PlKT2",
+          "mode": "list",
+          "cachedResultName": "Отчеты",
+          "cachedResultUrl": "https://airtable.com/appryB80BqY4X6y2I/tblNjCBwm2q2PlKT2"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Дата Отчета": "={{ $json.created_at }}",
+            "Лонгрид_URL": "={{ $json.gist_url }}",
+            "Использованные_Ссылки": "={{ $json.topics_covered.join(', ') }}",
+            "Текст_для_Telegram": "={{ $json.markdown_content.substring(0, 500) + '...' }}",
+            "Telegram_Message_ID": "={{ String($json.telegram_message_id) }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Дата Отчета",
+              "displayName": "Дата Отчета",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "dateTime",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Лонгрид_URL",
+              "displayName": "Лонгрид_URL",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Использованные_Ссылки",
+              "displayName": "Использованные_Ссылки",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Текст_для_Telegram",
+              "displayName": "Текст_для_Telegram",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Telegram_Message_ID",
+              "displayName": "Telegram_Message_ID",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "id": "YOUR_CREDENTIAL_ID",
+      "name": "YOUR_NAME",
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.1,
+      "position": [
+        1376,
+        720
+      ],
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "SNeO3C6XhrBc89Y7",
+          "name": "YOUR_NAME"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "tableId": "sent_messages",
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "telegram_message_id",
+              "fieldValue": "={{ $json.telegram_message_id }}"
+            },
+            {
+              "fieldId": "telegram_chat_id",
+              "fieldValue": "={{ $json.telegram_chat_id }}"
+            },
+            {
+              "fieldId": "message_type",
+              "fieldValue": "={{ $json.message_type }}"
+            },
+            {
+              "fieldId": "task_id",
+              "fieldValue": "={{ $json.task_id }}"
+            },
+            {
+              "fieldId": "content_data",
+              "fieldValue": "={{ $json.content_data }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        1376,
+        544
+      ],
+      "id": "YOUR_CREDENTIAL_ID",
+      "name": "YOUR_NAME",
+      "credentials": {
+        "supabaseApi": {
+          "id": "u5jLuYJAJLw2Nk0K",
+          "name": "YOUR_NAME"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "3. AI Analyst": {
+      "main": [
+        [
+          {
+            "node": "4. Prepare for Writer",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "3a. Gemini 2.5 Flash": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "3. AI Analyst",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "3b. Analysis Output Parser": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "3. AI Analyst",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "4. Prepare for Writer": {
+      "main": [
+        [
+          {
+            "node": "5. AI Longread Writer",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "5. AI Longread Writer": {
+      "main": [
+        [
+          {
+            "node": "6. Подготовка данных в массив",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "5a. Gemini 2.5 Pro": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "5. AI Longread Writer",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "5b. Longread Output Parser": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "5. AI Longread Writer",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "7. Create GitHub Gist": {
+      "main": [
+        [
+          {
+            "node": "8. Extract Gist URL",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "8. Extract Gist URL": {
+      "main": [
+        [
+          {
+            "node": "9. Prepare Telegram Summary",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "9. Prepare Telegram Summary": {
+      "main": [
+        [
+          {
+            "node": "10. Отправляем в ТГ результат опубликованного лонгрида на Gist",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "12. Filter Supabase": {
+      "main": [
+        [
+          {
+            "node": "13. Сохраняем в Supa",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "14. Filter Airtable": {
+      "main": [
+        [
+          {
+            "node": "15. Сохраняем в Airtable",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "1. Получаем массив сырых данных извне": {
+      "main": [
+        [
+          {
+            "node": "2. Подготовка данных для аналитики AI",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "2. Подготовка данных для аналитики AI": {
+      "main": [
+        [
+          {
+            "node": "3. AI Analyst",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "6. Подготовка данных в массив": {
+      "main": [
+        [
+          {
+            "node": "7. Create GitHub Gist",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "10. Отправляем в ТГ результат опубликованного лонгрида на Gist": {
+      "main": [
+        [
+          {
+            "node": "11. Подготовка данных перед записью в бд (airtable и supabase)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "11. Подготовка данных перед записью в бд (airtable и supabase)": {
+      "main": [
+        [
+          {
+            "node": "12. Filter Supabase",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "14. Filter Airtable",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "staticData": null,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "nodeGroups": [],
+  "pinData": {},
+  "versionId": "YOUR_CREDENTIAL_ID",
+  "activeVersionId": null,
+  "versionCounter": 89,
+  "triggerCount": 0,
+  "sourceWorkflowId": null,
+  "shared": [
+    {
+      "updatedAt": "2026-06-11T11:01:43.092Z",
+      "createdAt": "2026-06-11T11:01:43.092Z",
+      "role": "workflow:owner",
+      "workflowId": "zTkdcDnMZP5apEzE",
+      "projectId": "59YaPd0amPnB6Dlx",
+      "project": {
+        "updatedAt": "2026-05-15T13:36:37.930Z",
+        "createdAt": "2026-05-15T13:36:29.862Z",
+        "id": "59YaPd0amPnB6Dlx",
+        "name": "YOUR_NAME",
+        "type": "personal",
+        "icon": null,
+        "description": null,
+        "customTelemetryTags": [],
+        "creatorId": "YOUR_CREDENTIAL_ID"
+      }
+    }
+  ],
+  "tags": [],
+  "activeVersion": null
+}
