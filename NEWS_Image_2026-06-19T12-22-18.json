@@ -1,0 +1,804 @@
+{
+  "updatedAt": "2026-06-13T11:44:31.529Z",
+  "createdAt": "2026-06-12T13:16:20.894Z",
+  "id": "OPoLvosfgWq1C5SL",
+  "name": "YOUR_NAME",
+  "description": null,
+  "active": false,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "content": "# –––> ПОЛУЧИЛ ЗАПРОС > УЛУЧШИЛ ЕГО\n",
+        "height": 400,
+        "width": 1536,
+        "color": 6
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        0,
+        0
+      ],
+      "typeVersion": 1,
+      "id": "YOUR_CREDENTIAL_ID",
+      "name": "YOUR_NAME"
+    },
+    {
+      "parameters": {
+        "content": "## –––> ОТРЕДАЧИЛ КАРТИНКУ\n",
+        "height": 288,
+        "width": 736
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        80,
+        544
+      ],
+      "typeVersion": 1,
+      "id": "YOUR_CREDENTIAL_ID",
+      "name": "YOUR_NAME"
+    },
+    {
+      "parameters": {
+        "content": "## –––> ОТПРАВИЛ\n",
+        "height": 384,
+        "width": 704,
+        "color": 4
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        832,
+        496
+      ],
+      "typeVersion": 1,
+      "id": "YOUR_CREDENTIAL_ID",
+      "name": "YOUR_NAME"
+    },
+    {
+      "parameters": {
+        "content": "## [ ошибка при редактировании ]",
+        "height": 240,
+        "width": 608,
+        "color": 3
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        832,
+        896
+      ],
+      "typeVersion": 1,
+      "id": "YOUR_CREDENTIAL_ID",
+      "name": "YOUR_NAME"
+    },
+    {
+      "parameters": {
+        "inputSource": "passthrough"
+      },
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        96,
+        224
+      ],
+      "id": "YOUR_CREDENTIAL_ID",
+      "name": "YOUR_NAME"
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "tableId": "tasks",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "id",
+              "keyValue": "={{ $json.id }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        320,
+        224
+      ],
+      "id": "YOUR_CREDENTIAL_ID",
+      "name": "YOUR_NAME",
+      "credentials": {
+        "supabaseApi": {
+          "id": "u5jLuYJAJLw2Nk0K",
+          "name": "YOUR_NAME"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const inputData = $('1. When Executed by Another Workflow').first().json;\nconst taskDataFromDB = $('2. Load Task Data').first().json;\n\nconst versions = taskDataFromDB.agent_output?.versions || [];\nconst sourceData = taskDataFromDB.source_data || {};\nconst instruction = inputData.effective_user_request || inputData.initial_prompt;\nconst replyToMessageId = inputData.reply_to_message_id;  // ← НОВОЕ ПОЛЕ\n\nlet sourceFileId;\nlet baseVersion = null;\nlet isNewEdit = versions.length === 0;\n\nif (isNewEdit) {\n  // Новое редактирование: используем оригинальное фото\n  sourceFileId = sourceData.photo_file_id;\n  baseVersion = 0;\n  console.log(`[VERSION BRANCHING] New edit, using original photo (base_version: 0)`);\n  \n} else if (replyToMessageId) {\n  // Reply на конкретное сообщение - ищем версию по message_id\n  const targetVersion = versions.find(v => v.message_id === replyToMessageId);\n  \n  if (targetVersion) {\n    // Нашли версию - используем её как базу\n    sourceFileId = targetVersion.file_id;\n    baseVersion = targetVersion.version;\n    console.log(`[VERSION BRANCHING] Using version ${baseVersion} (message_id: ${replyToMessageId}) as base`);\n  } else {\n    // Не нашли - fallback на последнюю версию\n    const lastVersion = versions[versions.length - 1];\n    sourceFileId = lastVersion.file_id;\n    baseVersion = lastVersion.version;\n    console.log(`[VERSION BRANCHING] Message ${replyToMessageId} not found in versions, using latest version ${baseVersion} as fallback`);\n  }\n  \n} else {\n  // Нет Reply - берём последнюю версию (обычный task_update)\n  const lastVersion = versions[versions.length - 1];\n  sourceFileId = lastVersion.file_id;\n  baseVersion = lastVersion.version;\n  console.log(`[VERSION BRANCHING] No reply context, using latest version ${baseVersion}`);\n}\n\nif (!sourceFileId) {\n  throw new Error('No photo_file_id found in task data');\n}\n\nreturn [{\n  json: {\n    task_id: inputData.id,\n    chat_id: inputData.chat_id,\n    user_id: inputData.user_id,\n    file_id: sourceFileId,\n    instruction: instruction,\n    version: versions.length + 1,\n    base_version: baseVersion,  // ← НОВОЕ: на основе какой версии создана новая\n    reply_to_message_id: replyToMessageId,  // ← НОВОЕ: передаём дальше для сохранения в БД\n    is_new_edit: isNewEdit\n  }\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        528,
+        224
+      ],
+      "id": "YOUR_CREDENTIAL_ID",
+      "name": "YOUR_NAME"
+    },
+    {
+      "parameters": {
+        "resource": "file",
+        "fileId": "={{ $json.file_id }}",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        736,
+        224
+      ],
+      "id": "YOUR_CREDENTIAL_ID",
+      "name": "YOUR_NAME",
+      "webhookId": "YOUR_CREDENTIAL_ID",
+      "credentials": {
+        "telegramApi": {
+          "id": "08rilHeqmVcSA8cN",
+          "name": "YOUR_NAME"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $('3. Determine Source Photo').item.json.instruction }}",
+        "messages": {
+          "messageValues": [
+            {
+              "message": "Ты - AI ассистент для улучшения промптов с поддержкой VISION (видишь изображения). Ты улучшаешь изначальный запрос пользователя, и пишешь промпты для image-to-image модельки nano-banana. Твоя цель – своей работой, помочь пользователю получить отредактированное новое изображение. \n\nТвоя задача:\n1. ПОСМОТРИ на изображение\n2. ПРОЧИТАЙ инструкцию пользователя\n3. НАПИШИ ДЕТАЛИЗИРОВАННЫЙ ПРОМПТ\n4. ВСЕГДА верни результат на АНГЛИЙСКОМ языке\n\n## КРИТИЧЕСКИ ВАЖНО:\n⚠️ ВЫХОДНОЙ ПРОМПТ ВСЕГДА НА АНГЛИЙСКОМ ЯЗЫКЕ ⚠️\n\n## ПРАВИЛА:\n\n### Если инструкция уже на АНГЛИЙСКОМ языке:\n→ ОСТАВЬ КАК ЕСТЬ. Ничего не меняй. Верни точно такой же текст.\n\n### Если инструкция на РУССКОМ языке:\n→ ПЕРЕВЕДИ НА АНГЛИЙСКИЙ и УЛУЧШИ, анализируя детали которые ты ВИДИШЬ на изображении, и продумывая все детали так чтобы результат получимся качественным. Описывай композицию, свет, и другие детали которые могут быть важны для image-to-image модельки. ПОМНИ, что она получит на вход то же изображение, что и видишь ты.\n\n## Что анализировать на изображении:\n\n- Главный объект (человек, предмет, сцена)\n- Фон (мебель, стены, улица)\n- Беспорядок (предметы для удаления: мусор, вещи)\n- Освещение\n- Композиция\n\n## ФОРМАТ ОТВЕТА:\nВерни ТОЛЬКО улучшенную инструкцию НА АНГЛИЙСКОМ ЯЗЫКЕ plain text.\nНикаких объяснений, комментариев или переводов.\nТОЛЬКО английский промпт для Nano Banana API."
+            },
+            {
+              "type": "HumanMessagePromptTemplate",
+              "messageType": "imageBinary"
+            }
+          ]
+        },
+        "batching": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.7,
+      "position": [
+        944,
+        32
+      ],
+      "id": "YOUR_CREDENTIAL_ID",
+      "name": "YOUR_NAME"
+    },
+    {
+      "parameters": {
+        "model": "google/gemini-2.5-flash",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenRouter",
+      "typeVersion": 1,
+      "position": [
+        944,
+        288
+      ],
+      "id": "YOUR_CREDENTIAL_ID",
+      "name": "YOUR_NAME",
+      "credentials": {
+        "openRouterApi": {
+          "id": "kSlzJSYywOH0MwEV",
+          "name": "YOUR_NAME"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.imgbb.com/1/upload",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpQueryAuth",
+        "sendBody": true,
+        "contentType": "multipart-form-data",
+        "bodyParameters": {
+          "parameters": [
+            {
+              "parameterType": "formBinaryData",
+              "name": "YOUR_NAME",
+              "inputDataFieldName": "data"
+            }
+          ]
+        },
+        "options": {
+          "response": {
+            "response": {}
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1120,
+        224
+      ],
+      "id": "YOUR_CREDENTIAL_ID",
+      "name": "YOUR_NAME",
+      "credentials": {
+        "httpQueryAuth": {
+          "id": "DzcAWDgGA2ZY9pbz",
+          "name": "YOUR_NAME"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "combineBy": "combineByPosition",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        1344,
+        224
+      ],
+      "id": "YOUR_CREDENTIAL_ID",
+      "name": "YOUR_NAME"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://queue.fal.run/fal-ai/nano-banana/edit",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"prompt\": \"{{ $json.text }}\",\n  \"image_urls\": [\n    \"{{ $json.data.url }}\"\n  ],\n  \"num_images\": 1,\n  \"output_format\": \"jpeg\"\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        160,
+        640
+      ],
+      "id": "YOUR_CREDENTIAL_ID",
+      "name": "YOUR_NAME",
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "uYjANeOBNxAt5C49",
+          "name": "YOUR_NAME"
+        }
+      },
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "amount": 30
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        400,
+        624
+      ],
+      "id": "YOUR_CREDENTIAL_ID",
+      "name": "YOUR_NAME",
+      "webhookId": "YOUR_CREDENTIAL_ID"
+    },
+    {
+      "parameters": {
+        "url": "={{ $json.response_url }}",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        608,
+        624
+      ],
+      "id": "YOUR_CREDENTIAL_ID",
+      "name": "YOUR_NAME",
+      "retryOnFail": true,
+      "waitBetweenTries": 5000,
+      "maxTries": 3,
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "uYjANeOBNxAt5C49",
+          "name": "YOUR_NAME"
+        }
+      },
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "operation": "sendPhoto",
+        "chatId": "={{ $('3. Determine Source Photo').item.json.chat_id }}",
+        "file": "={{ $json.images[0].url }}",
+        "additionalFields": {
+          "caption": "=Нафотошопил ✔️  (версия {{ $('3. Determine Source Photo').item.json.version }})"
+        }
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        912,
+        608
+      ],
+      "id": "YOUR_CREDENTIAL_ID",
+      "name": "YOUR_NAME",
+      "webhookId": "YOUR_CREDENTIAL_ID",
+      "credentials": {
+        "telegramApi": {
+          "id": "08rilHeqmVcSA8cN",
+          "name": "YOUR_NAME"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const telegramResponse = $input.first().json.result;\nconst sourceData = $('3. Determine Source Photo').item.json;\nconst photo = telegramResponse.photo[telegramResponse.photo.length - 1];\n\nreturn [{\n  json: {\n    telegram_message_id: telegramResponse.message_id,\n    telegram_chat_id: telegramResponse.chat.id,\n    message_type: 'photo',\n    task_id: sourceData.task_id,\n    content_data: JSON.stringify({\n      file_id: photo.file_id,\n      caption: telegramResponse.caption,\n      version: sourceData.version\n    }),\n    created_at: new Date().toISOString()\n  }\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1136,
+        528
+      ],
+      "id": "YOUR_CREDENTIAL_ID",
+      "name": "YOUR_NAME"
+    },
+    {
+      "parameters": {
+        "tableId": "sent_messages",
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "telegram_chat_id",
+              "fieldValue": "={{ $json.telegram_chat_id }}"
+            },
+            {
+              "fieldId": "telegram_message_id",
+              "fieldValue": "={{ $json.telegram_message_id }}"
+            },
+            {
+              "fieldId": "message_type",
+              "fieldValue": "={{ $json.message_type }}"
+            },
+            {
+              "fieldId": "task_id",
+              "fieldValue": "={{ $json.task_id }}"
+            },
+            {
+              "fieldId": "content_data",
+              "fieldValue": "={{ $json.content_data }}"
+            },
+            {
+              "fieldId": "created_at",
+              "fieldValue": "={{ $json.created_at }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        1344,
+        528
+      ],
+      "id": "YOUR_CREDENTIAL_ID",
+      "name": "YOUR_NAME",
+      "credentials": {
+        "supabaseApi": {
+          "id": "u5jLuYJAJLw2Nk0K",
+          "name": "YOUR_NAME"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const telegramResponse = $input.first().json.result;\nconst originalTask = $('2. Load Task Data').first().json;\nconst sourceData = $('3. Determine Source Photo').item.json;\nconst enhancedPrompt = $('5. AI Prompt Enhancer with Vision').item.json.text;\nconst photo = telegramResponse.photo[telegramResponse.photo.length - 1];\n\n// Получить существующие версии из оригинального task\nconst existingVersions = originalTask.agent_output?.versions || [];\n\n// Создать объект новой версии\nconst newVersion = {\n  version: sourceData.version,\n  user_request: sourceData.instruction,\n  file_id: photo.file_id,\n  message_id: telegramResponse.message_id,\n  instruction: enhancedPrompt,\n  timestamp: new Date().toISOString(),\n  base_version: sourceData.base_version,  // ← ДОБАВЛЕНО: на основе какой версии создана\n  reply_to_message_id: sourceData.reply_to_message_id  // ← ДОБАВЛЕНО: на какое сообщение был Reply\n};\n\n// Добавить к существующим версиям\nconst updatedVersions = [...existingVersions, newVersion];\n\n// Подготовить данные для UPDATE\nreturn [{\n  json: {\n    task_id: originalTask.id,\n    agent_output: {\n      current_version: newVersion.version,\n      versions: updatedVersions\n    },\n    status: 'completed'\n  }\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1136,
+        704
+      ],
+      "id": "YOUR_CREDENTIAL_ID",
+      "name": "YOUR_NAME"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "tableId": "tasks",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "id",
+              "condition": "eq",
+              "keyValue": "={{ $json.task_id }}"
+            }
+          ]
+        },
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "agent_output",
+              "fieldValue": "={{ $json.agent_output }}"
+            },
+            {
+              "fieldId": "status",
+              "fieldValue": "={{ $json.status }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        1344,
+        704
+      ],
+      "id": "YOUR_CREDENTIAL_ID",
+      "name": "YOUR_NAME",
+      "credentials": {
+        "supabaseApi": {
+          "id": "u5jLuYJAJLw2Nk0K",
+          "name": "YOUR_NAME"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const errorData = $input.first().json;\nconst taskData = $('2. Load Task Data').first().json;\nconst sourceData = $('3. Determine Source Photo').item.json;\n\n// Генерируем Error ID\nconst errorId = `ERR-${Date.now().toString(36).toUpperCase()}`;\n\n// Определяем откуда пришла ошибка\nlet errorSource = 'unknown';\nlet technicalError = '';\nlet userRequest = sourceData.instruction || 'Неизвестный запрос';\n\n// ============================================\n// ОПРЕДЕЛЯЕМ ИСТОЧНИК ОШИБКИ\n// ============================================\n\n// Проверяем есть ли node info в ошибке\nconst nodeName = errorData.node?.name || '';\n\nif (nodeName.includes('Nano Banana') || errorData.error?.message?.includes('fal.run')) {\n  // Ошибка от Nano Banana API\n  errorSource = 'nano_banana_api';\n  technicalError = errorData.error?.message || JSON.stringify(errorData);\n  \n} else if (nodeName.includes('Download') || nodeName.includes('Get File')) {\n  // Ошибка при скачивании файла\n  errorSource = 'download_file';\n  technicalError = errorData.error?.message || JSON.stringify(errorData);\n  \n} else {\n  // Неизвестная ошибка\n  errorSource = 'unknown';\n  technicalError = JSON.stringify(errorData);\n}\n\n// ============================================\n// ФОРМИРУЕМ СООБЩЕНИЕ\n// ============================================\n\nconst userMessage = `❌ Запрос \"${userRequest}\" не удался, попробуйте изменить запрос или изображение.`;\n\n// ============================================\n// СОЗДАЁМ ВЕРСИЮ С ОШИБКОЙ\n// ============================================\n\nconst existingVersions = taskData.agent_output?.versions || [];\n\nconst errorVersion = {\n  version: sourceData.version,\n  user_request: userRequest,\n  base_version: sourceData.base_version,\n  reply_to_message_id: sourceData.reply_to_message_id,\n  error: {\n    error_id: errorId,\n    source: errorSource,  // ← Откуда ошибка (nano_banana_api / download_file)\n    message: technicalError.substring(0, 500),  // Обрезаем длинные ошибки\n    timestamp: new Date().toISOString()\n  }\n};\n\nconst updatedVersions = [...existingVersions, errorVersion];\n\nreturn [{\n  json: {\n    task_id: taskData.id,\n    chat_id: taskData.chat_id,\n    user_message: userMessage,\n    agent_output: {\n      current_version: sourceData.version,\n      versions: updatedVersions\n    },\n    status: 'failed'\n  }\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        896,
+        992
+      ],
+      "id": "YOUR_CREDENTIAL_ID",
+      "name": "YOUR_NAME"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "tableId": "tasks",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "id",
+              "condition": "eq",
+              "keyValue": "={{ $json.task_id }}"
+            }
+          ]
+        },
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "status",
+              "fieldValue": "={{ $json.status }}"
+            },
+            {
+              "fieldId": "agent_output",
+              "fieldValue": "={{ $json.agent_output }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        1072,
+        992
+      ],
+      "id": "YOUR_CREDENTIAL_ID",
+      "name": "YOUR_NAME",
+      "credentials": {
+        "supabaseApi": {
+          "id": "u5jLuYJAJLw2Nk0K",
+          "name": "YOUR_NAME"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $json.chat_id }}",
+        "text": "={{ $json.user_message }}",
+        "additionalFields": {
+          "appendAttribution": false,
+          "parse_mode": "Markdown"
+        }
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        1248,
+        992
+      ],
+      "id": "YOUR_CREDENTIAL_ID",
+      "name": "YOUR_NAME",
+      "webhookId": "YOUR_CREDENTIAL_ID",
+      "credentials": {
+        "telegramApi": {
+          "id": "08rilHeqmVcSA8cN",
+          "name": "YOUR_NAME"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "ImgBB.com — это популярный и очень простой бесплатный фотохостинг (сервис для загрузки и хранения изображений в интернете).\nЕсли говорить простыми словами, он нужен для того, чтобы вы могли загрузить картинку или скриншот со своего компьютера/телефона в сеть и получить взамен готовую короткую ссылку. Эту ссылку потом можно отправить другу, вставить на форум, в блог или использовать в автоматизациях.",
+        "height": 224,
+        "width": 560
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        1552,
+        0
+      ],
+      "typeVersion": 1,
+      "id": "YOUR_CREDENTIAL_ID",
+      "name": "YOUR_NAME"
+    },
+    {
+      "parameters": {
+        "content": "# 📋 ДОКУМЕНТАЦИЯ WORKFLOW\n\n## 🔵 ОСНОВНОЙ ПОТОК\n\n**1. When Executed by Another Workflow** — Триггер, запускается из другого workflow. Получает task_id, chat_id, user_id, инструкцию и reply_to_message_id.\n\n**2. Load Task Data** — Загружает данные задачи из Supabase (таблица tasks) по ID. Получает историю версий, source_data с оригинальным фото.\n\n**3. Determine Source Photo** — Определяет какое фото использовать как базу:\n   • Если это новое редактирование → берёт оригинальное фото (base_version: 0)\n   • Если есть reply_to_message_id → ищет версию по message_id и использует её как базу\n   • Иначе → берёт последнюю версию из истории\n   Возвращает file_id, version, base_version, instruction.\n\n**4. Get a file** — Скачивает файл из Telegram по file_id в бинарном формате.\n\n## 🔀 ПАРАЛЛЕЛЬНАЯ ОБРАБОТКА\n\n**5. AI Prompt Enhancer with Vision** — AI агент с vision (Gemini 2.5 Flash). Анализирует изображение и улучшает промпт пользователя:\n   • Если промпт на английском → оставляет как есть\n   • Если на русском → переводит и детализирует для nano-banana API\n   Возвращает улучшенный промпт на английском.\n\n**5a. Gemini 2.5 Flash** — Language Model для AI агента (OpenRouter).\n\n**6. Upload to imgbb** — Загружает изображение на imgbb.com, возвращает публичный URL для nano-banana API.\n\n**7. Merge** — Объединяет результаты AI агента (улучшенный промпт) и imgbb (URL изображения) для передачи в API.\n\n## 🎨 РЕДАКТИРОВАНИЕ ИЗОБРАЖЕНИЯ\n\n**8. Nano Banana API** — Отправляет запрос на редактирование изображения в fal.ai/nano-banana/edit. Получает response_url для скачивания результата.\n\n**9. Wait** — Ожидает 30 секунд пока nano-banana обработает изображение.\n\n**10. Download Edited Image** — Скачивает отредактированное изображение по response_url. Retry: 3 попытки с интервалом 5 сек.\n\n## 📤 ОТПРАВКА РЕЗУЛЬТАТА\n\n**11. Send to Telegram** — Отправляет отредактированное фото в Telegram с подписью \"Нафотошопил ✔️ (версия N)\".\n\n**12. Prepare sent_message** — Подготавливает данные для сохранения отправленного сообщения: message_id, chat_id, file_id, caption, version.\n\n**13. Save to sent_messages** — Сохраняет информацию об отправленном сообщении в Supabase (таблица sent_messages).\n\n**14. Prepare task_update** — Создаёт новую версию в истории задачи:\n   • version — номер новой версии\n   • user_request — оригинальный запрос пользователя\n   • file_id — ID файла в Telegram\n   • message_id — ID отправленного сообщения\n   • instruction — улучшенный промпт от AI\n   • base_version — на основе какой версии создана\n   • reply_to_message_id — ID сообщения на которое был Reply\n\n**15. Update Task** — Обновляет задачу в Supabase: добавляет новую версию в agent_output.versions, устанавливает status: completed.\n\n## ❌ ОБРАБОТКА ОШИБОК\n\n**E1. Handle Error** — Обрабатывает ошибки от nano-banana API или скачивания файла:\n   • Генерирует error_id\n   • Определяет источник ошибки (nano_banana_api / download_file / unknown)\n   • Создаёт версию с ошибкой в истории\n   • Формирует сообщение для пользователя\n\n**E2. Task Error** — Сохраняет информацию об ошибке в Supabase (обновляет agent_output с версией-ошибкой, status: failed).\n\n**E3. Send Error** — Отправляет пользователю сообщение об ошибке в Telegram.\n\n## 🔄 ЛОГИКА ВЕРСИОНИРОВАНИЯ\n\nWorkflow поддерживает ветвление версий через Reply:\n• Без Reply → создаёт версию на основе последней\n• С Reply → создаёт версию на основе той, на которую был Reply\n• Каждая версия хранит base_version и reply_to_message_id для отслеживания истории ветвления",
+        "height": 2160,
+        "width": 624
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -688,
+        0
+      ],
+      "typeVersion": 1,
+      "id": "YOUR_CREDENTIAL_ID",
+      "name": "YOUR_NAME"
+    }
+  ],
+  "connections": {
+    "1. When Executed by Another Workflow": {
+      "main": [
+        [
+          {
+            "node": "2. Load Task Data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "2. Load Task Data": {
+      "main": [
+        [
+          {
+            "node": "3. Determine Source Photo",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "3. Determine Source Photo": {
+      "main": [
+        [
+          {
+            "node": "4. Get a file",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "4. Get a file": {
+      "main": [
+        [
+          {
+            "node": "5. AI Prompt Enhancer with Vision",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "6. Upload to imgbb",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "5. AI Prompt Enhancer with Vision": {
+      "main": [
+        [
+          {
+            "node": "7. Merge",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "5a. Gemini 2.5 Flash": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "5. AI Prompt Enhancer with Vision",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "6. Upload to imgbb": {
+      "main": [
+        [
+          {
+            "node": "7. Merge",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "7. Merge": {
+      "main": [
+        [
+          {
+            "node": "8. Nano Banana API",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "8. Nano Banana API": {
+      "main": [
+        [
+          {
+            "node": "9. Wait",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "E1. Handle Error",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "9. Wait": {
+      "main": [
+        [
+          {
+            "node": "10. Download Edited Image",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "10. Download Edited Image": {
+      "main": [
+        [
+          {
+            "node": "11. Send to Telegram",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "E1. Handle Error",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "11. Send to Telegram": {
+      "main": [
+        [
+          {
+            "node": "12. Prepare sent_message",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "14. Prepare task_update",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "12. Prepare sent_message": {
+      "main": [
+        [
+          {
+            "node": "13. Save to sent_messages",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "14. Prepare task_update": {
+      "main": [
+        [
+          {
+            "node": "15. Update Task",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "E1. Handle Error": {
+      "main": [
+        [
+          {
+            "node": "E2. Task Error",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "E2. Task Error": {
+      "main": [
+        [
+          {
+            "node": "E3. Send Error",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "staticData": null,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "nodeGroups": [],
+  "pinData": {},
+  "versionId": "YOUR_CREDENTIAL_ID",
+  "activeVersionId": null,
+  "versionCounter": 51,
+  "triggerCount": 0,
+  "sourceWorkflowId": null,
+  "shared": [
+    {
+      "updatedAt": "2026-06-12T13:16:20.897Z",
+      "createdAt": "2026-06-12T13:16:20.897Z",
+      "role": "workflow:owner",
+      "workflowId": "OPoLvosfgWq1C5SL",
+      "projectId": "59YaPd0amPnB6Dlx",
+      "project": {
+        "updatedAt": "2026-05-15T13:36:37.930Z",
+        "createdAt": "2026-05-15T13:36:29.862Z",
+        "id": "59YaPd0amPnB6Dlx",
+        "name": "YOUR_NAME",
+        "type": "personal",
+        "icon": null,
+        "description": null,
+        "customTelemetryTags": [],
+        "creatorId": "YOUR_CREDENTIAL_ID"
+      }
+    }
+  ],
+  "tags": [],
+  "activeVersion": null
+}
