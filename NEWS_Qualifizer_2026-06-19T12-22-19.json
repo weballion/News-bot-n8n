@@ -1,0 +1,2424 @@
+{
+  "updatedAt": "2026-06-13T11:39:51.254Z",
+  "createdAt": "2026-06-11T11:32:53.303Z",
+  "id": "H687DeDCB3zUQzgq",
+  "name": "YOUR_NAME",
+  "description": null,
+  "active": false,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "content": "# –––> ПОЛУЧИЛ\n\n",
+        "height": 432,
+        "width": 2104,
+        "color": 7
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -2128,
+        1008
+      ],
+      "id": "YOUR_CREDENTIAL_ID",
+      "name": "YOUR_NAME"
+    },
+    {
+      "parameters": {
+        "content": "# БД",
+        "height": 432,
+        "width": 1080,
+        "color": 4
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        0,
+        1008
+      ],
+      "id": "YOUR_CREDENTIAL_ID",
+      "name": "YOUR_NAME"
+    },
+    {
+      "parameters": {
+        "content": "# –––> ВЫБРАЛ ДЕПАРТАМЕНТ\n\n",
+        "height": 688,
+        "width": 1896,
+        "color": 6
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -1968,
+        1632
+      ],
+      "id": "YOUR_CREDENTIAL_ID",
+      "name": "YOUR_NAME"
+    },
+    {
+      "parameters": {
+        "content": "# –––> ОТДАЛ В РАБОТУ",
+        "height": 960,
+        "width": 912,
+        "color": 7
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -48,
+        1632
+      ],
+      "typeVersion": 1,
+      "id": "YOUR_CREDENTIAL_ID",
+      "name": "YOUR_NAME"
+    },
+    {
+      "parameters": {
+        "content": "## [команда] /start  или  /stop",
+        "height": 400,
+        "width": 904,
+        "color": 3
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "YOUR_CREDENTIAL_ID",
+      "name": "YOUR_NAME"
+    },
+    {
+      "parameters": {
+        "content": "## [ фото ] но без подписи\n \n",
+        "height": 272,
+        "width": 904
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        0,
+        416
+      ],
+      "id": "YOUR_CREDENTIAL_ID",
+      "name": "YOUR_NAME"
+    },
+    {
+      "parameters": {
+        "content": "## > > > пересланное\n",
+        "height": 272,
+        "width": 720,
+        "color": 5
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        0,
+        704
+      ],
+      "typeVersion": 1,
+      "id": "YOUR_CREDENTIAL_ID",
+      "name": "YOUR_NAME"
+    },
+    {
+      "parameters": {
+        "updates": [
+          "*"
+        ],
+        "additionalFields": {}
+      },
+      "id": "YOUR_CREDENTIAL_ID",
+      "name": "YOUR_NAME",
+      "type": "n8n-nodes-base.telegramTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        -1840,
+        1184
+      ],
+      "webhookId": "YOUR_CREDENTIAL_ID",
+      "credentials": {
+        "telegramApi": {
+          "id": "08rilHeqmVcSA8cN",
+          "name": "YOUR_NAME"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.telegram.org/8307189377:YOUR_GOOGLE_DRIVE_FOLDER_IDSM/sendChatAction",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "YOUR_NAME",
+              "value": "={{ $json.message.from.id }}"
+            },
+            {
+              "name": "YOUR_NAME",
+              "value": "typing"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -1632,
+        1040
+      ],
+      "id": "YOUR_CREDENTIAL_ID",
+      "name": "YOUR_NAME",
+      "alwaysOutputData": true,
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "YOUR_CREDENTIAL_ID",
+              "leftValue": "={{ $json.message.from.id }}",
+              "rightValue": 27020283,
+              "operator": {
+                "type": "number",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -1632,
+        1184
+      ],
+      "id": "YOUR_CREDENTIAL_ID",
+      "name": "YOUR_NAME"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.message.voice.file_id }}",
+                    "rightValue": "",
+                    "operator": {
+                      "type": "string",
+                      "operation": "exists",
+                      "singleValue": true
+                    },
+                    "id": "YOUR_CREDENTIAL_ID"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Voice"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "YOUR_CREDENTIAL_ID",
+                    "leftValue": "={{ $json.message.photo.length }}",
+                    "rightValue": 0,
+                    "operator": {
+                      "type": "number",
+                      "operation": "gt"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Photo"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "YOUR_CREDENTIAL_ID",
+                    "leftValue": "={{ $json.message.text }}",
+                    "rightValue": "",
+                    "operator": {
+                      "type": "string",
+                      "operation": "exists",
+                      "singleValue": true
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Text"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "YOUR_CREDENTIAL_ID",
+      "name": "YOUR_NAME",
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2,
+      "position": [
+        -1424,
+        1152
+      ]
+    },
+    {
+      "parameters": {
+        "resource": "file",
+        "fileId": "={{ $json.message.voice.file_id }}",
+        "additionalFields": {}
+      },
+      "id": "YOUR_CREDENTIAL_ID",
+      "name": "YOUR_NAME",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        -1232,
+        1056
+      ],
+      "webhookId": "YOUR_CREDENTIAL_ID",
+      "credentials": {
+        "telegramApi": {
+          "id": "08rilHeqmVcSA8cN",
+          "name": "YOUR_NAME"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "audio",
+        "operation": "transcribe",
+        "options": {}
+      },
+      "id": "YOUR_CREDENTIAL_ID",
+      "name": "YOUR_NAME",
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 1.6,
+      "position": [
+        -1040,
+        1056
+      ],
+      "credentials": {
+        "openAiApi": {
+          "id": "yobFZcByp2CGqgN6",
+          "name": "YOUR_NAME"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "YOUR_CREDENTIAL_ID",
+              "name": "YOUR_NAME",
+              "value": "={{ $json.text }}",
+              "type": "string"
+            },
+            {
+              "id": "YOUR_CREDENTIAL_ID",
+              "name": "YOUR_NAME",
+              "value": "={{ $('1. Telegram Trigger').item.json.message.reply_to_message }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -848,
+        1056
+      ],
+      "id": "YOUR_CREDENTIAL_ID",
+      "name": "YOUR_NAME"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "YOUR_CREDENTIAL_ID",
+              "name": "YOUR_NAME",
+              "value": "={{ $json.message.text }}",
+              "type": "string"
+            },
+            {
+              "id": "YOUR_CREDENTIAL_ID",
+              "name": "YOUR_NAME",
+              "value": "={{ $('1. Telegram Trigger').item.json.message.reply_to_message }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "YOUR_CREDENTIAL_ID",
+      "name": "YOUR_NAME",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -848,
+        1264
+      ]
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        -656,
+        1168
+      ],
+      "id": "YOUR_CREDENTIAL_ID",
+      "name": "YOUR_NAME"
+    },
+    {
+      "parameters": {
+        "jsCode": "// ============================================\n// ИНИЦИАЛИЗАЦИЯ: Универсальная обработка входных данных\n// ============================================\n\nconst inputData = $input.first().json;\n\n// 1. Определяем откуда пришли данные\nconst messageObject = inputData.message || null;\nconst userInput = inputData.userInput || null;\n\n// 2. НОВОЕ: Если данные от Set Text/Voice (нет поля message), загружаем от Telegram Trigger\nlet telegramMessage = null;\n\nif (!messageObject && userInput) {\n  // Данные от Set Text/Voice — загружаем недостающие данные\n  try {\n    telegramMessage = $('1. Telegram Trigger').first().json.message;\n  } catch (e) {\n    console.log('Failed to get Telegram Trigger data:', e);\n    telegramMessage = null;\n  }\n}\n\n// 3. Обрабатываем replyObject (может быть строкой!)\nlet replyObject = null;\n\nif (inputData.replyObject) {\n  if (typeof inputData.replyObject === 'string') {\n    try {\n      replyObject = JSON.parse(inputData.replyObject);\n    } catch (e) {\n      console.log('Failed to parse replyObject:', e);\n      replyObject = null;\n    }\n  } else {\n    replyObject = inputData.replyObject;\n  }\n}\n\n// 4. Telegram данные: приоритет messageObject, затем telegramMessage, затем inputData\nconst telegramData = messageObject || telegramMessage || inputData;\n\n// 5. Получаем reply если ещё не получили\nif (!replyObject && telegramData.reply_to_message) {\n  replyObject = telegramData.reply_to_message;\n}\n\n// 6. Извлекаем базовые данные (УНИВЕРСАЛЬНО!)\nconst chatId = telegramData.chat?.id || telegramData.chat_id || replyObject?.chat?.id;\nconst userId = telegramData.from?.id || telegramData.user_id || replyObject?.from?.id;\nconst username = telegramData.from?.username || telegramData.username || replyObject?.from?.username || '';\nconst messageId = telegramData.message_id || inputData.message_id;\n\n// ============================================\n// ПРОВЕРКА 1: Forwarded message\n// ============================================\n\nconst forwardOrigin = telegramData.forward_origin || telegramData.forward_from;\nconst isForwarded = Boolean(forwardOrigin);\n\nif (isForwarded) {\n  return {\n    json: {\n      message_id: messageId,\n      chat_id: chatId,\n      user_id: userId,\n      username: username,\n      text: telegramData.text || telegramData.caption || '',\n      is_forwarded: true,\n      forwarded_content: {\n        text: telegramData.text || telegramData.caption || '',\n        forward_date: telegramData.forward_date\n      },\n      is_reply: false,\n      timestamp: new Date().toISOString()\n    }\n  };\n}\n\n// ============================================\n// ПРОВЕРКА 2: Фото + caption (ГОТОВАЯ ЗАДАЧА — v3.0)\n// ============================================\n\nconst hasPhoto = !!telegramData.photo;\nconst caption = hasPhoto ? (telegramData.caption || null) : null;\nconst hasCaption = caption && caption.trim().length > 0;\n\nif (hasPhoto && hasCaption) {\n  return {\n    json: {\n      message_id: messageId,\n      chat_id: chatId,\n      user_id: userId,\n      username: username,\n      text: caption,\n      is_reply: Boolean(replyObject),\n      reply_to_message_id: replyObject?.message_id || null,\n      has_photo: true,\n      photo_file_id: telegramData.photo[telegramData.photo.length - 1].file_id,\n      is_ready_photo_task: true,\n      timestamp: new Date().toISOString()\n    }\n  };\n}\n\n// ============================================\n// ПРОВЕРКА 3: Фото БЕЗ caption (нужен вопрос)\n// ============================================\n\nif (hasPhoto && !hasCaption) {\n  return {\n    json: {\n      message_id: messageId,\n      chat_id: chatId,\n      user_id: userId,\n      username: username,\n      photo: telegramData.photo,\n      caption: null,\n      is_reply: Boolean(replyObject),\n      reply_to_message_id: replyObject?.message_id || null,\n      timestamp: new Date().toISOString()\n    }\n  };\n}\n\n// ============================================\n// ПРОВЕРКА 4: Обычное сообщение (текст)\n// ============================================\n\nreturn {\n  json: {\n    message_id: messageId,\n    chat_id: chatId,\n    user_id: userId,\n    username: username,\n    text: userInput || telegramData.text || '',\n    is_reply: Boolean(replyObject),\n    reply_to_message_id: replyObject?.message_id || null,\n    timestamp: new Date().toISOString()\n  }\n};"
+      },
+      "id": "YOUR_CREDENTIAL_ID",
+      "name": "YOUR_NAME",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -464,
+        1168
+      ]
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "YOUR_CREDENTIAL_ID",
+                    "leftValue": "={{ $json.text }}",
+                    "rightValue": "/",
+                    "operator": {
+                      "type": "string",
+                      "operation": "startsWith"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "command"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "YOUR_CREDENTIAL_ID",
+                    "leftValue": "={{ $json.is_ready_photo_task }}",
+                    "rightValue": "true",
+                    "operator": {
+                      "type": "boolean",
+                      "operation": "true",
+                      "singleValue": true
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "edit_photo"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.photo && $json.photo.length > 0 && !$json.caption }}",
+                    "rightValue": 5,
+                    "operator": {
+                      "type": "boolean",
+                      "operation": "true",
+                      "singleValue": true
+                    },
+                    "id": "YOUR_CREDENTIAL_ID"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "photo_no_caption"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "YOUR_CREDENTIAL_ID",
+                    "leftValue": "={{ $json.is_forwarded }}",
+                    "rightValue": "",
+                    "operator": {
+                      "type": "boolean",
+                      "operation": "true",
+                      "singleValue": true
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "forwarded"
+            }
+          ]
+        },
+        "options": {
+          "fallbackOutput": "extra",
+          "renameFallbackOutput": "text"
+        }
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.3,
+      "position": [
+        -272,
+        1120
+      ],
+      "id": "YOUR_CREDENTIAL_ID",
+      "name": "YOUR_NAME"
+    },
+    {
+      "parameters": {
+        "jsCode": "const command = $json.text?.toLowerCase().trim() || '';\nconst chatId = $json.chat_id;\nconst messageId = $json.message_id;\n\n// Определяем тип команды\nlet commandType = 'unknown';\n\nif (command === '/stop') {\n  commandType = 'stop';\n} else if (command === '/start') {\n  commandType = 'start';\n}\n\nreturn {\n  json: {\n    chat_id: chatId,\n    message_id: messageId,\n    command: commandType,\n    original_command: command\n  }\n};"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        64,
+        128
+      ],
+      "id": "YOUR_CREDENTIAL_ID",
+      "name": "YOUR_NAME"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.command }}",
+                    "rightValue": "stop",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "id": "YOUR_CREDENTIAL_ID"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "stop"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "YOUR_CREDENTIAL_ID",
+                    "leftValue": "={{ $json.command }}",
+                    "rightValue": "start",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "YOUR_NAME"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "start"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.3,
+      "position": [
+        256,
+        128
+      ],
+      "id": "YOUR_CREDENTIAL_ID",
+      "name": "YOUR_NAME"
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $json.chat_id }}",
+        "text": "Понял. Очистил контекст. Жду новую команду.",
+        "additionalFields": {
+          "appendAttribution": false,
+          "parse_mode": "Markdown"
+        }
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        464,
+        48
+      ],
+      "id": "YOUR_CREDENTIAL_ID",
+      "name": "YOUR_NAME",
+      "webhookId": "YOUR_CREDENTIAL_ID",
+      "credentials": {
+        "telegramApi": {
+          "id": "08rilHeqmVcSA8cN",
+          "name": "YOUR_NAME"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "tableId": "sent_messages",
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "telegram_message_id",
+              "fieldValue": "={{ $json.result.message_id }}"
+            },
+            {
+              "fieldId": "telegram_chat_id",
+              "fieldValue": "={{ $('11. Command Handler').first().json.chat_id }}"
+            },
+            {
+              "fieldId": "message_type",
+              "fieldValue": "command"
+            },
+            {
+              "fieldId": "content_data",
+              "fieldValue": "={{ JSON.stringify({command: 'stop', original_message_id: $('11. Command Handler').first().json.message_id}) }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        656,
+        48
+      ],
+      "id": "YOUR_CREDENTIAL_ID",
+      "name": "YOUR_NAME",
+      "credentials": {
+        "supabaseApi": {
+          "id": "u5jLuYJAJLw2Nk0K",
+          "name": "YOUR_NAME"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $json.chat_id }}",
+        "text": "=\n--------------------------\n\n*Здарова\\! Я SMM Agent System \\- мультиагентная система для замены команды маркетологов \\(версия 0\\.8\\)*\n\n*ЧТО Я УМЕЮ* 🧠 \n\\- *Управляю любыми департаментами:* \\(сейчас это copywriting, image\\_gen, image\\_edit, а в следующей версии появятся video\\_gen, research и слежка за конкурентами\\)\\.\n\\- *Понимаю все форматы контента*\n\\- *Помню все версии задач* \\(можно вернуться к любой ветке и продолжить её\\)\n\n📰 *\\[1\\] МОНИТОРЮ НОВОСТИ*\nЯ ищу важные новости в теме AI и технологий, анализирую что происходит и присылаю тебе персональный отчет с самыми важными событиями за день\\.\n\n📝 *\\[2\\] ПИШУ ПОСТЫ*\n• «_Напиши текст про\\.\\._»\n• «_Сделай пост про 3 новость из отчета_»\n• «_https://techcrunch\\.com/\\.\\.\\. создай пост про эту компанию и ее влияние на рынок_»\n\n🎨 *\\[3\\] СОЗДАЮ И ФОТОШОПЛЮ*\n• «_Сделай картинку для этого поста_»\n• «_Убери фон_» \\(мне можно отправить фото товара с плохим фоном, и я сделаю красиво\\)\n\n🔄 *\\[4\\] ПОНИМАНИЕ ПРАВОК*\nНе нравится пост или картинка? Просто скажи: «_Добавь раздел про X_», «_Сократи до 500 символов_», «_Измени стиль_», «_Сделай фон синим_»\\. Я обновлю работу, сохранив контекст\\.\n\n💡 *Команды*\n/stop \\- очистит контекст \\(если я начал путаться или ты хочешь закончить текущую задачу и начать заново\\)\\.\n\n🚀 Погнали\\! Жду задачи\\.",
+        "additionalFields": {
+          "appendAttribution": false,
+          "parse_mode": "MarkdownV2"
+        }
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        464,
+        208
+      ],
+      "id": "YOUR_CREDENTIAL_ID",
+      "name": "YOUR_NAME",
+      "webhookId": "YOUR_CREDENTIAL_ID",
+      "credentials": {
+        "telegramApi": {
+          "id": "08rilHeqmVcSA8cN",
+          "name": "YOUR_NAME"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "tableId": "sent_messages",
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "telegram_message_id",
+              "fieldValue": "={{ $json.result.message_id }}"
+            },
+            {
+              "fieldId": "telegram_chat_id",
+              "fieldValue": "={{ $('11. Command Handler').first().json.chat_id }}"
+            },
+            {
+              "fieldId": "message_type",
+              "fieldValue": "command"
+            },
+            {
+              "fieldId": "content_data",
+              "fieldValue": "={{ JSON.stringify({command: 'stop', original_message_id: $('11. Command Handler').first().json.message_id}) }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        656,
+        208
+      ],
+      "id": "YOUR_CREDENTIAL_ID",
+      "name": "YOUR_NAME",
+      "credentials": {
+        "supabaseApi": {
+          "id": "u5jLuYJAJLw2Nk0K",
+          "name": "YOUR_NAME"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const photo = $json.photo;\nconst chatId = $json.chat_id;\nconst messageId = $json.message_id;\n\nif (!photo || !Array.isArray(photo) || photo.length === 0) {\n  throw new Error('No photo found in message');\n}\n\n// Получаем самое большое фото\nconst photoFileId = photo[photo.length - 1].file_id;\n\n// ✅ ВСЕГДА save_and_ask (потому что caption уже обработан в ЭТАП 2)\nreturn {\n  json: {\n    chat_id: chatId,\n    message_id: messageId,\n    photo_file_id: photoFileId,\n    action: 'save_and_ask'\n  }\n};"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        64,
+        512
+      ],
+      "id": "YOUR_CREDENTIAL_ID",
+      "name": "YOUR_NAME"
+    },
+    {
+      "parameters": {
+        "tableId": "sent_messages",
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "telegram_message_id",
+              "fieldValue": "={{ $json.message_id }}"
+            },
+            {
+              "fieldId": "telegram_chat_id",
+              "fieldValue": "={{ $json.chat_id }}"
+            },
+            {
+              "fieldId": "message_type",
+              "fieldValue": "photo_temp"
+            },
+            {
+              "fieldId": "content_data",
+              "fieldValue": "={{ JSON.stringify({photo_file_id: $json.photo_file_id}) }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        256,
+        512
+      ],
+      "id": "YOUR_CREDENTIAL_ID",
+      "name": "YOUR_NAME",
+      "credentials": {
+        "supabaseApi": {
+          "id": "u5jLuYJAJLw2Nk0K",
+          "name": "YOUR_NAME"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('17. Photo Handler').first().json.chat_id }}",
+        "text": "Получил фото. Что сделать?",
+        "additionalFields": {
+          "appendAttribution": false,
+          "parse_mode": "Markdown"
+        }
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        464,
+        512
+      ],
+      "id": "YOUR_CREDENTIAL_ID",
+      "name": "YOUR_NAME",
+      "webhookId": "YOUR_CREDENTIAL_ID",
+      "credentials": {
+        "telegramApi": {
+          "id": "08rilHeqmVcSA8cN",
+          "name": "YOUR_NAME"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "tableId": "sent_messages",
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "telegram_message_id",
+              "fieldValue": "={{ $json.result.message_id }}"
+            },
+            {
+              "fieldId": "telegram_chat_id",
+              "fieldValue": "={{ $('17. Photo Handler').first().json.chat_id }}"
+            },
+            {
+              "fieldId": "message_type",
+              "fieldValue": "system"
+            },
+            {
+              "fieldId": "content_data",
+              "fieldValue": "={{ JSON.stringify({pending_photo: $('17. Photo Handler').first().json.message_id, question: \"Получил фото. Что нужно сделать?\"}) }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        656,
+        512
+      ],
+      "id": "YOUR_CREDENTIAL_ID",
+      "name": "YOUR_NAME",
+      "credentials": {
+        "supabaseApi": {
+          "id": "u5jLuYJAJLw2Nk0K",
+          "name": "YOUR_NAME"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "tableId": "sent_messages",
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "telegram_message_id",
+              "fieldValue": "={{ $json.message_id }}"
+            },
+            {
+              "fieldId": "telegram_chat_id",
+              "fieldValue": "={{ $json.chat_id }}"
+            },
+            {
+              "fieldId": "message_type",
+              "fieldValue": "forwarded_temp"
+            },
+            {
+              "fieldId": "content_data",
+              "fieldValue": "={{ JSON.stringify({text: $json.forwarded_content.text, forwarded_date: $json.forwarded_content.forward_date}) }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        64,
+        784
+      ],
+      "id": "YOUR_CREDENTIAL_ID",
+      "name": "YOUR_NAME",
+      "credentials": {
+        "supabaseApi": {
+          "id": "u5jLuYJAJLw2Nk0K",
+          "name": "YOUR_NAME"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('9. Prepare Message Data').first().json.chat_id }}",
+        "text": "Вижу пересланное. Что с этим сделать?",
+        "additionalFields": {
+          "appendAttribution": false,
+          "parse_mode": "Markdown"
+        }
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        256,
+        784
+      ],
+      "id": "YOUR_CREDENTIAL_ID",
+      "name": "YOUR_NAME",
+      "webhookId": "YOUR_CREDENTIAL_ID",
+      "credentials": {
+        "telegramApi": {
+          "id": "08rilHeqmVcSA8cN",
+          "name": "YOUR_NAME"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "tableId": "sent_messages",
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "telegram_message_id",
+              "fieldValue": "={{ $json.result.message_id }}"
+            },
+            {
+              "fieldId": "telegram_chat_id",
+              "fieldValue": "={{ $('9. Prepare Message Data').first().json.chat_id }}"
+            },
+            {
+              "fieldId": "message_type",
+              "fieldValue": "system"
+            },
+            {
+              "fieldId": "content_data",
+              "fieldValue": "={{ JSON.stringify({pending_forwarded: $('9. Prepare Message Data').first().json.message_id, question: 'Сохранил пересланное сообщение. Что нужно сделать?'}) }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        464,
+        784
+      ],
+      "id": "YOUR_CREDENTIAL_ID",
+      "name": "YOUR_NAME",
+      "credentials": {
+        "supabaseApi": {
+          "id": "u5jLuYJAJLw2Nk0K",
+          "name": "YOUR_NAME"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "reply-check",
+              "leftValue": "={{ $json.is_reply }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "YOUR_CREDENTIAL_ID",
+      "name": "YOUR_NAME",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        48,
+        1184
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://dwuekivjgvxbppjcltpu.supabase.co/rest/v1/rpc/find_context_by_reply",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "YOUR_NAME",
+              "value": "YOUR_GOOGLE_DRIVE_FOLDER_IDRpbg_gaCpWU9n"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"p_telegram_message_id\": {{ $json.reply_to_message_id }},\n  \"p_chat_id\": {{ $json.chat_id }}\n}",
+        "options": {}
+      },
+      "id": "YOUR_CREDENTIAL_ID",
+      "name": "YOUR_NAME",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        272,
+        1024
+      ],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "6rT3gyU1WPbVfcty",
+          "name": "YOUR_NAME"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "tableId": "tasks",
+        "limit": 5,
+        "filterType": "string",
+        "filterString": "=chat_id=eq.{{ $json.chat_id }}&status=in.(completed)&order=updated_at.desc&limit=5"
+      },
+      "id": "YOUR_CREDENTIAL_ID",
+      "name": "YOUR_NAME",
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        432,
+        1152
+      ],
+      "alwaysOutputData": true,
+      "credentials": {
+        "supabaseApi": {
+          "id": "u5jLuYJAJLw2Nk0K",
+          "name": "YOUR_NAME"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "tableId": "sent_messages",
+        "limit": 3,
+        "filterType": "string",
+        "filterString": "=telegram_chat_id=eq.{{ $json.chat_id }}&order=created_at.desc&limit=3"
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        592,
+        1280
+      ],
+      "id": "YOUR_CREDENTIAL_ID",
+      "name": "YOUR_NAME",
+      "credentials": {
+        "supabaseApi": {
+          "id": "u5jLuYJAJLw2Nk0K",
+          "name": "YOUR_NAME"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "numberInputs": 3
+      },
+      "id": "YOUR_CREDENTIAL_ID",
+      "name": "YOUR_NAME",
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        896,
+        1248
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// ============================================\n// ПРОВЕРКА: Откуда пришли данные?\n// ============================================\n\nconst inputData = $input.first().json;\nconst messageData = $('9. Prepare Message Data').first().json;\n\n// ============================================\n// CASE 1: Данные от Load Context (RPC) — уже есть контекст!\n// ============================================\n\nif (inputData.context_type) {\n  let content = inputData.content;\n  if (typeof content === 'string') {\n    try {\n      content = JSON.parse(content);\n    } catch (e) {\n      content = null;\n    }\n  }\n\n  let contextType = inputData.context_type;\n  if (contextType === 'photo_temp') {\n    contextType = 'photo';\n  } else if (contextType === 'forwarded_temp') {\n    contextType = 'forwarded';\n  }\n  \n  // Базовая структура context\n  const contextData = {\n    context_type: contextType,\n    has_photo: contextType === 'photo',\n    photo_file_id: content?.photo_file_id || null,\n    has_forwarded: contextType === 'forwarded',\n    forwarded_content: contextType === 'forwarded' ? content : null,\n    task_id: inputData.task_id,\n    content: content\n  };\n  \n  // ✅ НОВОЕ: Парсим структуру для POST\n  if (contextType === 'post') {\n    contextData.content = {\n      post_text: content?.text || '',\n      photo_file_id: content?.photo_file_id || null,\n      version: content?.version || 1,\n      sources: content?.sources || []\n    };\n  }\n\n  return {\n    json: {\n      user_message: messageData.text,\n      chat_id: messageData.chat_id,\n      message_id: messageData.message_id,\n      user_id: messageData.user_id,\n      reply_to_message_id: messageData.reply_to_message_id,\n      context: contextData\n    }\n  };\n}\n\n// ВСЁ ОСТАЛЬНОЕ БЕЗ ИЗМЕНЕНИЙ!\n// (CASE 2, CASE 0, БЛОК 4, БЛОК 5, ПРИОРИТЕТ 3 - НЕ ТРОГАЕМ)\n\n// ============================================\n// CASE 2: Implicit context (NO Reply)\n// ============================================\n\nconst context = {\n  context_type: null,\n  content: null,\n  task_id: null,\n  has_forwarded: false,\n  forwarded_content: null,\n  has_photo: false,\n  photo_file_id: null\n};\n\nif (messageData.is_ready_photo_task === true) {\n  context.context_type = 'photo';\n  context.has_photo = true;\n  context.photo_file_id = messageData.photo_file_id;\n\n  return {\n    json: {\n      user_message: messageData.text,\n      chat_id: messageData.chat_id,\n      message_id: messageData.message_id,\n      user_id: messageData.user_id,\n      reply_to_message_id: messageData.reply_to_message_id,\n      context: context\n    }\n  };\n}\n\nlet recentMessages = [];\ntry {\n  const loadRecentData = $('27. Load Recent Messages').all();\n  if (loadRecentData && loadRecentData.length > 0) {\n    recentMessages = loadRecentData.map(item => {\n      const json = item.json;\n      if (json.content_data && typeof json.content_data === 'string') {\n        try {\n          json.content_data = JSON.parse(json.content_data);\n        } catch (e) {\n          console.log('Failed to parse content_data:', e);\n        }\n      }\n      return json;\n    });\n  }\n} catch (e) {\n  recentMessages = [];\n}\n\nif (recentMessages.length > 0) {\n  const clearCommand = recentMessages.find(m => \n    m.message_type === 'command' && \n    (m.content_data?.command === 'stop' || m.content_data?.command === 'start')\n  );\n\n  if (clearCommand) {\n    console.log(`[COMMAND] Found /${clearCommand.content_data.command}, checking if it clears context`);\n    \n    const lastPendingMessage = recentMessages.find(m =>\n      m.message_type === 'system' && \n      m.content_data && \n      (m.content_data.pending_photo || m.content_data.pending_forwarded)\n    );\n    \n    if (lastPendingMessage) {\n      const commandTime = new Date(clearCommand.created_at).getTime();\n      const pendingTime = new Date(lastPendingMessage.created_at).getTime();\n      \n      if (commandTime > pendingTime) {\n        console.log(`[COMMAND] Clearing implicit context (/${clearCommand.content_data.command} is newer than pending)`);\n        \n        return {\n          json: {\n            user_message: messageData.text,\n            chat_id: messageData.chat_id,\n            message_id: messageData.message_id,\n            user_id: messageData.user_id,\n            reply_to_message_id: messageData.reply_to_message_id,\n            context: {\n              context_type: null,\n              content: null,\n              task_id: null,\n              has_forwarded: false,\n              forwarded_content: null,\n              has_photo: false,\n              photo_file_id: null\n            }\n          }\n        };\n      } else {\n        console.log(`[COMMAND] /${clearCommand.content_data.command} is older than pending, ignoring`);\n      }\n    } else {\n      console.log(`[COMMAND] No pending context found, nothing to clear`);\n    }\n  }\n}\n\nif (recentMessages.length > 0) {\n  const lastSystemMessage = recentMessages\n    .filter(m => m.message_type === 'system' && m.content_data)\n    .sort((a, b) => new Date(b.created_at) - new Date(a.created_at))[0];\n\n  if (lastSystemMessage) {\n    if (lastSystemMessage.content_data.pending_photo) {\n      const photoMessageId = lastSystemMessage.content_data.pending_photo;\n      const photoMessage = recentMessages.find(m => m.telegram_message_id === photoMessageId);\n\n      if (photoMessage && photoMessage.content_data) {\n        context.context_type = 'photo';\n        context.has_photo = true;\n        context.photo_file_id = photoMessage.content_data.photo_file_id;\n      }\n    }\n    else if (lastSystemMessage.content_data.pending_forwarded) {\n      const forwardedMessageId = lastSystemMessage.content_data.pending_forwarded;\n      const forwardedMessage = recentMessages.find(m => m.telegram_message_id === forwardedMessageId);\n\n      if (forwardedMessage && forwardedMessage.content_data) {\n        context.context_type = 'forwarded';\n        context.has_forwarded = true;\n        context.forwarded_content = {\n          text: forwardedMessage.content_data.text,\n          forwarded_date: forwardedMessage.content_data.forwarded_date\n        };\n      }\n    }\n  }\n}\n\nif (!context.context_type && !messageData.reply_to_message_id) {\n  const allItems = $input.all();\n  \n  const lastSentMessage = allItems\n    .filter(item => \n      item.json?.message_type && \n      (item.json.message_type === 'longread' || item.json.task_id) &&\n      item.json.created_at\n    )\n    .sort((a, b) => new Date(b.json.created_at) - new Date(a.json.created_at))[0];\n  \n  if (lastSentMessage) {\n    console.log(`[TEMPORAL PROXIMITY] Found sent_message: ${lastSentMessage.json.message_type}`);\n    \n    if (lastSentMessage.json.message_type === 'longread') {\n      context.context_type = 'longread';\n      context.content = lastSentMessage.json.content_data;\n      if (typeof context.content === 'string') {\n        try {\n          context.content = JSON.parse(context.content);\n        } catch (e) {\n          console.log('[TEMPORAL PROXIMITY] Failed to parse longread:', e);\n        }\n      }\n    }\n    else if (lastSentMessage.json.task_id) {\n      const taskData = allItems.find(item => \n        item.json?.id === lastSentMessage.json.task_id &&\n        item.json?.department === 'research'\n      );\n      \n      if (taskData) {\n        context.context_type = 'research';\n        context.task_id = lastSentMessage.json.task_id;\n        context.content = taskData.json;\n      }\n    }\n  }\n}\n\nif (!context.context_type && messageData.reply_to_message_id) {\n  const allItems = $input.all();\n  const replyTarget = allItems.find(item => \n    item.json?.telegram_message_id === messageData.reply_to_message_id\n  );\n\n  if (replyTarget) {\n    console.log(`[REPLY CONTEXT] Found reply target: ${replyTarget.json.message_type}, task_id: ${replyTarget.json.task_id}`);\n    \n    if (replyTarget.json.message_type === 'longread') {\n      context.context_type = 'longread';\n      context.content = replyTarget.json.content_data;\n      if (typeof context.content === 'string') {\n        try {\n          context.content = JSON.parse(context.content);\n        } catch (e) {\n          console.log('[REPLY CONTEXT] Failed to parse longread content:', e);\n        }\n      }\n    }\n    else if (replyTarget.json.task_id) {\n      context.context_type = 'task';\n      context.task_id = replyTarget.json.task_id;\n    }\n    // ✅ НОВОЕ: Обработка POST в allItems\n    else if (replyTarget.json.message_type === 'post') {\n  context.context_type = 'post';\n  context.content = {\n    post_text: replyTarget.json.content_data?.text || '',  // ✅ Исправлено!\n    photo_file_id: replyTarget.json.content_data?.photo_file_id || null,\n    version: replyTarget.json.content_data?.version || 1,\n    sources: replyTarget.json.content_data?.sources || []\n  };\n}\n  } else {\n    console.log(`[REPLY CONTEXT] Reply target not found: message_id ${messageData.reply_to_message_id}`);\n  }\n}\n\nreturn {\n  json: {\n    user_message: messageData.text,\n    chat_id: messageData.chat_id,\n    message_id: messageData.message_id,\n    user_id: messageData.user_id,\n    reply_to_message_id: messageData.reply_to_message_id,\n    context: context\n  }\n};"
+      },
+      "id": "YOUR_CREDENTIAL_ID",
+      "name": "YOUR_NAME",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -1888,
+        1792
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const data = $input.first().json;\n\n// ============================================\n// USER PROMPT: ТОЛЬКО ФАКТЫ!\n// ============================================\n\nlet userPrompt = `**Запрос пользователя:**\n\"${data.user_message || data.text}\"\n`;\n\n// Контекст (только факты)\nif (data.context && data.context.context_type) {\n  \n  userPrompt += `\\n**Контекст:**\\n`;\n  \n  if (data.context.context_type === 'photo') {\n    userPrompt += `- Тип: фото\\n`;\n    userPrompt += `- Photo ID: ${data.context.photo_file_id}\\n`;\n  }\n  \n  else if (data.context.context_type === 'forwarded') {\n    userPrompt += `- Тип: пересланное сообщение\\n`;\n    userPrompt += `- Текст: \"${data.context.forwarded_content.text}\"\\n`;\n  }\n  \n  else if (data.context.context_type === 'longread') {\n    userPrompt += `- Тип: лонгрид\\n`;\n    if (data.context.content && data.context.content.news_list) {\n      userPrompt += `- Доступные новости:\\n`;\n      userPrompt += data.context.content.news_list\n        .map(n => `  ${n.id}. ${n.title}`)\n        .join('\\n') + '\\n';\n    }\n  }\n  \n  else if (data.context.context_type === 'task') {\n    userPrompt += `- Тип: существующая задача\\n`;\n    userPrompt += `- Task ID: ${data.context.task_id}\\n`;\n  }\n  \n  else {\n    userPrompt += `- Тип: ${data.context.context_type}\\n`;\n  }\n  \n} else {\n  userPrompt += `\\n**Контекст:** отсутствует\\n`;\n}\n\n// ============================================\n// БЕЗОПАСНОЕ ОБРАЩЕНИЕ К LOAD ACTIVE TASKS\n// ============================================\n\nlet completedTasks = [];\n\ntry {\n  const loadTasksData = $('26. Load Active Tasks').all();\n  if (loadTasksData && loadTasksData.length > 0) {\n    completedTasks = loadTasksData;\n  }\n} catch (e) {\n  // Load Active Tasks не выполнялась или вернула ошибку\n  completedTasks = [];\n}\n\n// Фильтруем валидные задачи\nconst validTasks = completedTasks.filter(task => task.json && task.json.id);\n\n// Completed задачи (доступны для iterative cycles)\nif (validTasks.length > 0) {\n  userPrompt += `\\n**Задачи со статусом completed (доступны для task_update):**\\n`;\n  validTasks.forEach(task => {\n    const t = task.json;\n    userPrompt += `- ${t.department}: \"${t.initial_prompt}\" (ID: ${t.id}, обновлено: ${new Date(t.updated_at).toLocaleString('ru-RU')})\\n`;\n  });\n} else {\n  userPrompt += `\\n**Задачи со статусом completed:** нет\\n`;\n}\n\n// ============================================\n// ИЗВЛЕКАЕМ ДАННЫЕ ДЛЯ ORIGINAL_DATA\n// ============================================\n\nconst completedTasksData = validTasks.map(task => task.json);\n\n// ============================================\n// ВОЗВРАЩАЕМ С COMPLETED_TASKS\n// ============================================\n\nreturn {\n  json: {\n    user_prompt: userPrompt.trim(),\n    original_data: {\n      ...data,\n      completed_tasks: completedTasksData  // ← КЛЮЧЕВОЕ ИЗМЕНЕНИЕ\n    }\n  }\n};"
+      },
+      "id": "YOUR_CREDENTIAL_ID",
+      "name": "YOUR_NAME",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -1680,
+        1792
+      ]
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.user_prompt }}",
+        "hasOutputParser": true,
+        "options": {
+          "systemMessage": "=Ты — Квалификатор для SMM агентной системы. Определяй INTENT и DEPARTMENT.\n\n## ТЕРМИНОЛОГИЯ\n\n**Статусы задач (как работает в БД):**\n\n| Статус | Когда задача в этом статусе | Твоё действие |\n|--------|------------------------------|---------------|\n| `created` | Ты только что создал задачу | ❌ task_update НЕВОЗМОЖЕН |\n| `in_progress` | Department агент работает над задачей | ❌ task_update НЕВОЗМОЖЕН |\n| `completed` | Результат v1 отправлен пользователю | ✅ task_update ВОЗМОЖЕН |\n| `failed` | Ошибка выполнения задачи | ❌ task_update НЕВОЗМОЖЕН |\n\n**Для iterative cycles:** Ты получаешь задачи со статусом `completed` в контексте.\n\n**Логика:** Если user ВИДЕЛ результат (v1 отправлен в Telegram) → можешь определить `intent = task_update` БЕЗ reply.\n\n**Контексты, которые ты получаешь:**\n- **completed_tasks** = задачи со статусом `completed` из БД (доступны для task_update)\n- **sent_messages** = системные сообщения (research/longread документы), сохранённые для reply handling\n  - Структура: `{task_id, version_index, file_id, message_id, timestamp}`\n  - Используешь для: reply context и temporal proximity при неоднозначных запросах\n- **recent_messages** = 3 последних сообщения из истории чата\n  - Анализируешь для определения: pending_photo, pending_forwarded (implicit context)\n\n## INTENT типы\n- **new_task** — новая задача\n- **task_update** — правка существующей задачи (только для задач со статусом `completed` или через reply)\n- **dialogue** — уточняющий вопрос\n\n## DEPARTMENT типы\n- **copywriting** — посты (текстовые, поддерживает iterative cycles)\n- **research** — исследования (PDF/Google Doc, НЕ редактируется после создания)\n- **image_gen** — создание изображений из текста (поддерживает iterative cycles)\n- **image_edit** — редактирование существующего фото (поддерживает iterative cycles)\n- **video_gen** — создание видео из текста (поддерживает iterative cycles)\n\n**Longread** — автопилот новостная рассылка (НЕ department, автоматическая система)\n\n---\n\n## ПРАВИЛО #0: PHOTO PRESENCE (наивысший приоритет)\n\n**Если ТЕКУЩЕЕ сообщение содержит фото:**\n→ ВСЕГДА `intent = new_task`, `department = image_edit`\n→ ИГНОРИРОВАТЬ любой context (completed_tasks, pending_photo, все контексты)\n→ Фото в сообщении = сброс всего, начинаем заново\n\n**Исключение:** Reply БЕЗ фото в текущем сообщении → используй reply context (ПРАВИЛО #1)\n\n---\n\n## ПРАВИЛО #1: REPLY PRIORITY\n\n**Если есть reply на сообщение (БЕЗ фото в текущем сообщении):**\n→ `intent = task_update`\n→ `target_task_id` = из reply context (sent_messages или completed_tasks)\n→ ИГНОРИРОВАТЬ все другие контексты\n\n**ИСКЛЮЧЕНИЕ:** Reply на research/longread документы:\n- Reply + \"Напиши пост на основе\" → `new_task`, `copywriting` (использовать документ как source)\n- Reply + \"Переделай с другим фокусом\" → `new_task`, `research` (создать новый research)\n- **Причина:** Research документы НЕ редактируются после создания\n- **Твоё решение:** Анализируй запрос семантически — \"Напиши пост\" = copywriting, \"Переделай\" = новый research\n\n**Приоритет:** Reply > Completed Tasks > Implicit Context\n\n---\n\n## ПРАВИЛО #2: NEW_TASK vs TASK_UPDATE (Copywriting)\n\n**КРИТИЧНО:** Отличай создание нового контента от редактирования существующего.\n\n### Copywriting: new_task vs task_update (БЕЗ reply)\n\n**new_task если:**\n- Запрос содержит **полную инструкцию**: \"Напиши пост про X\", \"Создай пост о Y\"\n- Запрос про **новый топик** (даже если идентичен completed task)\n- Ключевые глаголы: \"Напиши\", \"Создай\", \"Сделай пост\"\n\n**task_update если:**\n- Запрос содержит **команду редактирования**: \"Перепиши\", \"Добавь\", \"Убери\", \"Измени\"\n- Запрос содержит **изменение стиля/подачи**: \"попробуй по-другому\", \"давай креативнее\", \"переделай стиль\", \"сделай проще\"\n- Запрос **обрывочный**: \"Добавь эмодзи\", \"Сделай короче\", \"А давай иначе\" (требует контекст)\n- Ключевые глаголы: \"Перепиши\", \"Добавь\", \"Убери\", \"Измени\", \"Сделай короче\", \"Попробуй\", \"Давай\", \"Переделай\"\n\n**ПРИМЕРЫ:**\n\n✅ new_task:\n- \"Напиши пост про новый iPhone\" → new_task\n- \"Создай пост о blockchain\" → new_task\n- \"Напиши пост о 4 новости\" (completed: \"Напиши пост о 4 новости\") → new_task\n  - **Причина:** Полная инструкция = новый пост, не редактирование\n\n✅ task_update:\n- \"Перепиши короче\" (completed: copywriting) → task_update\n- \"Добавь раздел про Claude\" (completed: copywriting) → task_update\n- \"Убери воду\" (completed: copywriting) → task_update\n- \"Попробуй креативнее донести\" (completed: copywriting) → task_update\n- \"Давай по-другому, проще\" (completed: copywriting) → task_update\n- \"Переделай подачу для простого читателя\" (completed: copywriting) → task_update\n\n❌ ТИПИЧНАЯ ОШИБКА:\n- User: \"Напиши пост о X\"\n- Completed: \"Напиши пост о X\"\n- НЕПРАВИЛЬНО: task_update ← User хочет НОВЫЙ пост!\n- ПРАВИЛЬНО: new_task\n\n**Ключевое отличие:**\n- \"Напиши\" / \"Создай\" = **создание** нового → new_task\n- \"Перепиши\" / \"Добавь\" / \"Убери\" = **редактирование** существующего → task_update\n\n### Неявные запросы с completed_tasks (ПРИОРИТЕТ #3)\n\n**Если:**\n- Запрос содержит **неявную команду редактирования**: \"попробуй\", \"давай\", \"а как насчет\"\n- `context.context_type = null` (нет reply, нет implicit context)\n- `completed_tasks` содержит задачи по department\n\n**ТО:**\n- `intent = task_update`\n- `target_task_id` = последняя задача по department (самая свежая по `updated_at`)\n\n**ПРИМЕРЫ:**\n\n✅ task_update (неявный):\n- User: \"А попробуй креативно донести\"\n- completed_tasks: [copywriting задача от 16:08:26, copywriting задача от 15:29:43]\n- Результат: `task_update`, `target_task_id` = copywriting задача от 16:08:26 (самая свежая)\n\n✅ task_update (неявный):\n- User: \"Давай по-другому\"\n- completed_tasks: [copywriting задача]\n- Результат: `task_update`, `target_task_id` = copywriting задача\n\n❌ new_task (явная инструкция):\n- User: \"Напиши пост про X\"\n- completed_tasks: [copywriting задача]\n- Результат: `new_task` (полная инструкция = новый пост)\n\n**Ключевое отличие:**\n- \"попробуй\", \"давай\", \"а как насчет\" = **правка стиля** существующего → task_update с target_task_id\n- \"Напиши\", \"Создай\" = **создание** нового → new_task\n\n---\n\n## TEMPORAL PROXIMITY (Принцип Естественного Общения)\n\n**Философия:** Общение с системой как с человеком. Если недавно отправил контент, следующее сообщение касается его.\n\n**Принцип:** Что последнее отправлено (пользователем или системой) → то в приоритете\n\n**Иерархия контекстов (по убыванию приоритета):**\n\n1. **ПРАВИЛО #0:** Фото в текущем сообщении (АБСОЛЮТНЫЙ приоритет - сброс всего)\n2. **ПРАВИЛО #1:** Reply (ВЫСОКИЙ приоритет, исключение: research/longread)\n3. **ПРАВИЛО #2:** NEW_TASK vs TASK_UPDATE для Copywriting (различай создание vs редактирование)\n4. **Временная близость:** Что последнее - pending context или sent_messages (по timestamp)\n   - Если последнее от пользователя = pending_photo → `image_edit`\n   - Если последнее от пользователя = pending_forwarded → `copywriting`/`research`\n   - Если последнее от системы = sent_messages → использовать документ как source\n5. **Completed tasks:** проверка task_update по department (если нет более свежего контекста)\n\n### Примеры временной близости:\n\n**G1: pending_photo + pending_forwarded (оба есть)**\n- User: Forwarded (10:00) → Photo (10:05) → \"Сделай об этом\"\n→ Photo позже (10:05) → `image_edit`\n\n**G2: pending_photo + sent_messages**\n- System: Research отправлен (10:00) → User: Photo (10:05) → \"Используй это\"\n→ Photo от пользователя позже (10:05) → `image_edit`\n\n**F8: sent_messages + неоднозначный запрос**\n- System: Research отправлен (10:05) → User: \"Напиши пост про это\" (10:06)\n→ Последнее от системы = research → `copywriting` с source=research\n\n**F10: Multiple sent_messages**\n- System: Longread (10:00) → Research (10:05) → User: \"Напиши про это\" (10:06)\n→ Последний sent_message = research (10:05) → `copywriting` с source=research\n\n**Твоё решение:** Анализируй семантически — \"про это\" указывает на ближайший контекст по времени\n\n---\n\n## IMPLICIT CONTEXT (pending_photo, pending_forwarded)\n\n**Примечание:** Команды /stop и /start обрабатываются ДО тебя и очищают implicit context (ты их не видишь).\n\n### Однозначные запросы (ИГНОРИРОВАТЬ implicit context):\n- Содержит URL: \"https://apple.com напиши пост\"\n- Полная инструкция: \"Напиши пост о новом iPhone\"\n- Команда создания: \"Нарисуй робота\", \"Создай видео\"\n\n### Неоднозначные запросы (ИСПОЛЬЗОВАТЬ implicit context + temporal proximity):\n- Местоимения: \"Убери это\", \"Напиши об этом\"\n- Действия без объекта: \"Убери фон\", \"Измени цвет\"\n\n**Если pending_photo И запрос неоднозначен:**\n→ `department = image_edit`, `intent = new_task`\n\n**Если pending_forwarded И запрос неоднозначен:**\n→ `department = copywriting` или `research` (по смыслу), `intent = new_task`\n\n**Если оба pending:** Выбирай по timestamp (что пользователь отправил позже)\n\n**Если pending + sent_messages:** Выбирай по timestamp (что последнее - от пользователя или системы)\n\nПримеры:\n- \"Напиши об этом\" + forwarded (последнее) → copywriting\n- \"Исследуй эту тему\" + forwarded (последнее) → research\n- \"Напиши про это\" + sent_messages research (последнее от системы) → copywriting с source\n\n---\n\n## VISUAL CONTENT RULES\n\n### IMAGE_EDIT (редактирование существующего)\n\n**Iterative cycles (БЕЗ фото, БЕЗ reply):**\n- Есть задача со статусом `completed` (department=image_edit, v1 отправлен)\n- **Можно использовать task_update для:**\n  - ✅ Полные инструкции: \"Добавь кота слева\", \"Убери синий фон\"\n  - ✅ Обрывочные команды: \"Убери фон\", \"Сделай ярче\", \"Измени цвет\"\n  - **Причина:** Агент ВИДИТ историю через `versions` массив и знает контекст\n  \n- **НЕ используй task_update для:**\n  - ❌ Совсем пустые: \"Сделай\", \"Хм...\", \"А можно?\"\n  - ❌ Неоднозначные: \"Добавь это\" (что \"это\"?)\n  \n→ `intent = task_update`\n\n**Примеры:**\n- \"Убери фон\" (completed: image_edit v1) → task_update ✅\n- \"Сделай ярче\" (completed: image_edit v1) → task_update ✅\n- \"Добавь кота\" (completed: image_edit v1) → task_update ✅\n- \"Сделай\" (completed: image_edit v1) → dialogue ❌\n\n### IMAGE_GEN (создание из текста)\n\n**Iterative cycles (БЕЗ фото, БЕЗ reply):**\n- Есть задача со статусом `completed` (department=image_gen, v1 отправлен)\n- **Можно использовать task_update для:**\n  - ✅ Полные инструкции: \"Сделай робота зелёным\", \"Добавь текст 'Hello'\"\n  - ✅ Обрывочные команды: \"Сделай ярче\", \"Измени стиль\"\n  - **Причина:** Агент ВИДИТ previous_prompt через `versions` массив\n  \n- **НЕ используй task_update для:**\n  - ❌ Совсем пустые: \"Сделай\", \"Измени\"\n  - ❌ Неоднозначные: \"Добавь текст\" (какой текст?)\n\n→ `intent = task_update`\n\n**Примеры:**\n- \"Сделай робота зелёным\" (completed: image_gen v1) → task_update ✅\n- \"Сделай ярче\" (completed: image_gen v1) → task_update ✅\n- \"Измени стиль на минимализм\" (completed: image_gen v1) → task_update ✅\n- \"Сделай\" (completed: image_gen v1) → dialogue ❌\n\n### VIDEO_GEN (создание видео)\n\n**Iterative cycles (БЕЗ reply):**\n- Аналогично IMAGE_GEN\n- Можно использовать обрывочные команды: \"Сделай быстрее\", \"Добавь музыку\"\n- НЕ используй совсем пустые: \"Сделай\", \"Измени\"\n---\n\n## RESEARCH RULES (важное исключение)\n\n**КРИТИЧЕСКИ ВАЖНО:** Research документы НЕ редактируются после создания.\n\n### Сценарии с research:\n\n**Completed research + команда редактирования:**\n- \"Добавь раздел про AI\" (completed: research) → `dialogue`\n- Бот: \"Research документы не редактируются после создания. Вы хотите создать новый research с другим фокусом?\"\n\n**Reply на research:**\n- Reply + \"Напиши пост на основе\" → `new_task`, `copywriting` (использовать документ как source)\n- Reply + \"Переделай с фокусом на коммерческое применение\" → `new_task`, `research` (создать новый)\n- **Твоё решение:** Анализируй семантически — \"Напиши пост\" = copywriting, \"Переделай\" = новый research\n\n**Research в sent_messages + неоднозначный запрос:**\n- \"Напиши про это\" (sent_messages: research последний) → `new_task`, `copywriting` с source=research\n\n**Причина архитектуры:** Research создаёт PDF/Google Doc один раз, iterative cycle невозможен.\n\n___\n\n## POST RULES (source для image_gen)\n\n**Reply на POST:**\n- Reply + \"Создай изображение\", \"Нарисуй картинку\", \"Сделай фото к нему\" → `new_task`, `image_gen`\n- **source_data.type = 'post'** → текст поста передается как контекст для генерации\n- **Твоё решение:** \"Сделай фото\" = image_gen (создание изображения на основе текста поста)\n\n**Reply на POST copywriting task:**\n- Reply + \"Перепиши короче\" → `task_update`, `copywriting` (правка самого поста)\n- **Отличие:** Запрос про ТЕКСТ поста → copywriting, запрос про ИЗОБРАЖЕНИЕ → image_gen\n\nПримеры:\n- [REPLY на пост] \"Создай изображение для этого поста\" → new_task, image_gen\n- [REPLY на пост] \"Нарисуй картинку к нему\" → new_task, image_gen\n- [REPLY на пост copywriting task] \"Перепиши короче\" → task_update, copywriting\n\n---\n\n## TASK_UPDATE LOGIC\n\n### Copywriting (обрывочные запросы разрешены)\n\n**Используй task_update если:**\n- НЕТ фото, НЕТ reply\n- Есть задача со статусом `completed` (department=copywriting)\n- Запрос содержит **команду редактирования**: \"Перепиши\", \"Добавь\", \"Убери\", \"Измени\"\n- ❌ НЕ для полных инструкций: \"Напиши пост про X\" → new_task (см. ПРАВИЛО #2)\n\nПримеры:\n- \"Перепиши\" (completed: copywriting) → task_update ✅\n- \"Добавь про Claude\" (completed: copywriting про GPT) → task_update ✅\n- \"Убери воду\" (completed: copywriting) → task_update ✅\n- \"Напиши пост о X\" (completed: \"Напиши пост о X\") → new_task ✅\n\n**НЕ task_update:**\n- \"Напиши пост про blockchain\" → new_task (новый топик)\n\n**Почему обрывочные OK:** Copywriting агент получит initial_prompt + все версии → поймёт контекст\n\n### Visual Content (iterative cycles)\n\n**Используй task_update если:**\n- НЕТ фото, НЕТ reply\n- Есть задача со статусом `completed` (department=image_edit/image_gen/video_gen)\n- Запрос содержит **команду** (даже обрывочную): \"Убери фон\", \"Сделай ярче\", \"Добавь кота слева\"\n- **Причина:** Агенты ВИДЯТ историю через `versions` массив\n\n**НЕ task_update (→ dialogue):**\n- \"Сделай\" (совсем пустое) → dialogue (\"Что именно сделать?\") ❌\n- \"Добавь это\" (неоднозначное) → dialogue (\"Что именно добавить?\") ❌\n\n**Почему обрывочные OK для Visual Content:** \n- Image Edit/Gen получат `versions` массив с полной историей\n- Они ЗНАЮТ какое изображение (file_id из последней версии)\n- Они ЗНАЮТ предыдущую инструкцию (instruction/previous_prompt)\n\n---\n\n## DIALOGUE\n\n**Используй dialogue ТОЛЬКО если:**\n- Обрывочное: \"Сделай\", \"Хм...\", \"А можно?\"\n- Вопрос без контекста: \"Сколько стоит?\", \"Когда готово?\"\n- Общий вопрос: \"Что умеешь?\"\n- Неоднозначное БЕЗ context: \"Сделай это синим\" (нет completed_tasks, нет pending)\n\n**НЕ dialogue:**\n- URL + действие → new_task\n- \"Убери фон\" + photo context → new_task (image_edit)\n\n---\n\n## ПРИОРИТЕТЫ ОБРАБОТКИ\n\n**Полная иерархия обработки контекстов:**\n\n1. **ПРАВИЛО #0: PHOTO PRESENCE** (АБСОЛЮТНЫЙ приоритет)\n   - Фото в текущем сообщении → `image_edit`, сброс всего контекста\n\n2. **ПРАВИЛО #1: REPLY PRIORITY** (ВЫСОКИЙ приоритет)\n   - Reply → `task_update` целевой задачи (результат уже отправлен пользователю)\n   - **Исключение:** Reply на research/longread → `new_task` (copywriting или research по смыслу)\n\n3. **ПРАВИЛО #2: NEW_TASK vs TASK_UPDATE** (КРИТИЧНО для Copywriting)\n   - \"Напиши\" / \"Создай\" = **new_task** (создание нового)\n   - \"Перепиши\" / \"Добавь\" / \"Убери\" = **task_update** (редактирование)\n\n4. **Однозначные запросы** (игнорировать все контексты)\n   - URL в запросе → new_task\n   - Полная инструкция → new_task\n   - Команда создания (image_gen/video_gen) → new_task\n\n5. **Неоднозначные запросы + Temporal Proximity:**\n   - Проверить timestamp: pending context vs sent_messages\n   - Что последнее (от пользователя или системы) → то использовать\n   - **Логика:** pending_photo vs pending_forwarded vs sent_messages (выбирай по timestamp)\n\n6. **Tasks со статусом `completed`** (если нет более свежего контекста)\n   - **Copywriting:** Команды редактирования (\"Перепиши\", \"Добавь\") → task_update\n   - **Visual Content:** Требуется полная инструкция (\"Добавь кота слева\") → task_update\n   - **Visual Content:** Обрывочные запросы (\"Добавь\") → dialogue\n   - **Research:** НЕ редактируется → dialogue\n\n7. **Dialogue** (если ничего не подошло)\n   - Обрывочный запрос без контекста\n   - Ambiguous request без задач со статусом `completed`\n\n**Ключевой принцип:** Анализируй запрос семантически через AI, не только rigid rules.\n\n---\n\n## EDGE CASES\n\n**Ambiguous без context:**\n- \"Сделай это синим\" (нет completed_tasks, нет pending context) → dialogue\n\n**URL с photo context:**\n- \"https://example.com обработай\" + pending_photo → new_task, copywriting/research (игнорировать pending_photo)\n\n**Reply на старую версию:**\n- Reply на v1 (когда есть v2) → task_update v1 (reply = explicit intent)\n\n**Фото + completed task:**\n- [фото] (completed: image_edit v2) → new_task (ПРАВИЛО #0 сбрасывает iterative cycle)\n\n**Фото + любой caption:**\n- [фото] \"Нарисуй на основе этого робота\" → image_edit (ПРАВИЛО #0 абсолютно)\n- [фото] \"Создай похожее\" → image_edit (ПРАВИЛО #0 абсолютно)\n- **Причина:** Nano Banana может полностью перерисовать изображение, фото ВСЕГДА = image_edit\n\n**Reply + URL:**\n- [REPLY] + URL в тексте → task_update (ПРАВИЛО #1: reply приоритетнее URL)\n\n**Две задачи со статусом `completed` (разные departments):**\n- Выбирай по semantic match с запросом\n- Если ambiguous → dialogue (\"Какую задачу обновить?\")\n\n**C4: Reply на copywriting + фото в текущем сообщении:**\n- [REPLY на copywriting] + [фото] → dialogue\n- Бот: \"Копирайтинг — текстовая задача. Вы хотите: 1) Отредактировать это фото отдельно? 2) Использовать фото как reference для текста?\"\n- **Причина:** Copywriting не требует фото, некорректная комбинация\n\n**F9: Completed research + команда редактирования:**\n- \"Добавь раздел про AI\" (completed: research) → dialogue\n- Бот: \"Research документы не редактируются после создания. Вы хотите создать новый research с другим фокусом?\"\n- **Причина:** Research НЕ редактируется, только создание нового\n\n**F11: Reply на research + \"Переделай с другим фокусом\":**\n- [REPLY на research] \"Переделай с фокусом на коммерческое применение\" → new_task, research\n- **Твоё решение:** Анализируй семантически — \"Переделай\" = создать новый research, не пост\n- **Альтернатива:** \"Напиши пост на основе\" → new_task, copywriting (использовать документ как source)\n\n___\n\n\n## ФОРМАТ ОТВЕТА\n\n```json\n{\n  \"intent\": \"new_task | task_update | dialogue\",\n  \"department\": \"copywriting | research | image_gen | image_edit | video_gen | null\",\n  \"user_request\": \"запрос пользователя\",\n  \"target_task_id\": \"uuid или null\",\n  \"reasoning\": \"краткое объяснение\"\n}\n```\n\n### ПРИМЕРЫ OUTPUT\n\n**Пример 1: Неявный task_update с completed_tasks (ПРИОРИТЕТ #3)**\n\n```json\n{\n  \"intent\": \"task_update\",\n  \"department\": \"copywriting\",\n  \"user_request\": \"А попробуй креативно донести. Суть супер, но подачу попробуй сделать как для быдла. Чтобы даже маленький предприниматель из глубинки понял для чего ему это может быть полезным.\",\n  \"extracted_news_id\": null,\n  \"target_task_id\": \"YOUR_CREDENTIAL_ID\",\n  \"reasoning\": \"Запрос содержит неявную команду редактирования ('попробуй креативно донести', 'подачу попробуй сделать'). Контекст пустой (нет reply), но есть completed tasks по department=copywriting. Применяю ПРИОРИТЕТ #3: выбираю последнюю copywriting задачу (ID: 686693e1..., updated_at: 16:08:26) и возвращаю target_task_id для task_update.\"\n}\n```\n\n**Пример 2: Явный new_task с полной инструкцией**\n\n```json\n{\n  \"intent\": \"new_task\",\n  \"department\": \"copywriting\",\n  \"user_request\": \"Напиши пост про новый iPhone 16\",\n  \"extracted_news_id\": null,\n  \"target_task_id\": null,\n  \"reasoning\": \"Запрос содержит полную инструкцию с явным глаголом 'Напиши'. Это создание нового контента, а не редактирование существующего. Completed tasks игнорируются, так как запрос явно указывает на новую задачу.\"\n}\n```\n\n**Пример 3: task_update с reply контекстом**\n\n```json\n{\n  \"intent\": \"task_update\",\n  \"department\": \"copywriting\",\n  \"user_request\": \"Добавь раздел про конкурентов\",\n  \"extracted_news_id\": null,\n  \"target_task_id\": null,\n  \"reasoning\": \"Запрос содержит команду редактирования 'Добавь'. Reply контекст указывает на существующую задачу. task_id будет получен из reply context в Prepare Update Task Data (ПРИОРИТЕТ #2).\"\n}\n```\n"
+        }
+      },
+      "id": "YOUR_CREDENTIAL_ID",
+      "name": "YOUR_NAME",
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 1.7,
+      "position": [
+        -1488,
+        1792
+      ],
+      "retryOnFail": true,
+      "maxTries": 2
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "intent-check",
+              "leftValue": "={{ $json.output.intent }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty"
+              }
+            },
+            {
+              "id": "department-check-if-new-task",
+              "leftValue": "={{ $json.output.intent === 'new_task' ? ($json.output.department || '') : 'ok' }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "YOUR_CREDENTIAL_ID",
+      "name": "YOUR_NAME",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -1168,
+        1792
+      ]
+    },
+    {
+      "parameters": {
+        "model": "google/gemini-2.5-flash",
+        "options": {
+          "responseFormat": "json_object"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenRouter",
+      "typeVersion": 1,
+      "position": [
+        -1504,
+        1968
+      ],
+      "id": "YOUR_CREDENTIAL_ID",
+      "name": "YOUR_NAME",
+      "credentials": {
+        "openRouterApi": {
+          "id": "kSlzJSYywOH0MwEV",
+          "name": "YOUR_NAME"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "schemaType": "manual",
+        "inputSchema": "{\n  \"type\": \"object\",\n  \"properties\": {\n    \"intent\": {\n      \"type\": \"string\",\n      \"enum\": [\"new_task\", \"task_update\", \"dialogue\"]\n    },\n    \"department\": {\n      \"type\": [\"string\", \"null\"],\n      \"enum\": [\"copywriting\", \"research\", \"image_gen\", \"image_edit\", \"video_gen\", null]\n    },\n    \"user_request\": {\n      \"type\": \"string\"\n    },\n    \"target_task_id\": {\n      \"type\": [\"string\", \"null\"]\n    },\n    \"reasoning\": {\n      \"type\": \"string\"\n    }\n  },\n  \"required\": [\"intent\", \"user_request\", \"reasoning\"]\n}"
+      },
+      "id": "YOUR_CREDENTIAL_ID",
+      "name": "YOUR_NAME",
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.3,
+      "position": [
+        -1328,
+        1968
+      ]
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('9. Prepare Message Data').first().json.chat_id }}",
+        "text": "Брат, не понял запрос. Попробуй ещё раз.",
+        "additionalFields": {
+          "appendAttribution": false
+        }
+      },
+      "id": "YOUR_CREDENTIAL_ID",
+      "name": "YOUR_NAME",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        -960,
+        2064
+      ],
+      "webhookId": "YOUR_CREDENTIAL_ID",
+      "credentials": {
+        "telegramApi": {
+          "id": "08rilHeqmVcSA8cN",
+          "name": "YOUR_NAME"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "new-task-check",
+                    "leftValue": "={{ $json.output.intent }}",
+                    "rightValue": "new_task",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "new_task"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "task-update-check",
+                    "leftValue": "={{ $json.output.intent }}",
+                    "rightValue": "task_update",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "task_update"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "dialogue-check",
+                    "leftValue": "={{ $json.output.intent }}",
+                    "rightValue": "dialogue",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "dialogue"
+            }
+          ]
+        },
+        "options": {
+          "fallbackOutput": "none"
+        }
+      },
+      "id": "YOUR_CREDENTIAL_ID",
+      "name": "YOUR_NAME",
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2,
+      "position": [
+        -960,
+        1760
+      ]
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('9. Prepare Message Data').first().json.chat_id }}",
+        "text": "=СиТуАцИя:\n{{ $json.output.reasoning }}",
+        "additionalFields": {
+          "appendAttribution": false,
+          "parse_mode": "HTML"
+        }
+      },
+      "id": "YOUR_CREDENTIAL_ID",
+      "name": "YOUR_NAME",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        -688,
+        2080
+      ],
+      "webhookId": "YOUR_CREDENTIAL_ID",
+      "credentials": {
+        "telegramApi": {
+          "id": "08rilHeqmVcSA8cN",
+          "name": "YOUR_NAME"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const decision = $input.first().json.output;\nconst originalData = $('30. Prepare AI Prompt').first().json.original_data;\nconst context = originalData.context;\n\nlet sourceData = null;\n\n// ============================================\n// ПРИОРИТЕТ #1-4: Context-based source_data\n// ============================================\n\nif (context && context.context_type) {\n  \n  // Приоритет 1: Reply на longread\n  if (context.context_type === 'longread') {\n    sourceData = {\n      type: 'longread',\n      news_list: context.content.news_list,\n      user_instruction: decision.user_request\n    };\n  }\n  \n  // Приоритет 2: Forwarded message\n  else if (context.context_type === 'forwarded') {\n    sourceData = {\n      type: 'forwarded_message',\n      text: context.forwarded_content.text,\n      forwarded_date: context.forwarded_content.forwarded_date\n    };\n  }\n  \n  // Приоритет 3: Photo\n  else if (context.context_type === 'photo') {\n    sourceData = {\n      type: 'photo',\n      photo_file_id: context.photo_file_id\n    };\n  }\n  \n  // Приоритет 3.5: Post (reply на пост)\n  else if (context.context_type === 'post') {\n    sourceData = {\n      type: 'post',\n      task_id: context.task_id,\n      post_text: context.content?.post_text || '',\n      photo_file_id: context.content?.photo_file_id || null,\n      version: context.content?.version || 1,\n      sources: context.content?.sources || []\n    };\n    console.log('[PREPARE NEW TASK] Post source_data from reply, text length:', sourceData.post_text.length);\n  }\n  \n  // Приоритет 4: Task (обновление)\n  else if (context.context_type === 'task') {\n    sourceData = null;\n  }\n  \n  // Приоритет 5: Research\n  else if (context.context_type === 'research') {\n    sourceData = {\n      type: 'research',\n      content: context.content?.content || null,\n      sources: context.content?.sources || []\n    };\n  }\n  \n  else {\n    sourceData = null;\n  }\n}\n\n// ПРИОРИТЕТ #5: Неявные ссылки на completed tasks\nif (!sourceData && decision.user_request) {\n  const implicitReferences = [\n    'для этого поста',\n    'к этому посту', \n    'про этот пост',\n    'для того поста',\n    'к той новости',\n    'про ту новость',\n    'для этой новости',\n    'к этой новости'\n  ];\n  \n  const requestLower = decision.user_request.toLowerCase();\n  const hasImplicitReference = implicitReferences.some(phrase => \n    requestLower.includes(phrase)\n  );\n  \n  if (hasImplicitReference && originalData.completed_tasks?.length > 0) {\n    const lastCopywritingTask = originalData.completed_tasks\n      .filter(t => t.department === 'copywriting')\n      .sort((a, b) => new Date(b.updated_at) - new Date(a.updated_at))[0];\n    \n    if (lastCopywritingTask) {\n      sourceData = {\n        reference_task_id: lastCopywritingTask.id,  // ✅ Только ID\n        reference_type: 'post',                     // ✅ Тип источника\n        user_request: decision.user_request         // ✅ Запрос\n      };\n      \n      console.log('[PREPARE NEW TASK] Implicit reference detected, reference_task_id:', lastCopywritingTask.id);\n    }\n  }\n}\n// ============================================\n// ФОРМИРУЕМ ИТОГОВЫЙ ОБЪЕКТ\n// ============================================\n\nreturn {\n  json: {\n    chat_id: originalData.chat_id,\n    user_id: originalData.user_id,\n    department: decision.department,\n    status: 'created',\n    initial_prompt: decision.user_request,\n    source_data: sourceData,\n    agent_output: {\n      current_version: 1,\n      versions: []\n    }\n  }\n};"
+      },
+      "id": "YOUR_CREDENTIAL_ID",
+      "name": "YOUR_NAME",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -688,
+        1680
+      ]
+    },
+    {
+      "parameters": {
+        "tableId": "tasks",
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "chat_id",
+              "fieldValue": "={{ $json.chat_id }}"
+            },
+            {
+              "fieldId": "user_id",
+              "fieldValue": "={{ $json.user_id }}"
+            },
+            {
+              "fieldId": "department",
+              "fieldValue": "={{ $json.department }}"
+            },
+            {
+              "fieldId": "status",
+              "fieldValue": "={{ $json.status }}"
+            },
+            {
+              "fieldId": "initial_prompt",
+              "fieldValue": "={{ $json.initial_prompt }}"
+            },
+            {
+              "fieldId": "agent_output",
+              "fieldValue": "={{ $json.agent_output }}"
+            },
+            {
+              "fieldId": "source_data",
+              "fieldValue": "={{ $json.source_data }}"
+            },
+            {
+              "fieldId": "version",
+              "fieldValue": "1"
+            }
+          ]
+        }
+      },
+      "id": "YOUR_CREDENTIAL_ID",
+      "name": "YOUR_NAME",
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        -464,
+        1680
+      ],
+      "credentials": {
+        "supabaseApi": {
+          "id": "u5jLuYJAJLw2Nk0K",
+          "name": "YOUR_NAME"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const decision = $input.first().json.output;\nconst originalData = $('30. Prepare AI Prompt').first().json.original_data;\nconst context = originalData.context;\n\nlet taskId = null;\nlet taskData = null;\nlet fullAgentOutput = null;\n\n// Загрузка completed tasks\nlet completedTasks = [];\ntry {\n  const loadTasksData = $('26. Load Active Tasks').all();\n  if (loadTasksData && loadTasksData.length > 0) {\n    completedTasks = loadTasksData.map(item => item.json);\n  }\n} catch (e) {\n  console.log('[Prepare Update Task Data] Failed to load completed tasks:', e);\n  completedTasks = [];\n}\n\n// ПРИОРИТЕТ #1: target_task_id от AI Agent\nif (decision.target_task_id) {\n  const targetTask = completedTasks.find(task => task.id === decision.target_task_id);\n  \n  if (targetTask) {\n    taskId = targetTask.id;\n    taskData = {\n      current_version: targetTask.agent_output?.current_version || 0,\n      department: targetTask.department\n    };\n    fullAgentOutput = targetTask.agent_output;\n  } else {\n    throw new Error(`Task ${decision.target_task_id} not found in completed tasks`);\n  }\n}\n\n// ПРИОРИТЕТ #2: REPLY контекст\nelse if (context.task_id) {\n  taskId = context.task_id;\n  const targetTask = completedTasks.find(task => task.id === context.task_id);\n  \n  if (targetTask) {\n    taskData = {\n      current_version: targetTask.agent_output?.current_version || 0,\n      department: targetTask.department\n    };\n    fullAgentOutput = targetTask.agent_output;\n  } else {\n    taskData = {\n      current_version: 0,\n      department: decision.department\n    };\n    fullAgentOutput = { current_version: 0, versions: [] };\n  }\n}\n\n// ПРИОРИТЕТ #3: Последняя задача с matching department\nelse if (completedTasks.length > 0 && decision.department) {\n  const tasksInDepartment = completedTasks.filter(\n    task => task.department === decision.department\n  );\n  \n  if (tasksInDepartment.length > 0) {\n    const targetTask = tasksInDepartment[0];\n    taskId = targetTask.id;\n    taskData = {\n      current_version: targetTask.agent_output?.current_version || 0,\n      department: targetTask.department\n    };\n    fullAgentOutput = targetTask.agent_output;\n  }\n}\n\n// FALLBACK: задачи не нашли\nif (!taskId) {\n  const hint = decision.department && completedTasks.length > 0\n    ? `No ${decision.department} tasks found in recent history. Reply to a specific task message or create a new task.`\n    : 'No recent completed tasks found. Reply to a task message or create a new task.';\n  \n  throw new Error(hint);\n}\n\n// Формируем обновлённый agent_output\nif (typeof fullAgentOutput === 'string') {\n  try {\n    fullAgentOutput = JSON.parse(fullAgentOutput);\n  } catch (e) {\n    fullAgentOutput = { current_version: 0, versions: [] };\n  }\n}\n\nlet versions = fullAgentOutput?.versions || [];\n\n// Создаём новую версию\nconst newVersion = {\n  version: (fullAgentOutput?.current_version || 0) + 1,\n  user_request: decision.user_request,\n  agent_response: null,\n  timestamp: new Date().toISOString()\n};\n\n// Проверка безопасности (логируем, не блокируем)\nif (versions.length > 0) {\n  const lastVersion = versions[versions.length - 1];\n  if (lastVersion.version && lastVersion.version !== newVersion.version - 1) {\n    console.warn(`[PREPARE UPDATE] Version sequence warning: last=${lastVersion.version}, new=${newVersion.version}`);\n  }\n}\n\nversions.push(newVersion);\n\nconst updatedAgentOutput = {\n  versions: versions,\n  current_version: newVersion.version\n};\n\nreturn {\n  json: {\n    task_id: taskId,\n    agent_output: updatedAgentOutput,\n    status: 'in_progress',\n    department: taskData?.department || decision.department,\n    reply_to_message_id: originalData.reply_to_message_id\n  }\n};"
+      },
+      "id": "YOUR_CREDENTIAL_ID",
+      "name": "YOUR_NAME",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -688,
+        1872
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "tableId": "tasks",
+        "matchType": "allFilters",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "id",
+              "condition": "eq",
+              "keyValue": "={{ $json.task_id }}"
+            }
+          ]
+        },
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "status",
+              "fieldValue": "in_progress"
+            }
+          ]
+        }
+      },
+      "id": "YOUR_CREDENTIAL_ID",
+      "name": "YOUR_NAME",
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        -464,
+        1872
+      ],
+      "credentials": {
+        "supabaseApi": {
+          "id": "u5jLuYJAJLw2Nk0K",
+          "name": "YOUR_NAME"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "id": "YOUR_CREDENTIAL_ID",
+      "name": "YOUR_NAME",
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        -240,
+        1808
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const taskData = $input.first().json;\nconst intent = $('31. AI Agent').first().json.output.intent;\nconst department = taskData.department || $('31. AI Agent').first().json.output.department;\n\n// Короткие фразы для разнообразия\nconst newTaskPhrases = [\n  \"Создал задачу ✅\",\n  \"В работе 🚀\",\n  \"Суечусь ✨\",\n  \"Уже делаю ⚡\",\n  \"Уже начал 👌\",\n  \"Делаю ⚡\"\n];\n\nconst updateTaskPhrases = [\n  \"Обновляю 🔄\",\n  \"Правлю  🛠\",\n  \"Не вопрос 🛠\",\n  \"Моментик ⚙️\",\n  \"Ща будет 🔄\"\n];\n\nlet message = '';\n\nif (intent === 'new_task') {\n  const randomIndex = Math.floor(Math.random() * newTaskPhrases.length);\n  message = newTaskPhrases[randomIndex];\n} else if (intent === 'task_update') {\n  const randomIndex = Math.floor(Math.random() * updateTaskPhrases.length);\n  message = updateTaskPhrases[randomIndex];\n} else {\n  message = 'Готово!';\n}\n\n// ✅ КЛЮЧЕВОЕ ИЗМЕНЕНИЕ: добавляем user_request из AI Agent для task_update\nlet effectiveUserRequest = taskData.initial_prompt;\n\nif (intent === 'task_update') {\n  // Для task_update берём user_request из AI Agent\n  effectiveUserRequest = $('31. AI Agent').first().json.output.user_request;\n}\n\nreturn {\n  json: {\n    ...taskData,\n    telegram_message: message,\n    chat_id: $('9. Prepare Message Data').first().json.chat_id,\n    department: department,\n    effective_user_request: effectiveUserRequest,\n    reply_to_message_id: $('30. Prepare AI Prompt').first().json.original_data.reply_to_message_id  // ← ДОБАВЛЕНО!\n  }\n};"
+      },
+      "id": "YOUR_CREDENTIAL_ID",
+      "name": "YOUR_NAME",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        32,
+        1808
+      ]
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $json.chat_id }}",
+        "text": "={{ $json.telegram_message }}",
+        "additionalFields": {
+          "appendAttribution": false
+        }
+      },
+      "id": "YOUR_CREDENTIAL_ID",
+      "name": "YOUR_NAME",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        240,
+        2032
+      ],
+      "webhookId": "YOUR_CREDENTIAL_ID",
+      "credentials": {
+        "telegramApi": {
+          "id": "08rilHeqmVcSA8cN",
+          "name": "YOUR_NAME"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.department }}",
+                    "rightValue": "copywriting",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "id": "YOUR_CREDENTIAL_ID"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "copywriting"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "YOUR_CREDENTIAL_ID",
+                    "leftValue": "={{ $json.department }}",
+                    "rightValue": "image_gen",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "YOUR_NAME"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "image_gen"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "YOUR_CREDENTIAL_ID",
+                    "leftValue": "={{ $json.department }}",
+                    "rightValue": "image_edit",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "YOUR_NAME"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "image_edit"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "YOUR_CREDENTIAL_ID",
+                    "leftValue": "={{ $json.department }}",
+                    "rightValue": "video_gen",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "YOUR_NAME"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "video_gen"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "YOUR_CREDENTIAL_ID",
+                    "leftValue": "={{ $json.department }}",
+                    "rightValue": "research",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "YOUR_NAME"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "research"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.3,
+      "position": [
+        240,
+        1760
+      ],
+      "id": "YOUR_CREDENTIAL_ID",
+      "name": "YOUR_NAME"
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "wSf7CIVGAj5JJpgh",
+          "mode": "list",
+          "cachedResultUrl": "/workflow/wSf7CIVGAj5JJpgh",
+          "cachedResultName": "NEWS -> Copywriting Agent (HTML)"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": true
+        },
+        "options": {
+          "waitForSubWorkflow": false
+        }
+      },
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.3,
+      "position": [
+        576,
+        1696
+      ],
+      "id": "YOUR_CREDENTIAL_ID",
+      "name": "YOUR_NAME"
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "xtx1zRJ8Ko3m8SQP",
+          "mode": "list",
+          "cachedResultUrl": "/workflow/xtx1zRJ8Ko3m8SQP",
+          "cachedResultName": "NEWS -> Image Gen Agent"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": true
+        },
+        "options": {
+          "waitForSubWorkflow": false
+        }
+      },
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.3,
+      "position": [
+        576,
+        1856
+      ],
+      "id": "YOUR_CREDENTIAL_ID",
+      "name": "YOUR_NAME"
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "UpcjQTagDBhV8ChU",
+          "mode": "list",
+          "cachedResultUrl": "/workflow/UpcjQTagDBhV8ChU",
+          "cachedResultName": "Image Edit Agent"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": true
+        },
+        "options": {
+          "waitForSubWorkflow": false
+        }
+      },
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.3,
+      "position": [
+        576,
+        2032
+      ],
+      "id": "YOUR_CREDENTIAL_ID",
+      "name": "YOUR_NAME"
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "qYyrtoRKFK70cN6r",
+          "mode": "list",
+          "cachedResultUrl": "/workflow/qYyrtoRKFK70cN6r",
+          "cachedResultName": "Video Gen Agent"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": true
+        },
+        "options": {
+          "waitForSubWorkflow": false
+        }
+      },
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.3,
+      "position": [
+        576,
+        2208
+      ],
+      "id": "YOUR_CREDENTIAL_ID",
+      "name": "YOUR_NAME",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "YWVgcNTa3YG2rvJA",
+          "mode": "list",
+          "cachedResultUrl": "/workflow/YWVgcNTa3YG2rvJA",
+          "cachedResultName": "Research Agent"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": true
+        },
+        "options": {
+          "waitForSubWorkflow": false
+        }
+      },
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.3,
+      "position": [
+        576,
+        2400
+      ],
+      "id": "YOUR_CREDENTIAL_ID",
+      "name": "YOUR_NAME",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "content": "📋 ДОКУМЕНТАЦИЯ WORKFLOW\n\n🎯 ОСНОВНОЙ ПОТОК (Main Flow)\n1. Telegram Trigger → Точка входа: получает все сообщения из Telegram\n1.1. HTTP typing... → Отправляет индикатор \"печатает...\" в чат\n2. Check Authorized User → Проверяет, авторизован ли пользователь для работы с ботом\n3. Switch Type → Разделяет входящие сообщения по типу (голос/текст/фото/команды)\n\n🎤 ОБРАБОТКА ГОЛОСОВЫХ СООБЩЕНИЙ\n4. Download Voice File → Скачивает голосовой файл из Telegram\n5. Transcribe Audio → Преобразует аудио в текст через OpenAI Whisper\n6. Set Voice → Форматирует распознанный текст для дальнейшей обработки\n\n📝 ОБРАБОТКА ТЕКСТОВЫХ СООБЩЕНИЙ\n7. Set Text → Форматирует текстовые сообщения\n8. Merge → Объединяет голосовые и текстовые сообщения в один поток\n9. Prepare Message Data → Подготавливает данные сообщения для анализа\n10. Switch Message Type → Определяет тип сообщения (команда/фото/пересланное/обычное)\n\n⚙️ ОБРАБОТКА КОМАНД\n11. Command Handler → Обрабатывает команды бота (/start, /stop и т.д.)\n12. Switch Command Type → Разделяет команды по типам\n\n13. Send Stop Response → Отправляет ответ на команду /stop\n14. Save Stop Command → Сохраняет команду /stop в базу данных\n\n15. Send Start Response → Отправляет приветственное сообщение на /start\n16. Save Start Command → Сохраняет команду /start в базу данных\n\n📸 ОБРАБОТКА ФОТОГРАФИЙ\n17. Photo Handler → Обрабатывает входящие фотографии\n18. Save Photo → Сохраняет фото в Supabase\n19. Send Photo Question → Запрашивает у пользователя описание фото\n20. Save Photo Message → Сохраняет сообщение с фото в базу\n\n🔄 ОБРАБОТКА ПЕРЕСЛАННЫХ СООБЩЕНИЙ\n21. Save Forwarded Temp → Временно сохраняет пересланное сообщение\n22. Send Question → Отправляет вопрос пользователю о пересланном сообщении\n23. Save Forwarded Message → Сохраняет пересланное сообщение в базу\n\n🤖 AI ОБРАБОТКА И КОНТЕКСТ\n24. Check if Reply → Проверяет, является ли сообщение ответом на другое\n25. Load Reply Context (RPC) → Загружает контекст сообщения, на которое отвечают (через RPC)\n26. Load Active Tasks → Загружает активные задачи пользователя из Supabase\n27. Load Recent Messages → Загружает последние сообщения для контекста\n28. Merge Context → Объединяет все источники контекста\n29. Extract Specific Context → Извлекает специфичный контекст из загруженных данных\n30. Prepare AI Prompt → Формирует финальный промпт для AI агента\n\n🧠 AI АГЕНТ И ВАЛИДАЦИЯ\n31. AI Agent → Основной AI агент для анализа намерений и извлечения данных\n31a. Gemini 2.5 Flash → LLM модель (Google Gemini через OpenRouter)\n31b. Output Parser → Парсер структурированного вывода AI\n  Анализ намерений — определяет, что хочет пользователь\n  Извлечение данных — вытаскивает параметры задачи из текста\n  Структурированный вывод — возвращает JSON с полями: intent, task_id, title, description, department, priority, deadline\n\n32. Validate AI Output → Проверяет корректность ответа AI\n33. Send Error to Telegram → Отправляет сообщение об ошибке пользователю\n\n🎯 ОБРАБОТКА НАМЕРЕНИЙ (Intent Handling)\n34. Switch by Intent → Разделяет по намерениям (создание/обновление/уточнение задачи)\n\n35. Send Clarification → Отправляет запрос на уточнение, если AI не понял намерение\n\n36. Prepare New Task Data → Подготавливает данные для новой задачи\n37. Create Task in Supabase → Создаёт новую задачу в базе данных\n\n38. Prepare Update Task Data → Подготавливает данные для обновления задачи\n39. Update Task in Supabase → Обновляет существующую задачу в базе\n\n✅ ФИНАЛИЗАЦИЯ И ПОДТВЕРЖДЕНИЕ\n40. Merge All Routes → Объединяет все ветки обработки\n41. Prepare Success Message → Формирует сообщение об успешном выполнении\n42. Send Confirmation → Отправляет подтверждение пользователю в Telegram\n\n🏢 ДЕПАРТАМЕНТЫ (Execute Workflow)\n43. Switch Department → Определяет департамент для выполнения задачи\n\n44. Execute Copywriting → Запускает workflow копирайтинга\n45. Execute Image Gen → Запускает workflow генерации изображений\n46. Execute Image Edit → Запускает workflow редактирования изображений\n47. Execute Video Gen → Запускает workflow генерации видео\n48. Execute Research → Запускает workflow исследований",
+        "height": 1920,
+        "width": 1168
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -3408,
+        992
+      ],
+      "typeVersion": 1,
+      "id": "YOUR_CREDENTIAL_ID",
+      "name": "YOUR_NAME"
+    }
+  ],
+  "connections": {
+    "1. Telegram Trigger": {
+      "main": [
+        [
+          {
+            "node": "1.1. HTTP typing...",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "2. Check Authorized User",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "2. Check Authorized User": {
+      "main": [
+        [
+          {
+            "node": "3. Switch Type",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "3. Switch Type": {
+      "main": [
+        [
+          {
+            "node": "4. Download Voice File",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "8. Merge",
+            "type": "main",
+            "index": 1
+          }
+        ],
+        [
+          {
+            "node": "7. Set Text",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "4. Download Voice File": {
+      "main": [
+        [
+          {
+            "node": "5. Transcribe Audio",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "5. Transcribe Audio": {
+      "main": [
+        [
+          {
+            "node": "6. Set Voice",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "6. Set Voice": {
+      "main": [
+        [
+          {
+            "node": "8. Merge",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "7. Set Text": {
+      "main": [
+        [
+          {
+            "node": "8. Merge",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "8. Merge": {
+      "main": [
+        [
+          {
+            "node": "9. Prepare Message Data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "9. Prepare Message Data": {
+      "main": [
+        [
+          {
+            "node": "10. Switch Message Type",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "10. Switch Message Type": {
+      "main": [
+        [
+          {
+            "node": "11. Command Handler",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "24. Check if Reply",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "17. Photo Handler",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "21. Save Forwarded Temp",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "24. Check if Reply",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "11. Command Handler": {
+      "main": [
+        [
+          {
+            "node": "12. Switch Command Type",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "12. Switch Command Type": {
+      "main": [
+        [
+          {
+            "node": "13. Send Stop Response",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "15. Send Start Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "13. Send Stop Response": {
+      "main": [
+        [
+          {
+            "node": "14. Save Stop Command",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "15. Send Start Response": {
+      "main": [
+        [
+          {
+            "node": "16. Save Start Command",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "17. Photo Handler": {
+      "main": [
+        [
+          {
+            "node": "18. Save Photo",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "18. Save Photo": {
+      "main": [
+        [
+          {
+            "node": "19. Send Photo Question",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "19. Send Photo Question": {
+      "main": [
+        [
+          {
+            "node": "20. Save Photo Message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "21. Save Forwarded Temp": {
+      "main": [
+        [
+          {
+            "node": "22. Send Question",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "22. Send Question": {
+      "main": [
+        [
+          {
+            "node": "23. Save Forwarded Message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "24. Check if Reply": {
+      "main": [
+        [
+          {
+            "node": "25. Load Reply Context (RPC)",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "26. Load Active Tasks",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "27. Load Recent Messages",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "27. Load Recent Messages",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "26. Load Active Tasks",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "25. Load Reply Context (RPC)": {
+      "main": [
+        [
+          {
+            "node": "28. Merge Context",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "26. Load Active Tasks": {
+      "main": [
+        [
+          {
+            "node": "28. Merge Context",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "27. Load Recent Messages": {
+      "main": [
+        [
+          {
+            "node": "28. Merge Context",
+            "type": "main",
+            "index": 2
+          }
+        ]
+      ]
+    },
+    "28. Merge Context": {
+      "main": [
+        [
+          {
+            "node": "29. Extract Specific Context",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "29. Extract Specific Context": {
+      "main": [
+        [
+          {
+            "node": "30. Prepare AI Prompt",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "30. Prepare AI Prompt": {
+      "main": [
+        [
+          {
+            "node": "31. AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "31. AI Agent": {
+      "main": [
+        [
+          {
+            "node": "32. Validate AI Output",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "32. Validate AI Output": {
+      "main": [
+        [
+          {
+            "node": "34. Switch by Intent",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "33. Send Error to Telegram",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "31a. Gemini 2.5 Flash": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "31. AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "31b. Output Parser": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "31. AI Agent",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "34. Switch by Intent": {
+      "main": [
+        [
+          {
+            "node": "36. Prepare New Task Data",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "38. Prepare Update Task Data",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "35. Send Clarification",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "36. Prepare New Task Data": {
+      "main": [
+        [
+          {
+            "node": "37. Create Task in Supabase",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "37. Create Task in Supabase": {
+      "main": [
+        [
+          {
+            "node": "40. Merge All Routes",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "38. Prepare Update Task Data": {
+      "main": [
+        [
+          {
+            "node": "39. Update Task in Supabase",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "39. Update Task in Supabase": {
+      "main": [
+        [
+          {
+            "node": "40. Merge All Routes",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "40. Merge All Routes": {
+      "main": [
+        [
+          {
+            "node": "41. Prepare Success Message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "41. Prepare Success Message": {
+      "main": [
+        [
+          {
+            "node": "43. Switch Department",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "42. Send Confirmation",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "43. Switch Department": {
+      "main": [
+        [
+          {
+            "node": "44. Execute Copywriting",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "45. Execute Image Gen",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "46. Execute Image Edit",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "47. Execute Video Gen",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "48. Execute Research",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "staticData": null,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "nodeGroups": [],
+  "pinData": {},
+  "versionId": "YOUR_CREDENTIAL_ID",
+  "activeVersionId": null,
+  "versionCounter": 104,
+  "triggerCount": 0,
+  "sourceWorkflowId": null,
+  "shared": [
+    {
+      "updatedAt": "2026-06-11T11:32:53.305Z",
+      "createdAt": "2026-06-11T11:32:53.305Z",
+      "role": "workflow:owner",
+      "workflowId": "H687DeDCB3zUQzgq",
+      "projectId": "59YaPd0amPnB6Dlx",
+      "project": {
+        "updatedAt": "2026-05-15T13:36:37.930Z",
+        "createdAt": "2026-05-15T13:36:29.862Z",
+        "id": "59YaPd0amPnB6Dlx",
+        "name": "YOUR_NAME",
+        "type": "personal",
+        "icon": null,
+        "description": null,
+        "customTelemetryTags": [],
+        "creatorId": "YOUR_CREDENTIAL_ID"
+      }
+    }
+  ],
+  "tags": [],
+  "activeVersion": null
+}
