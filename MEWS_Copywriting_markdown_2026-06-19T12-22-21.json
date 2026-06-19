@@ -1,0 +1,701 @@
+{
+  "updatedAt": "2026-06-13T11:36:05.256Z",
+  "createdAt": "2026-06-11T12:32:30.611Z",
+  "id": "eZ5MupEdVMLoIAqB",
+  "name": "YOUR_NAME",
+  "description": null,
+  "active": false,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "text": "={{ $json.post_text }}",
+        "outputField": "telegram_text",
+        "escapeMode": "escape"
+      },
+      "type": "n8n-nodes-telegramify-markdown.telegramifyMarkdown",
+      "typeVersion": 1,
+      "position": [
+        1728,
+        176
+      ],
+      "id": "YOUR_CREDENTIAL_ID",
+      "name": "YOUR_NAME"
+    },
+    {
+      "parameters": {
+        "content": "# COPYWRITER",
+        "height": 624,
+        "width": 768,
+        "color": 6
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        896,
+        0
+      ],
+      "typeVersion": 1,
+      "id": "YOUR_CREDENTIAL_ID",
+      "name": "YOUR_NAME"
+    },
+    {
+      "parameters": {
+        "content": "# OUTPUT\n",
+        "height": 432,
+        "width": 848,
+        "color": 4
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        1680,
+        0
+      ],
+      "typeVersion": 1,
+      "id": "YOUR_CREDENTIAL_ID",
+      "name": "YOUR_NAME"
+    },
+    {
+      "parameters": {
+        "content": "# INPUT\n\n",
+        "height": 320,
+        "width": 880,
+        "color": 7
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        0,
+        0
+      ],
+      "typeVersion": 1,
+      "id": "YOUR_CREDENTIAL_ID",
+      "name": "YOUR_NAME"
+    },
+    {
+      "parameters": {
+        "inputSource": "passthrough"
+      },
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        80,
+        96
+      ],
+      "id": "YOUR_CREDENTIAL_ID",
+      "name": "YOUR_NAME"
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "tableId": "tasks",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "id",
+              "keyValue": "={{ $json.id }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        304,
+        96
+      ],
+      "id": "YOUR_CREDENTIAL_ID",
+      "name": "YOUR_NAME",
+      "credentials": {
+        "supabaseApi": {
+          "id": "u5jLuYJAJLw2Nk0K",
+          "name": "YOUR_NAME"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// ========================================\n// ДВОЙНАЯ ЗАГРУЗКА КОНТЕКСТА\n// ========================================\n\nconst taskFromDB = $('2. Load Task').first()?.json;\nconst inputFromQualifizer = $('1. When Executed by Another Workflow').first()?.json;\n\n// ========================================\n// ВАЛИДАЦИЯ\n// ========================================\n\nif (!taskFromDB || !taskFromDB.id) {\n  throw new Error('Task data from database is missing or invalid');\n}\n\nif (!inputFromQualifizer) {\n  console.warn('⚠️ WARNING: No input from Qualifizer! Using database data only.');\n}\n\n// ========================================\n// ОБЪЕДИНЕНИЕ ДАННЫХ\n// ========================================\n\nconst task = {\n  ...taskFromDB,\n  effective_user_request: inputFromQualifizer?.effective_user_request || taskFromDB.effective_user_request\n};\n\nconsole.log('📥 Context loaded:', {\n  from_db: !!taskFromDB,\n  from_qualifizer: !!inputFromQualifizer,\n  has_effective_request: !!task.effective_user_request\n});\n\n// ========================================\n// ИЗВЛЕЧЕНИЕ КОНТЕКСТА\n// ========================================\n\nconst sourceData = task.source_data || null;\nconst agentOutput = task.agent_output || { current_version: 0, versions: [] };\nconst versions = agentOutput.versions || [];\nconst isUpdate = versions.length > 0;\nconst currentVersion = agentOutput.current_version || 0;\n\n// ✅ НОВОЕ: Извлекаем текст предыдущей версии\nlet previousVersionText = null;\nif (isUpdate && versions.length > 0) {\n  const lastVersion = versions[versions.length - 1];\n  previousVersionText = lastVersion.agent_response || null;\n  \n  console.log('📝 Task Update Mode:', {\n    current_version: currentVersion,\n    total_versions: versions.length,\n    has_previous_text: !!previousVersionText,\n    previous_text_length: previousVersionText ? previousVersionText.length : 0\n  });\n}\n\n// ========================================\n// ВЫБОР ЗАПРОСА ПОЛЬЗОВАТЕЛЯ\n// ========================================\n\nconst userRequest = task.effective_user_request || task.initial_prompt || 'No user request provided';\n\nconsole.log('✅ User request selected:', {\n  source: task.effective_user_request ? 'Qualifizer' : 'Database',\n  length: userRequest.length\n});\n\n// ========================================\n// ВОЗВРАТ РЕЗУЛЬТАТА\n// ========================================\n\nreturn {\n  json: {\n    task_id: task.id,\n    chat_id: task.chat_id,\n    user_id: task.user_id,\n    user_request: userRequest,\n    source_data: sourceData,\n    is_update: isUpdate,\n    current_version: currentVersion,\n    versions: versions,\n    previous_version_text: previousVersionText,  // ✅ НОВОЕ\n    text: userRequest\n  }\n};"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        512,
+        96
+      ],
+      "id": "YOUR_CREDENTIAL_ID",
+      "name": "YOUR_NAME",
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "YOUR_CREDENTIAL_ID",
+              "name": "YOUR_NAME",
+              "value": "- Каждое слово/предложение должно нести смысловую нагрузку или вызывать эмоциональную реакцию. Старайся избегать \"воды\" и сжато доносить самое главное. Но так, чтобы текст был связным и интересным для прочтения.\n\n- Избегай первых слов, которые приходят на ум, и старайся выбирать интересный и необычный способ выражения мыслей, по возможности.\n\n- Можно пожертвовать красивыми словами ради сжатого донесения ценной информации, но нельзя делать наоборот (метафоры ради метафор нам не нужны, они только перегружают текст). Текст должен читаться быстро, легко.\n\n- Простой способ проверки необходимости использования какого-либо слова или выражения это попробовать \"убрать\" его из текста, и если его смысл от этого не потерялся, значит оно было лишним. А если слово или выражение исчезнув, \"ломает\" структуру мысли, значит оно было лишним.\n\n- Старайся писать как человек, а не как искусственный интеллект. \n\n- Помни, что у нас научно-популярное издание - и люди будут читать только если написано честно, но так чтобы текст \"ласкал\" их умы или чувства.\n\n- Пиши с любовью, так будто тебе реально очень интересно рассказать о каждой из этих новостей и объяснить их. \n\n- МАТЕРИТЬСЯ МОЖНО (иногда и по делу).\n\n- СТОП СЛОВА И ФРАЗЫ (СТРОГО ЗАПРЕЩЕНЫ они и близкие к ним, так как выдают что текст написан ИИ ,а мы это скрываем): \"Это не просто\"; \"Представьте\"; \"Совершил революцию\"; \"Перевернул игру\"; \"Перевернет мир\"; \"Это не очередное.\"; \"Забудьте о простом\"; \"Результаты говорят сами за себя\". НЕ ИСПОЛЬЗУЙ ЭТИ СЛОВА.\n",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        704,
+        96
+      ],
+      "id": "YOUR_CREDENTIAL_ID",
+      "name": "YOUR_NAME",
+      "alwaysOutputData": false
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.user_request }}\n\n{{ $json.source_data ? '\\n\\n# SOURCE DATA\\n\\n' + JSON.stringify($json.source_data, null, 2) : '' }}\n\n{{ $json.is_update ? '\\n\\n# UPDATE MODE\\n\\nPrevious version:\\n```\\n' + ($json.previous_version_text || 'Not found') + '\\n```' : '' }}",
+        "hasOutputParser": true,
+        "options": {
+          "systemMessage": "=Ты — опытный главный редактор информационного онлайн-журнала. Наша аудитория интересуется искусственным интеллектом, роботами, технологиями, новыми открытиями - но не вникая глубоко в IT-шные темы, поэтому издание можно назвать техно-науч-попом. Мы противопоставляем себя массовым медиа, и стараемся говорить коротко о самом важном, и доносить только актуальную информацию до наших читателей.\n\n---\n\n## СТИЛИСТИЧЕСКИЕ ТРЕБОВАНИЯ\n\n{{ $json.style_preference }}\n\n---\n\n## РАБОТА С ИСТОЧНИКАМИ ДАННЫХ\n\n### Типы источников и стратегия работы\n\n**Если `source_data.type === 'longread'`:**\n- Пользователь сделал reply на лонгрид (дневной дайджест новостей)\n- `source_data.news_list` содержит **массив всех новостей за день**\n- `source_data.user_instruction` содержит инструкцию (например: \"напиши пост о 3 новости\")\n\n**Структура каждой новости в news_list:**\n```javascript\n{\n  id: 1,              // Номер новости\n  title: \"...\",       // Заголовок\n  url: \"...\",         // Ссылка на оригинал\n  summary: \"...\",     // Краткое описание\n  full_text: \"...\"    // ПОЛНЫЙ текст статьи\n}\n```\n\n**Стратегия работы:**\n1. Проанализируй `user_instruction` — о какой новости писать?\n2. Если указан номер (\"напиши о 3 новости\") → используй `news_list[2].full_text` (массив с индекса 0)\n3. Если указана тема (\"напиши про AI\") → найди релевантную новость в `news_list` по ключевым словам в title/summary\n4. **НЕ пиши пост только по заголовку!** Используй `full_text` как основной источник\n5. Если нужны дополнительные детали → используй `read_url(news_list[X].url)`\n6. Используй контекст всего дня для понимания общей картины и связей между новостями\n\n---\n\n**Если `source_data.type === 'research'`:**\n- Это результат работы Research Agent\n- `source_data.content` содержит подготовленное исследование\n- `source_data.sources` содержит массив объектов `[{url, title, relevance}, ...]`\n\n**Стратегия:**\n1. Используй контент исследования как базу\n2. Если в research есть ссылки на первоисточники → **ОБЯЗАТЕЛЬНО** открой их через `read_url()` для проверки фактов и получения деталей\n3. Если информация устарела или неполная → используй `search` для актуализации\n4. Не полагайся слепо на research — проверяй ключевые факты из первоисточников\n\n---\n\n**Если `source_data.type === 'forwarded_message'`:**\n- Пользователь переслал сообщение из другого канала/чата\n- `source_data.text` содержит текст пересланного сообщения\n- `source_data.forwarded_date` содержит дату пересылки\n- В сообщении могут быть ссылки\n\n**Стратегия:**\n1. Проанализируй содержимое пересланного сообщения\n2. **Если в сообщении есть ссылки → ОБЯЗАТЕЛЬНО открой их через `read_url()`**\n3. Не просто переписывай чужой пост — изучи первоисточник и напиши свой пост на основе фактов\n4. Используй `search` для проверки информации и поиска дополнительного контекста\n\n---\n\n**Если `source_data` пустой или отсутствует:**\n- Пользователь запросил пост без предоставленных источников\n- Нужно самостоятельно найти информацию\n\n**Стратегия:**\n1. Используй `search` для поиска актуальных материалов\n2. Выбери надежные источники: TechCrunch, The Verge, Ars Technica, официальные блоги компаний\n3. Используй `read_url()` для чтения найденных статей целиком\n4. Проверяй факты из нескольких источников\n\n---\n\n## РЕЖИМ ОБНОВЛЕНИЯ\n\n**Если `is_update === true`:**\n\nПользователь хочет изменить существующий пост.\n\n**Доступные данные:**\n- `previous_version_text` — текущая версия поста\n- `user_request` — запрос на изменения\n- `source_data` — дополнительные источники (если пользователь добавил новую информацию через reply)\n\n**Как действовать:**\n\n1. **Проанализируй запрос и определи тип изменений:**\n   - **Целевые правки:** \"добавь раздел про X\", \"измени заголовок\", \"сократи до 1000 символов\"\n   - **Частичная переработка:** \"переделай вступление\", \"улучши структуру\"\n   - **Полный rewrite:** \"перепиши полностью с новым углом зрения\", \"сделай фокус на безопасности вместо скорости\"\n   - **Добавление информации:** \"добавь данные про Y\" + пользователь приложил reply на research/longread\n\n2. **Примени изменения соответствующим образом:**\n   - **Целевые правки** → точечные изменения, остальное без изменений\n   - **Частичная переработка** → измени запрошенные части, сохрани общую структуру и tone of voice\n   - **Полный rewrite** → создай новый пост, но сохрани изначальную тему\n   - **Добавление информации** → интегрируй новые данные органично в существующую структуру\n\n3. **Заполни поле `changes_made`:**\n   - Конкретно опиши, что изменилось\n   - Если запрос был неоднозначным → укажи свою интерпретацию\n   - Примеры: \"Добавлен раздел про Claude 3.5 Sonnet на основе research\", \"Сокращён с 1500 до 987 символов, удалены технические детали\", \"Полная переработка: новый угол подачи с фокусом на безопасность\"\n\n**Важно:** Если запрос неоднозначен (например, \"измени это\") — сделай наиболее логичное изменение на основе контекста и обязательно укажи в `changes_made` свою интерпретацию (\"Интерпретировал как просьбу сократить длину поста\").\n\n___\n\n## ВАЖНЫЕ ПРИНЦИПЫ\n\n### 1. Работай с первоисточниками\n- Не полагайся только на краткие описания\n- Если есть ссылка на источник — открой её через `read_url()` и изучи\n- Проверяй ключевые факты из нескольких источников\n- Не выдумывай информацию\n\n### 2. Указывай источники честно\n- Только те, которые реально использовал\n- Не добавляй источники \"для галочки\"\n- Если использовал research и открывал ссылки из него — укажи и research, и прочитанные источники\n\n### 3. Обновления должны быть осмысленными\n- Проанализируй `previous_version_text` перед изменениями\n- Сохрани общий tone of voice (если не требуется полный rewrite)\n- Не разрушай хорошо написанные части без необходимости\n- Если неясно, что менять — сделай best guess и укажи в `changes_made`\n\n### 4. Понимай контекст системы\n- Qualifier уже обработал контекст и передал нужные данные в `source_data`\n- Если пользователь сказал \"добавь это\" + приложил reply на research → \"это\" = research\n- Если пользователь сказал \"напиши про это\" + недавно получил longread → используй longread\n\n---\n\n## ОБРАБОТКА ПРОБЛЕМНЫХ СИТУАЦИЙ\n\n**Если в longread не можешь найти нужную новость:**\n1. Проверь `user_instruction` — возможно указан номер или тема\n2. Если указан номер больше чем новостей в списке → возьми последнюю новость\n3. Если тема неоднозначна → возьми наиболее релевантную по keywords в title/summary\n4. В крайнем случае используй `search` для поиска информации по теме\n\n**Если `full_text` пустой или некорректный:**\n1. Попробуй `read_url(source_data.url)` для получения контента\n2. Если не помогло → используй `search` по теме из `title`\n\n**Если не хватает информации:**\n1. Не придумывай факты\n2. Используй `search` для поиска дополнительной информации\n3. Используй `read_url()` для изучения найденных источников\n4. Если тема слишком узкая/новая → напиши на основе доступных данных и укажи ограничения в тексте\n\n**Если информация противоречивая:**\n- Укажи это в посте\n- Опиши разные точки зрения\n- Укажи все источники с противоречивой информацией\n\n**Если запрос на обновление неоднозначен:**\n- Сделай best guess на основе контекста\n- Обязательно укажи в `changes_made` свою интерпретацию\n- Пример: \"Интерпретировал как просьбу сократить длину поста с сохранением ключевых фактов\"\n\n---\n\n## ИСПОЛЬЗОВАНИЕ ИНСТРУМЕНТОВ\n\n**`search` (Google поиск):**\n- Для поиска актуальных новостей и информации\n- Формулируй запросы конкретно: \"OpenAI GPT-4 Turbo release date\", \"Claude 3.5 Sonnet pricing\"\n- Проверяй даты публикаций (приоритет свежим источникам)\n\n**`read_url` (чтение веб-страниц):**\n- Для получения полного контекста из источника\n- **ОБЯЗАТЕЛЬНО используй когда:**\n  - В research есть ссылки на первоисточники\n  - В forwarded_message есть ссылки\n  - В longread упоминаются важные дополнительные материалы\n  - В результатах search нужно прочитать статью целиком\n- Не ограничивайся кратким описанием — изучи источник полностью\n\n---\n\n## ФОРМАТ ОТВЕТА\n\nВерни JSON со следующими полями:\n\n```json\n{\n  \"post_text\": \"Полный текст поста в markdown\",\n  \"sources\": [\n    {\n      \"type\": \"longread\",\n      \"url\": \"https://...\",\n      \"title\": \"Название источника\"\n    }\n  ],\n  \"changes_made\": \"Описание изменений (обязательно для обновлений)\"\n}\n```\n\n### Описание полей\n\n**`post_text`** (string):\n- Полный готовый текст поста в markdown\n- Включая заголовок, основной текст, заключение\n- Как оформлять источники в тексте — определяется в `style_preference`\n\n**`sources`** (array):\n- Массив всех источников, которые ты **реально использовал** для написания поста\n- **Допустимые значения `type`:**\n  - `longread` — если использовал новость из лонгрида (`source_data.type === 'longread'`)\n  - `research` — если использовал research отчёт (`source_data.type === 'research'`)\n  - `forwarded` — если использовал пересланное сообщение (`source_data.type === 'forwarded_message'`)\n  - `google` — если нашёл через инструмент `search`\n  - `web` — если прочитал через инструмент `read_url()`\n- Для каждого источника укажи:\n  - `type` — тип источника (один из перечисленных выше)\n  - `url` — полная ссылка на источник (с https://)\n  - `title` — точное название статьи или источника (как указано в оригинале)\n- Если использовал несколько источников — укажи **все**\n- Не добавляй источники \"для галочки\" — только те, что реально использовал\n\n**`changes_made`** (string):\n- **ОБЯЗАТЕЛЬНО** если `is_update === true`\n- Опционально для новых постов\n- Опиши конкретно, что изменилось относительно `previous_version_text`\n- Если интерпретировал неоднозначный запрос — укажи свою интерпретацию\n- Примеры:\n  - \"Добавлен раздел про сравнение с конкурентами\"\n  - \"Сокращён текст с 1200 до 800 символов, сохранены ключевые факты\"\n  - \"Изменён стиль с формального на разговорный\"\n",
+          "maxIterations": 10
+        }
+      },
+      "id": "YOUR_CREDENTIAL_ID",
+      "name": "YOUR_NAME",
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "position": [
+        1072,
+        96
+      ],
+      "typeVersion": 2.2,
+      "retryOnFail": true,
+      "maxTries": 2,
+      "waitBetweenTries": 5000
+    },
+    {
+      "parameters": {
+        "model": "google/gemini-2.5-pro",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenRouter",
+      "typeVersion": 1,
+      "position": [
+        944,
+        224
+      ],
+      "id": "YOUR_CREDENTIAL_ID",
+      "name": "YOUR_NAME",
+      "credentials": {
+        "openRouterApi": {
+          "id": "kSlzJSYywOH0MwEV",
+          "name": "YOUR_NAME"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "description": "Используй РОВНО 1 РАЗ В САМОМ НАЧАЛЕ для составления плана работы. Опиши шаги: какие источники читать, что гуглить, какую информацию собрать. Не используй этот инструмент повторно! Передай свои размышления о плане действий.",
+        "workflowId": {
+          "__rl": true,
+          "value": "jrsjDpbIQaiF5Ue3",
+          "mode": "list",
+          "cachedResultUrl": "/workflow/jrsjDpbIQaiF5Ue3",
+          "cachedResultName": "ReAct (пустышка)"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Thoughts": "={{ /*YOUR_GOOGLE_DRIVE_FOLDER_IDe*/ $fromAI('Thoughts', `Напиши свои начальные мысли очень кратко (экономь токены, просто перечисли несколько мыслей) о лучших способах выполнить запрос пользователя.`, 'string') }}"
+          },
+          "matchingColumns": [
+            "Thoughts"
+          ],
+          "schema": [
+            {
+              "id": "Thoughts",
+              "type": "string",
+              "display": true,
+              "removed": false,
+              "required": false,
+              "displayName": "Thoughts",
+              "defaultMatch": false,
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        }
+      },
+      "id": "YOUR_CREDENTIAL_ID",
+      "name": "YOUR_NAME",
+      "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
+      "position": [
+        944,
+        480
+      ],
+      "typeVersion": 2.2
+    },
+    {
+      "parameters": {
+        "description": "Используй ПОСЛЕ КАЖДОГО действия (google_search или read_url) для рефлексии. Оцени: достаточно ли информации? Нужны ли ещё данные? Что делать дальше? Передай краткий анализ результата последнего шага.",
+        "workflowId": {
+          "__rl": true,
+          "value": "jrsjDpbIQaiF5Ue3",
+          "mode": "list",
+          "cachedResultUrl": "/workflow/jrsjDpbIQaiF5Ue3",
+          "cachedResultName": "ReAct (пустышка)"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Thoughts": "={{ /*YOUR_GOOGLE_DRIVE_FOLDER_IDe*/ $fromAI('Thoughts', `Напиши свои начальные мысли очень кратко (экономь токены, просто перечисли несколько мыслей) о лучших способах выполнить запрос пользователя.`, 'string') }}"
+          },
+          "matchingColumns": [
+            "Thoughts"
+          ],
+          "schema": [
+            {
+              "id": "Thoughts",
+              "type": "string",
+              "display": true,
+              "removed": false,
+              "required": false,
+              "displayName": "Thoughts",
+              "defaultMatch": false,
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        }
+      },
+      "id": "YOUR_CREDENTIAL_ID",
+      "name": "YOUR_NAME",
+      "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
+      "position": [
+        1120,
+        480
+      ],
+      "typeVersion": 2.2,
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "options": {
+          "hl": "en"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.toolSerpApi",
+      "typeVersion": 1,
+      "position": [
+        1264,
+        480
+      ],
+      "id": "YOUR_CREDENTIAL_ID",
+      "name": "YOUR_NAME",
+      "credentials": {
+        "serpApi": {
+          "id": "oJvYOwAs35ocJbuB",
+          "name": "YOUR_NAME"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "url": "={{ /*YOUR_GOOGLE_DRIVE_FOLDER_IDe*/ $fromAI('URL', ``, 'string') }}",
+        "options": {},
+        "requestOptions": {}
+      },
+      "type": "n8n-nodes-base.jinaAiTool",
+      "typeVersion": 1,
+      "position": [
+        1392,
+        480
+      ],
+      "id": "YOUR_CREDENTIAL_ID",
+      "name": "YOUR_NAME",
+      "credentials": {
+        "jinaAiApi": {
+          "id": "i4WpT7SqChXKsgHL",
+          "name": "YOUR_NAME"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsonSchemaExample": "{\n  \"post_text\": \"Полный текст поста в markdown\",\n  \"sources\": [\n    {\n      \"type\": \"longread\",\n      \"url\": \"https://example.com\",\n      \"title\": \"Название источника\"\n    }\n  ],\n  \"changes_made\": \"Описание изменений (опционально)\"\n}"
+      },
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.3,
+      "position": [
+        1376,
+        224
+      ],
+      "id": "YOUR_CREDENTIAL_ID",
+      "name": "YOUR_NAME"
+    },
+    {
+      "parameters": {
+        "jsCode": "// ========================================\n// ПОЛУЧАЕМ ДАННЫЕ\n// ========================================\n\nconst aiResponse = $input.first().json;\nconst context = $('4. Prepare Context').first().json;\n\n// ✅ С Structured Output Parser - ВСЕГДА структура {output: {...}}\nconst parsed = aiResponse.output;\n\nif (!parsed || !parsed.post_text) {\n  throw new Error('Output Parser не вернул корректный JSON. Проверьте настройку Structured Output Parser.');\n}\n\nconsole.log('✅ Received parsed output:', {\n  has_post_text: !!parsed.post_text,\n  post_length: parsed.post_text?.length,\n  sources_count: parsed.sources?.length || 0\n});\n\n// ========================================\n// ВАЛИДАЦИЯ БИЗНЕС-ЛОГИКИ\n// ========================================\n\nconst postText = parsed.post_text;\nconst sources = parsed.sources || [];\nconst changesMade = parsed.changes_made || null;\n\n// Проверка 1: Текст не пустой\nif (!postText || postText.trim() === '') {\n  throw new Error('Пост пустой! AI не вернул текст в поле post_text.');\n}\n\n// Проверка 2: Минимальная длина\nif (postText.length < 50) {\n  throw new Error(`Пост слишком короткий: ${postText.length} символов (минимум 50)`);\n}\n\n// Проверка 3: Если update — желательно описание изменений\nif (context.is_update && !changesMade) {\n  console.warn('⚠️ WARNING: Update mode but no changes_made provided');\n}\n\nconsole.log('✅ Validation passed:', {\n  post_length: postText.length,\n  sources_count: sources.length,\n  has_changes: !!changesMade\n});\n\n// ========================================\n// СОЗДАНИЕ НОВОЙ ВЕРСИИ\n// ========================================\n\nconst newVersion = {\n  version: context.current_version + 1,\n  user_request: context.user_request,\n  agent_response: postText,\n  sources: sources,\n  metadata: {\n    character_count: postText.length,\n    estimated_reading_time: Math.ceil(postText.length / 1000) + ' мин'\n  },\n  changes: changesMade || (context.is_update ? 'Обновлён по запросу пользователя' : null),\n  message_id: null,  // ✅ Заполнится после отправки в Telegram\n  timestamp: new Date().toISOString()\n};\n\n// Формируем обновлённый agent_output\nconst updatedAgentOutput = {\n  current_version: newVersion.version,\n  versions: [\n    ...context.versions,\n    newVersion\n  ]\n};\n\nconsole.log('✅ New version created:', {\n  version: newVersion.version,\n  has_changes: !!newVersion.changes,\n  sources_count: sources.length\n});\n\n// ========================================\n// ВОЗВРАТ РЕЗУЛЬТАТА\n// ========================================\n\nreturn {\n  json: {\n    task_id: context.task_id,\n    chat_id: context.chat_id,\n    user_id: context.user_id,\n    post_text: postText,              // ← В Telegram попадёт ТОЛЬКО ЭТО\n    sources: sources,\n    metadata: newVersion.metadata,\n    new_version: newVersion,\n    updated_agent_output: updatedAgentOutput\n  }\n};"
+      },
+      "id": "YOUR_CREDENTIAL_ID",
+      "name": "YOUR_NAME",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1504,
+        96
+      ],
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $json.chat_id }}",
+        "text": "={{ $json.telegram_text }}",
+        "additionalFields": {
+          "appendAttribution": false,
+          "parse_mode": "MarkdownV2"
+        }
+      },
+      "id": "YOUR_CREDENTIAL_ID",
+      "name": "YOUR_NAME",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        1936,
+        96
+      ],
+      "webhookId": "YOUR_CREDENTIAL_ID",
+      "credentials": {
+        "telegramApi": {
+          "id": "08rilHeqmVcSA8cN",
+          "name": "YOUR_NAME"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// ========================================\n// ОБНОВЛЕНИЕ TASK В БД (С MESSAGE_ID)\n// ========================================\n\n// Получаем данные от Validate Output\nconst validateOutput = $('7. Validate Output').first().json;\n\n// Получаем message_id от Send to Telegram\nconst telegramResponse = $('8. Send to Telegram').first().json;\nconst messageId = telegramResponse.result?.message_id;\n\nconsole.log('📥 Update Task inputs:', {\n  has_validate_output: !!validateOutput,\n  has_telegram_response: !!telegramResponse,\n  message_id: messageId\n});\n\n// Обновляем последнюю версию с message_id\nconst updatedAgentOutput = validateOutput.updated_agent_output;\n\nif (messageId) {\n  const lastVersionIndex = updatedAgentOutput.versions.length - 1;\n  updatedAgentOutput.versions[lastVersionIndex].message_id = messageId;\n  \n  console.log('✅ Updated version with message_id:', {\n    version: updatedAgentOutput.versions[lastVersionIndex].version,\n    message_id: messageId\n  });\n} else {\n  console.warn('⚠️ WARNING: message_id not found in Telegram response!');\n}\n\n// Возвращаем данные для Supabase UPDATE\nreturn {\n  json: {\n    task_id: validateOutput.task_id,\n    agent_output: updatedAgentOutput,\n    status: 'completed',\n    updated_at: new Date().toISOString()\n  }\n};"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2160,
+        96
+      ],
+      "id": "YOUR_CREDENTIAL_ID",
+      "name": "YOUR_NAME"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "tableId": "tasks",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "id",
+              "condition": "eq",
+              "keyValue": "={{ $json.task_id }}"
+            }
+          ]
+        },
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "agent_output",
+              "fieldValue": "={{ $json.agent_output }}"
+            },
+            {
+              "fieldId": "status",
+              "fieldValue": "={{ $json.status }}"
+            },
+            {
+              "fieldId": "updated_at",
+              "fieldValue": "={{ $json.updated_at }}"
+            }
+          ]
+        }
+      },
+      "id": "YOUR_CREDENTIAL_ID",
+      "name": "YOUR_NAME",
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        2336,
+        96
+      ],
+      "credentials": {
+        "supabaseApi": {
+          "id": "u5jLuYJAJLw2Nk0K",
+          "name": "YOUR_NAME"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "tableId": "sent_messages",
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "task_id",
+              "fieldValue": "={{ $('7. Validate Output').item.json.task_id }}"
+            },
+            {
+              "fieldId": "telegram_chat_id",
+              "fieldValue": "={{ $('7. Validate Output').item.json.chat_id }}"
+            },
+            {
+              "fieldId": "message_type",
+              "fieldValue": "post"
+            },
+            {
+              "fieldId": "telegram_message_id",
+              "fieldValue": "={{ $json.result.message_id }}"
+            },
+            {
+              "fieldId": "created_at",
+              "fieldValue": "={{ $now }}"
+            },
+            {
+              "fieldId": "content_data",
+              "fieldValue": "={{ {\"text\": $('7. Validate Output').item.json.post_text, \"version\": $('7. Validate Output').item.json.new_version.version, \"sources\": $('7. Validate Output').item.json.new_version.sources} }}"
+            }
+          ]
+        }
+      },
+      "id": "YOUR_CREDENTIAL_ID",
+      "name": "YOUR_NAME",
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        2160,
+        272
+      ],
+      "credentials": {
+        "supabaseApi": {
+          "id": "u5jLuYJAJLw2Nk0K",
+          "name": "YOUR_NAME"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "📋 ДОКУМЕНТАЦИЯ WORKFLOW\n\n🎯 ТРИГГЕР\n\n1. When Executed by Another Workflow (n8n-nodes-base.executeWorkflowTrigger)\n  Запускает workflow при вызове из другого workflow\n  Точка входа для обработки задач\n\n📊 ОСНОВНОЙ ПОТОК\n\n2. Load Task (n8n-nodes-base.supabase)\n  Загружает данные задачи из Supabase\n  Получает информацию о задаче для обработки\n\n4. Prepare Context (n8n-nodes-base.code)\n  Подготавливает контекст для AI агента\n  Формирует данные в нужном формате\n\n5. Set Style Preference (n8n-nodes-base.set)\n  Устанавливает предпочтения стиля ответа\n  Настраивает параметры форматирования\n\n6. AI Agent (@n8n/n8n-nodes-langchain.agent)\n  Основной AI агент для обработки задачи\n  Координирует работу инструментов и генерирует ответ\n\n  🤖 ИНСТРУМЕНТЫ AI АГЕНТА\n\n  6a. Gemini 2.5 Pro (@n8n/n8n-nodes-langchain.lmChatOpenRouter)\n  Языковая модель Gemini 2.5 Pro через OpenRouter\n  Основной движок для генерации ответов\n\n  6b. Plan_Initial_Steps (@n8n/n8n-nodes-langchain.toolWorkflow)\n  Инструмент для планирования начальных шагов\n  Помогает агенту структурировать подход к задаче\n\n  6c. Reflect_and_Correct (@n8n/n8n-nodes-langchain.toolWorkflow)\n  Инструмент для рефлексии и коррекции\n  Позволяет агенту анализировать и улучшать ответы\n\n  6d. SerpAPI (@n8n/n8n-nodes-langchain.toolSerpApi)\n  Поиск информации через SerpAPI\n  Доступ к актуальным данным из поисковых систем\n\n  6e. read_url (n8n-nodes-base.jinaAiTool)\n  Чтение содержимого веб-страниц через Jina AI\n  Извлечение информации из URL\n\n  6f. Structured Output Parser (@n8n/n8n-nodes-langchain.outputParserStructured)\n  Парсер структурированного вывода\n  Обеспечивает формат ответа агента\n\n7. Validate Output (n8n-nodes-base.code)\n  Проверяет корректность выходных данных агента\n  Валидирует структуру ответа\n\n9. Update Code (n8n-nodes-base.code)\n  Обновляет/обрабатывает код перед сохранением\n  Финальная обработка данных\n\n10. Update Task (n8n-nodes-base.supabase)\n  Обновляет статус задачи в Supabase\n  Сохраняет результат выполнения\n  📤 ОТПРАВКА РЕЗУЛЬТАТА\n  Telegramify Markdown (n8n-nodes-telegramify-markdown.telegramifyMarkdown)\n\n  Конвертирует Markdown в Telegram-совместимый формат\n  Подготавливает текст для отправки\n\n8. Send to Telegram (n8n-nodes-base.telegram)\n  Отправляет результат в Telegram\n  Доставляет ответ пользователю\n\n11. Save to sent_messages (n8n-nodes-base.supabase)\n  Сохраняет отправленное сообщение в базу данных\n  Ведёт историю отправленных сообщений\n\n\nОбщая логика: Workflow получает задачу → загружает данные → AI агент обрабатывает с помощью инструментов (поиск, чтение URL, планирование) → валидирует результат → отправляет в Telegram → сохраняет в базу данных.\n\n",
+        "height": 1600,
+        "width": 848
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -912,
+        -256
+      ],
+      "typeVersion": 1,
+      "id": "YOUR_CREDENTIAL_ID",
+      "name": "YOUR_NAME"
+    }
+  ],
+  "connections": {
+    "Telegramify Markdown": {
+      "main": [
+        []
+      ]
+    },
+    "1. When Executed by Another Workflow": {
+      "main": [
+        [
+          {
+            "node": "2. Load Task",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "2. Load Task": {
+      "main": [
+        [
+          {
+            "node": "4. Prepare Context",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "4. Prepare Context": {
+      "main": [
+        [
+          {
+            "node": "5. Set Style Preference",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "5. Set Style Preference": {
+      "main": [
+        [
+          {
+            "node": "6. AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "6. AI Agent": {
+      "main": [
+        [
+          {
+            "node": "7. Validate Output",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "6a. Gemini 2.5 Pro": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "6. AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "6b. Plan_Initial_Steps": {
+      "ai_tool": [
+        [
+          {
+            "node": "6. AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "6c. Reflect_and_Correct": {
+      "ai_tool": [
+        [
+          {
+            "node": "6. AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "6d. SerpAPI": {
+      "ai_tool": [
+        [
+          {
+            "node": "6. AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "6e. read_url": {
+      "ai_tool": [
+        [
+          {
+            "node": "6. AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "6f. Structured Output Parser": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "6. AI Agent",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "7. Validate Output": {
+      "main": [
+        [
+          {
+            "node": "8. Send to Telegram",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "8. Send to Telegram": {
+      "main": [
+        [
+          {
+            "node": "11. Save to sent_messages",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "9. Update Code",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "9. Update Code": {
+      "main": [
+        [
+          {
+            "node": "10. Update Task",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "staticData": null,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "nodeGroups": [],
+  "pinData": {},
+  "versionId": "YOUR_CREDENTIAL_ID",
+  "activeVersionId": null,
+  "versionCounter": 40,
+  "triggerCount": 0,
+  "sourceWorkflowId": null,
+  "shared": [
+    {
+      "updatedAt": "2026-06-11T12:32:30.614Z",
+      "createdAt": "2026-06-11T12:32:30.614Z",
+      "role": "workflow:owner",
+      "workflowId": "eZ5MupEdVMLoIAqB",
+      "projectId": "59YaPd0amPnB6Dlx",
+      "project": {
+        "updatedAt": "2026-05-15T13:36:37.930Z",
+        "createdAt": "2026-05-15T13:36:29.862Z",
+        "id": "59YaPd0amPnB6Dlx",
+        "name": "YOUR_NAME",
+        "type": "personal",
+        "icon": null,
+        "description": null,
+        "customTelemetryTags": [],
+        "creatorId": "YOUR_CREDENTIAL_ID"
+      }
+    }
+  ],
+  "tags": [],
+  "activeVersion": null
+}
